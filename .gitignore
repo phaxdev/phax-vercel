@@ -1,0 +1,8 @@
+# Бэкенд
+venv/
+*.sqlite3
+*.pyc
+__pycache__/
+
+# Фронтенд
+node_modules/
