@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Project, Skill, Experience, Profile
 from .serializers import (
-    ProjectSerializer, SkillSerializer, 
+    ProjectSerializer, SkillSerializer,
     ExperienceSerializer, ProfileSerializer
 )
 from rest_framework import viewsets, status
@@ -11,6 +11,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAdminUser
 from django.core.mail import send_mail
 from django.conf import settings
+from django.http import HttpResponse
+import os
 from .models import ContactMessage
 from .serializers import ContactMessageSerializer
 
@@ -72,7 +74,7 @@ class ExperienceListAPIView(generics.ListAPIView):
 class ProfileDetailAPIView(generics.RetrieveAPIView):
     serializer_class = ProfileSerializer
     permission_classes = [permissions.AllowAny]
-    
+
     def get_object(self):
         # Получаем или создаем профиль по умолчанию
         profile, created = Profile.objects.get_or_create(
@@ -84,3 +86,8 @@ class ProfileDetailAPIView(generics.RetrieveAPIView):
             }
         )
         return profile
+
+def serve_react(request):
+    index_path = os.path.join(settings.BASE_DIR, 'frontend', 'build', 'index.html')
+    with open(index_path, 'r') as f:
+        return HttpResponse(f.read(), content_type='text/html')

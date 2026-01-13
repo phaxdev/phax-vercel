@@ -2,9 +2,11 @@
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
     "builder": "NIXPACKS",
-    "buildCommand": "npm run build"
+    "buildCommand": "cd ../frontend && npm install && npm run build && cd ../backend/portfolio && python manage.py migrate && python manage.py collectstatic --noinput"
   },
   "deploy": {
-    "startCommand": "npm start"
+    "startCommand": "python manage.py runserver 0.0.0.0:$PORT",
+    "healthcheckPath": "/",
+    "healthcheckTimeout": 30
   }
 }

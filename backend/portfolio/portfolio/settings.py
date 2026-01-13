@@ -3,19 +3,17 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-your-secret-key-here'  # Замените на свой
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-your-secret-key-here')
 
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
 # Настройки сайта
-SITE_URL = 'http://localhost:3000'  # Для разработки
-# Для продакшена: 'https://ваш-домен.com'
+SITE_URL = os.environ.get('SITE_URL', 'https://your-railway-app.up.railway.app')
 
 # Email администратора
-ADMIN_EMAIL = 'phaxdev.info@internet.ru'  # Замените на свой email
-DEFAULT_FROM_EMAIL = 'noreply@example.com'  # Email отправителя
+ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'phaxdev.info@internet.ru')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@example.com')
 
-# ВАЖНО: Добавьте ваш IP
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
@@ -89,6 +87,10 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'frontend', 'build', 'static'),
+]
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -126,6 +128,4 @@ REST_FRAMEWORK = {
     ]
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-SITE_URL = 'http://localhost:3000'
-ADMIN_EMAIL = 'phaxdev.info@internet.ru'  # Просто любая строка
+

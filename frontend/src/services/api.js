@@ -1,25 +1,18 @@
+// src/api.js или src/utils/api.js
 import axios from 'axios';
 
-// Определяем базовый URL в зависимости от окружения
-const getBaseURL = () => {
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        return 'http://localhost:8000/api';
-    } else if (window.location.hostname === '192.168.56.1') {
-        return 'http://192.168.56.1:8000/api';
-    }
-    return '/api';
-};
-
-const API_BASE_URL = getBaseURL();
+// Способ 1: Простой и рабочий (рекомендуемый)
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 console.log('API Base URL:', API_BASE_URL);
+console.log('Node Environment:', process.env.NODE_ENV);
 
 const api = axios.create({
     baseURL: API_BASE_URL,
     headers: {
         'Content-Type': 'application/json',
     },
-    timeout: 15000, // Увеличиваем таймаут
+    timeout: 15000,
 });
 
 // Перехватчик для обработки ошибок
@@ -33,17 +26,23 @@ api.interceptors.response.use(
             data: error.response?.data
         });
 
-        // Для разработки возвращаем пустой ответ, чтобы использовать мок-данные
+        // Если ошибка сети (бэкенд не доступен)
+        if (error.code === 'ECONNREFUSED' || !error.response) {
+            console.error('Backend server is not responding');
+            // Можно показать пользователю сообщение
+        }
+
         return Promise.reject(error);
     }
 );
 
 export const portfolioAPI = {
-    getProjects: () => api.get('/projects/'),
-    getSkills: () => api.get('/skills/'),
-    getExperience: () => api.get('/experience/'),
-    getProfile: () => api.get('/profile/'),
+    getProjects: () => api.get('/api/projects/'),
+    getSkills: () => api.get('/api/skills/'),
+    getExperience: () => api.get('/api/experience/'),
+    getProfile: () => api.get('/api/profile/'),
 
-    // Для отладки
     testConnection: () => api.get('/')
 };
+
+export default api;
