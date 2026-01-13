@@ -80,10 +80,10 @@ class ProfileDetailAPIView(generics.RetrieveAPIView):
         # Получаем или создаем профиль по умолчанию
         profile, created = Profile.objects.get_or_create(
             defaults={
-                'name': 'Алексей Петров',
+                'name': 'phax',
                 'title': 'Full Stack разработчик',
-                'bio': 'Добавьте информацию о себе в админ-панели Django',
-                'email': 'example@email.com'
+                'bio': 'Специализируюсь на разработке сайтов под ключ. занимаюсь версткой по макету, пишу скрипты на Lua, немного знаю C++ и C#',
+                'email': 'phaxdev.info@internet.ru'
             }
         )
         return profile
