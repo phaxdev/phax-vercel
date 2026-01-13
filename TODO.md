@@ -10,8 +10,8 @@
    - Connect your GitHub account and select the repository.
 
 3. **Configure Deployment**:
-   - Railway will detect the `railway.json` and `Dockerfile` in `backend/portfolio/`.
-   - It will use Docker to build the image, which installs Node, builds the frontend, runs migrations, and collects static files.
+   - Railway will detect the `railway.json` and `Dockerfile` in `backend/portfolio/` (the root `railway.json` has been removed to avoid conflicts).
+   - It will use Docker to build the image, which builds the frontend in a Node stage, then runs the Django app.
 
 4. **Set Environment Variables** in Railway Dashboard (Variables tab):
    - `SECRET_KEY`: Generate a secure key (e.g., use `openssl rand -base64 32`).
