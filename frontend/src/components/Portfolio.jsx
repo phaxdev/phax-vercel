@@ -1,4 +1,219 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+const ContactForm = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+    // Очищаем ошибку при вводе
+    if (errors[name]) {
+      setErrors({
+        ...errors,
+        [name]: ''
+      });
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.name.trim()) {
+      newErrors.name = 'Введите свой @username или номер';
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = 'Введите email';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Введите корректный email';
+    }
+    
+    if (!formData.message.trim()) {
+      newErrors.message = 'Введите сообщение';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+    
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+    
+    try {
+      // Адрес вашего Django бэкенда
+      const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+      
+      const response = await axios.post(`${API_URL}/contact-messages/`, formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      
+      if (response.status === 201) {
+        setSubmitStatus({
+          type: 'success',
+          message: '✅ Сообщение успешно отправлено! Мы ответим вам в ближайшее время.'
+        });
+        
+        // Очищаем форму
+        setFormData({
+          name: '',
+          email: '',
+          message: ''
+        });
+        
+        // Автоматически скрываем сообщение об успехе через 5 секунд
+        setTimeout(() => {
+          setSubmitStatus(null);
+        }, 5000);
+      }
+    } catch (error) {
+      console.error('Ошибка при отправке сообщения:', error);
+      
+      if (error.response) {
+        // Ошибка от сервера
+        if (error.response.status === 400) {
+          setSubmitStatus({
+            type: 'error',
+            message: '❌ Проверьте правильность заполнения полей.'
+          });
+        } else {
+          setSubmitStatus({
+            type: 'error',
+            message: '❌ Ошибка сервера. Пожалуйста, попробуйте позже.'
+          });
+        }
+      } else if (error.request) {
+        // Нет ответа от сервера
+        setSubmitStatus({
+          type: 'error',
+          message: '❌ Не удалось соединиться с сервером. Проверьте подключение к интернету.'
+        });
+      } else {
+        // Другие ошибки
+        setSubmitStatus({
+          type: 'error',
+          message: '❌ Произошла ошибка при отправке.'
+        });
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="glass p-8 rounded-3xl border border-white/10">
+      <h3 className="text-2xl font-bold mb-6 text-white">Написать сообщение</h3>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label className="block text-gray-400 mb-2">Введите свой @username или номер *</label>
+          <input
+            type="text"
+            name="name"
+            placeholder="Писать сюда"
+            value={formData.name}
+            onChange={handleChange}
+            className={`w-full p-4 bg-white/5 border rounded-xl focus:outline-none transition-all text-white placeholder-gray-500 ${
+              errors.name 
+                ? 'border-red-500 focus:border-red-500' 
+                : 'border-white/10 focus:border-white/30'
+            }`}
+          />
+          {errors.name && (
+            <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+          )}
+        </div>
+
+        <div>
+          <label className="block text-gray-400 mb-2">Ваш email *</label>
+          <input
+            type="email"
+            name="email"
+            placeholder="example@email.com"
+            value={formData.email}
+            onChange={handleChange}
+            className={`w-full p-4 bg-white/5 border rounded-xl focus:outline-none transition-all text-white placeholder-gray-500 ${
+              errors.email 
+                ? 'border-red-500 focus:border-red-500' 
+                : 'border-white/10 focus:border-white/30'
+            }`}
+          />
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+          )}
+        </div>
+
+        <div>
+          <label className="block text-gray-400 mb-2">Сообщение *</label>
+          <textarea
+            name="message"
+            placeholder="Расскажите о вашем проекте..."
+            rows="5"
+            value={formData.message}
+            onChange={handleChange}
+            className={`w-full p-4 bg-white/5 border rounded-xl focus:outline-none transition-all text-white placeholder-gray-500 resize-none ${
+              errors.message 
+                ? 'border-red-500 focus:border-red-500' 
+                : 'border-white/10 focus:border-white/30'
+            }`}
+          ></textarea>
+          {errors.message && (
+            <p className="text-red-500 text-sm mt-1">{errors.message}</p>
+          )}
+        </div>
+
+        {/* Статус отправки */}
+        {submitStatus && (
+          <div className={`p-4 rounded-xl ${
+            submitStatus.type === 'success' 
+              ? 'bg-green-900/30 border border-green-500/50 text-green-300' 
+              : 'bg-red-900/30 border border-red-500/50 text-red-300'
+          }`}>
+            {submitStatus.message}
+          </div>
+        )}
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className={`w-full py-4 rounded-xl font-medium transition-all ${
+            isSubmitting
+              ? 'bg-white/10 cursor-not-allowed'
+              : 'glass-button hover:bg-white/20'
+          }`}
+        >
+          {isSubmitting ? (
+            <div className="flex items-center justify-center">
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
+              Отправка...
+            </div>
+          ) : (
+            'Отправить сообщение'
+          )}
+        </button>
+      </form>
+    </div>
+  );
+};
 import {
     FaGithub,
     FaLinkedin,
@@ -649,43 +864,7 @@ const Portfolio = () => {
 
                             <div>
                                 <div className="glass p-8 rounded-3xl border border-white/10">
-                                    <h3 className="text-2xl font-bold mb-6 text-white">Написать сообщение</h3>
-
-                                    <form className="space-y-6">
-                                        <div>
-                                            <label className="block text-gray-400 mb-2">Ваше имя</label>
-                                            <input
-                                                type="text"
-                                                placeholder="Иван Иванов"
-                                                className="w-full p-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-white/30 transition-all text-white placeholder-gray-500"
-                                            />
-                                        </div>
-
-                                        <div>
-                                            <label className="block text-gray-400 mb-2">Ваш email</label>
-                                            <input
-                                                type="email"
-                                                placeholder="example@email.com"
-                                                className="w-full p-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-white/30 transition-all text-white placeholder-gray-500"
-                                            />
-                                        </div>
-
-                                        <div>
-                                            <label className="block text-gray-400 mb-2">Сообщение</label>
-                                            <textarea
-                                                placeholder="Расскажите о вашем проекте..."
-                                                rows="5"
-                                                className="w-full p-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-white/30 transition-all text-white placeholder-gray-500 resize-none"
-                                            ></textarea>
-                                        </div>
-
-                                        <button
-                                            type="button"
-                                            className="w-full glass-button py-4 rounded-xl font-medium hover:bg-white/20 transition-all"
-                                        >
-                                            Отправить сообщение
-                                        </button>
-                                    </form>
+                                    <ContactForm />
                                 </div>
                             </div>
                         </div>

@@ -7,8 +7,16 @@ SECRET_KEY = 'django-insecure-your-secret-key-here'  # Замените на с�
 
 DEBUG = True
 
+# Настройки сайта
+SITE_URL = 'http://localhost:3000'  # Для разработки
+# Для продакшена: 'https://ваш-домен.com'
+
+# Email администратора
+ADMIN_EMAIL = 'phaxdev.info@internet.ru'  # Замените на свой email
+DEFAULT_FROM_EMAIL = 'noreply@example.com'  # Email отправителя
+
 # ВАЖНО: Добавьте ваш IP
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.56.1', '0.0.0.0']
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -92,12 +100,13 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "http://127.0.0.1:3000", 
-    "http://192.168.56.1:3000",
-    "http://0.0.0.0:3000",
+    "http://localhost:5173",  # Vite
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:5173",
+    "https://your-vercel-app.vercel.app",  # ваш Vercel домен
 ]
 
-# Дополнительные настройки CORS
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
@@ -105,18 +114,6 @@ CORS_ALLOW_METHODS = [
     'PATCH',
     'POST',
     'PUT',
-]
-
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
 ]
 
 # REST Framework настройки
@@ -128,3 +125,7 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
     ]
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+SITE_URL = 'http://localhost:3000'
+ADMIN_EMAIL = 'phaxdev.info@internet.ru'  # Просто любая строка

@@ -1,6 +1,11 @@
 from rest_framework import serializers
-from .models import Project, Skill, Experience, Profile
+from .models import Project, Skill, Experience, Profile, ContactMessage
 
+class ContactMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactMessage
+        fields = ['id', 'name', 'email', 'phone', 'message', 'created_at', 'status']
+        read_only_fields = ['created_at', 'status']
 class ProjectSerializer(serializers.ModelSerializer):
     technologies_list = serializers.SerializerMethodField()
     image_url = serializers.SerializerMethodField()

@@ -1,5 +1,63 @@
 from django.db import models
 from django.utils.text import slugify
+from django.core.mail import send_mail
+from django.conf import settings
+
+class ContactMessage(models.Model):
+    STATUS_CHOICES = [
+        ('new', 'Новое'),
+        ('read', 'Прочитано'),
+        ('replied', 'Ответ отправлен'),
+    ]
+    
+    name = models.CharField(max_length=100, verbose_name="Имя")
+    email = models.EmailField(verbose_name="Email")
+    phone = models.CharField(max_length=20, blank=True, verbose_name="Телефон")
+    message = models.TextField(verbose_name="Сообщение")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='new')
+    admin_reply = models.TextField(blank=True, verbose_name="Ответ администратора")
+    
+    def save(self, *args, **kwargs):
+        # Если добавлен ответ администратора, отправляем email
+        is_new = self._state.adding
+        if not is_new and self.pk:
+            old_instance = ContactMessage.objects.get(pk=self.pk)
+            if old_instance.admin_reply != self.admin_reply and self.admin_reply:
+                self.send_reply_email()
+                self.status = 'replied'
+        
+        super().save(*args, **kwargs)
+    
+    def send_reply_email(self):
+        """Отправка ответа на email пользователя"""
+        subject = f"Ответ на ваше сообщение от PhaxDev"
+        message = f"""Здравствуйте, {self.name}!
+
+Спасибо за ваше сообщение.
+
+Наш ответ:
+{self.admin_reply}
+
+---
+С уваженimportm,
+Команда PhaxDev"""
+        
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[self.email],
+            fail_silently=False,
+        )
+    
+    def __str__(self):
+        return f"{self.name} - {self.email}"
+    
+    class Meta:
+        verbose_name = "Контактное сообщение"
+        verbose_name_plural = "Контактные сообщения"
+        ordering = ['-created_at']
 
 class Project(models.Model):
     title = models.CharField(max_length=200, verbose_name="Название проекта")

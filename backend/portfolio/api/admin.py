@@ -1,6 +1,26 @@
 from django.contrib import admin
-from .models import Project, Skill, Experience, Profile
+from .models import Project, Skill, Experience, Profile, ContactMessage
 from django.utils.html import format_html
+    
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'phone', 'created_at', 'status', 'short_message')
+    list_filter = ('status', 'created_at')
+    search_fields = ('name', 'email', 'phone', 'message')
+    readonly_fields = ('name', 'email', 'phone', 'message', 'created_at')
+    fieldsets = (
+        ('Информация от пользователя', {
+            'fields': ('name', 'email', 'phone', 'message', 'created_at', 'status')
+        }),
+        ('Ответ администратора', {
+            'fields': ('admin_reply',),
+            'description': '⚠️ После сохранения ответ будет отправлен на email пользователя автоматически!'
+        }),
+    )
+    
+    def short_message(self, obj):
+        return obj.message[:50] + "..." if len(obj.message) > 50 else obj.message
+    short_message.short_description = "Сообщение"
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
