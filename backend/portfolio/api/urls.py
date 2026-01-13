@@ -10,7 +10,8 @@ from .views import (
     SkillListAPIView,
     ExperienceListAPIView, 
     ProfileDetailAPIView,
-    test_view
+    test_view,
+    health_check
 )
 
 urlpatterns = [
@@ -19,5 +20,6 @@ urlpatterns = [
     path('skills/', SkillListAPIView.as_view(), name='skills'),
     path('experience/', ExperienceListAPIView.as_view(), name='experience'),
     path('profile/', ProfileDetailAPIView.as_view(), name='profile'),
+    path('health/', health_check, name='health-check'),
     path('', include(router.urls)),
 ]

@@ -1,4 +1,5 @@
 from rest_framework import generics, permissions
+from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Project, Skill, Experience, Profile
@@ -91,3 +92,10 @@ def serve_react(request):
     index_path = os.path.join(settings.BASE_DIR, 'frontend', 'build', 'index.html')
     with open(index_path, 'r') as f:
         return HttpResponse(f.read(), content_type='text/html')
+
+def health_check(request):
+    return JsonResponse({
+        'status': 'ok',
+        'message': 'Backend is running',
+        'service': 'portfolio-api'
+    })
