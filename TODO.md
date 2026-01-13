@@ -10,8 +10,9 @@
    - Connect your GitHub account and select the repository.
 
 3. **Configure Deployment**:
-   - Railway will detect the `railway.json` and `Dockerfile` in `backend/portfolio/` (the root `railway.json` has been removed to avoid conflicts).
-   - It will use Docker to build the image, which builds the frontend in a Node stage, then runs the Django app.
+   - Railway will use Nixpacks to build the Python app.
+   - It will run the buildCommand to migrate the database and collect static files.
+   - The frontend build is pre-built and included in the repo.
 
 4. **Set Environment Variables** in Railway Dashboard (Variables tab):
    - `SECRET_KEY`: Generate a secure key (e.g., use `openssl rand -base64 32`).
@@ -26,6 +27,6 @@
 6. **Access the Site**: Once deployed, visit the provided URL.
 
 ## Notes
-- The app serves the React frontend and Django API in one service using Docker.
+- The app serves the React frontend and Django API in one service using Nixpacks.
 - Database is SQLite, included in the repo.
 - For production email, update `EMAIL_BACKEND` in settings.py if needed.
