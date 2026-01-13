@@ -10,8 +10,8 @@
    - Connect your GitHub account and select the repository.
 
 3. **Configure Deployment**:
-   - Railway will detect the `railway.json` in `backend/portfolio/`.
-   - It will build the frontend, run migrations, and collect static files.
+   - Railway will detect the `railway.json` and `Dockerfile` in `backend/portfolio/`.
+   - It will use Docker to build the image, which installs Node, builds the frontend, runs migrations, and collects static files.
 
 4. **Set Environment Variables** in Railway Dashboard (Variables tab):
    - `SECRET_KEY`: Generate a secure key (e.g., use `openssl rand -base64 32`).
@@ -21,11 +21,11 @@
    - `ADMIN_EMAIL`: Your email.
    - `DEFAULT_FROM_EMAIL`: Your email.
 
-5. **Deploy**: Click Deploy. Railway will build and deploy the app.
+5. **Deploy**: Click Deploy. Railway will build the Docker image and deploy the app.
 
 6. **Access the Site**: Once deployed, visit the provided URL.
 
 ## Notes
-- The app serves the React frontend and Django API in one service.
+- The app serves the React frontend and Django API in one service using Docker.
 - Database is SQLite, included in the repo.
 - For production email, update `EMAIL_BACKEND` in settings.py if needed.
