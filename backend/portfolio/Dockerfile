@@ -1,7 +1,14 @@
-FROM python:3.11-slim
+FROM node:18-slim AS frontend-builder
 
-# Install Node.js
-RUN apt-get update && apt-get install -y nodejs npm && rm -rf /var/lib/apt/lists/*
+WORKDIR /app/frontend
+
+COPY frontend/package*.json ./
+RUN npm ci
+
+COPY frontend/ ./
+RUN npm run build
+
+FROM python:3.11-slim
 
 WORKDIR /app
 
@@ -9,12 +16,8 @@ WORKDIR /app
 COPY backend/portfolio/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy and build frontend
-COPY frontend/ ./frontend/
-WORKDIR /app/frontend
-RUN npm ci && npm run build
-
-WORKDIR /app
+# Copy built frontend
+COPY --from=frontend-builder /app/frontend/build ./frontend/build
 
 # Copy backend code
 COPY backend/portfolio/ ./
