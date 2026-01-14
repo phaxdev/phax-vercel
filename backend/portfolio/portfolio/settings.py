@@ -105,7 +105,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Vite
     "http://127.0.0.1:3000",
     "http://127.0.0.1:5173",
-    "phax-vercel-production-e515.up.railway.app",  # ваш Vercel домен
+    "https://phax-vercel-production-e515.up.railway.app",  # ваш Vercel домен
 ]
 
 CORS_ALLOW_CREDENTIALS = True
