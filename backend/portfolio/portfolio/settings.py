@@ -146,6 +146,10 @@ REST_FRAMEWORK = {
     ]
 }
 
-cloudinary.config(cloudinary_url=os.getenv('CLOUDINARY_URL=cloudinary://<469328817995718>:<jIQRjFpJVBi_Z45DInN2ZEDIprw>@ddear0jsu'))
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME', 'ddear0jsu'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY', '469328817995718'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET', 'jIQRjFpJVBi_Z45DInN2ZEDIprw')
+}
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
