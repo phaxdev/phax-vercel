@@ -16,4 +16,7 @@ COPY . .
 
 RUN python manage.py collectstatic --noinput || true
 
-CMD python manage.py migrate && python manage.py runserver 0.0.0.0:$PORT
+# Создаём суперпользователя при старте если переменные заданы
+CMD python manage.py migrate && \
+    (python manage.py createsuperuser --noinput 2>/dev/null || echo "Superuser already exists") && \
+    python manage.py runserver 0.0.0.0:$PORT
