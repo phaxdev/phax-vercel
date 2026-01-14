@@ -14,7 +14,18 @@ SITE_URL = os.environ.get('SITE_URL', 'https://phax-vercel-ghostmaresaos-project
 ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'phaxdev.info@internet.ru')
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@example.com')
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    'phax-vercel-production-e515.up.railway.app',
+    'localhost',
+    '127.0.0.1',
+    '*'  # для разработки, потом можно убрать
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://phax-vercel-production-e515.up.railway.app',
+    'http://localhost:8080',
+    'http://127.0.0.1:8080',
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -106,10 +117,8 @@ CORS_ALLOW_ALL_ORIGINS = True  # Для разработки разрешаем 
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://localhost:5173",  # Vite
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1:5173",
+    'https://phax-vercel-production-e515.up.railway.app',
+    'http://localhost:3000',  # если фронтенд локально
     "https://phax-vercel-production-e515.up.railway.app",  # ваш Vercel домен
 ]
 
