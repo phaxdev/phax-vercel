@@ -1,5 +1,5 @@
 from rest_framework import generics, permissions
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Project, Skill, Experience, Profile
@@ -8,11 +8,9 @@ from .serializers import (
     ExperienceSerializer, ProfileSerializer
 )
 from rest_framework import viewsets, status
-from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAdminUser
 from django.core.mail import send_mail
 from django.conf import settings
-from django.http import HttpResponse
 import os
 from .models import ContactMessage
 from .serializers import ContactMessageSerializer
@@ -20,16 +18,13 @@ from .serializers import ContactMessageSerializer
 class ContactMessageViewSet(viewsets.ModelViewSet):
     queryset = ContactMessage.objects.all()
     serializer_class = ContactMessageSerializer
-    permission_classes = [AllowAny]  # Разрешить всем
+    permission_classes = [AllowAny]
     
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         
         if serializer.is_valid():
-            # Сохраняем сообщение
             self.perform_create(serializer)
-            
-            # Просто выводим в консоль
             data = serializer.data
             print(f"✅ Сообщение сохранено: {data['name']} ({data['email']})")
             
@@ -39,7 +34,6 @@ class ContactMessageViewSet(viewsets.ModelViewSet):
                 'data': data
             }, status=status.HTTP_201_CREATED)
         
-        # Если ошибка валидации
         return Response({
             'success': False,
             'errors': serializer.errors
@@ -77,7 +71,6 @@ class ProfileDetailAPIView(generics.RetrieveAPIView):
     permission_classes = [permissions.AllowAny]
 
     def get_object(self):
-        # Получаем или создаем профиль по умолчанию
         profile, created = Profile.objects.get_or_create(
             defaults={
                 'name': 'phax',
@@ -89,9 +82,13 @@ class ProfileDetailAPIView(generics.RetrieveAPIView):
         return profile
 
 def serve_react(request):
-    index_path = os.path.join(settings.BASE_DIR, 'frontend', 'build', 'index.html')
-    with open(index_path, 'r') as f:
-        return HttpResponse(f.read(), content_type='text/html')
+    # Фронтенд развернут отдельно
+    return JsonResponse({
+        'message': 'API is running',
+        'admin': '/admin/',
+        'api': '/api/',
+        'health': '/api/health/'
+    })
 
 def health_check(request):
     return JsonResponse({
