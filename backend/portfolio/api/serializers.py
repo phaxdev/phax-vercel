@@ -49,6 +49,8 @@ class ExperienceSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     photo_url = serializers.SerializerMethodField()
+    photo = serializers.SerializerMethodField()  # ← Переопределяем photo
+    cv_file = serializers.SerializerMethodField()  # ← И cv_file тоже
 
     class Meta:
         model = Profile
@@ -58,11 +60,24 @@ class ProfileSerializer(serializers.ModelSerializer):
             'cv_file', 'updated_at'
         ]
 
-    def get_photo_url(self, obj):
+    def get_photo(self, obj):
         if obj.photo and hasattr(obj.photo, 'url'):
             request = self.context.get('request')
             if request:
                 url = request.build_absolute_uri(obj.photo.url)
                 return url.replace('http://', 'https://')
             return obj.photo.url.replace('http://', 'https://')
+        return None
+
+    def get_photo_url(self, obj):
+        # Используем тот же метод
+        return self.get_photo(obj)
+    
+    def get_cv_file(self, obj):
+        if obj.cv_file and hasattr(obj.cv_file, 'url'):
+            request = self.context.get('request')
+            if request:
+                url = request.build_absolute_uri(obj.cv_file.url)
+                return url.replace('http://', 'https://')
+            return obj.cv_file.url.replace('http://', 'https://')
         return None
