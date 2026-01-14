@@ -107,7 +107,7 @@ frontend_static = os.path.join(BASE_DIR, 'frontend', 'build', 'static')
 if os.path.exists(frontend_static):
     STATICFILES_DIRS.append(frontend_static)
 
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

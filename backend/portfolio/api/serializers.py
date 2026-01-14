@@ -6,6 +6,7 @@ class ContactMessageSerializer(serializers.ModelSerializer):
         model = ContactMessage
         fields = ['id', 'name', 'email', 'phone', 'message', 'created_at', 'status']
         read_only_fields = ['created_at', 'status']
+
 class ProjectSerializer(serializers.ModelSerializer):
     technologies_list = serializers.SerializerMethodField()
     image_url = serializers.SerializerMethodField()
@@ -25,11 +26,12 @@ class ProjectSerializer(serializers.ModelSerializer):
         return []
 
     def get_image_url(self, obj):
-        request = self.context.get('request')
         if obj.image and hasattr(obj.image, 'url'):
+            request = self.context.get('request')
             if request:
-                return request.build_absolute_uri(obj.image.url)
-            return obj.image.url
+                url = request.build_absolute_uri(obj.image.url)
+                return url.replace('http://', 'https://')
+            return obj.image.url.replace('http://', 'https://')
         return None
 
 class SkillSerializer(serializers.ModelSerializer):
@@ -57,9 +59,10 @@ class ProfileSerializer(serializers.ModelSerializer):
         ]
 
     def get_photo_url(self, obj):
-        request = self.context.get('request')
         if obj.photo and hasattr(obj.photo, 'url'):
+            request = self.context.get('request')
             if request:
-                return request.build_absolute_uri(obj.photo.url)
-            return obj.photo.url
+                url = request.build_absolute_uri(obj.photo.url)
+                return url.replace('http://', 'https://')
+            return obj.photo.url.replace('http://', 'https://')
         return None
