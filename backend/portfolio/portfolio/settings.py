@@ -1,5 +1,7 @@
 import os
 from pathlib import Path
+from decouple import config
+import cloudinary
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -34,6 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'cloudinary_storage',  # добавить ПЕРЕД django.contrib.staticfiles
+    'cloudinary',
     'rest_framework',
     'corsheaders',
     'api',
@@ -142,4 +146,12 @@ REST_FRAMEWORK = {
     ]
 }
 
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': config('ddear0jsu'),
+    'API_KEY': config('469328817995718'),
+    'API_SECRET': config('jIQRjFpJVBi_Z45DInN2ZEDIprw')
+}
 
+cloudinary.config(cloudinary_url=os.getenv('CLOUDINARY_URL'))
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
