@@ -8,7 +8,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-your-secret-key-here'
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
 # Настройки сайта
-SITE_URL = os.environ.get('SITE_URL', 'https://your-railway-app.up.railway.app')
+SITE_URL = os.environ.get('SITE_URL', 'https://phax-vercel-ghostmaresaos-projects.vercel.app/')
 
 # Email администратора
 ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'phaxdev.info@internet.ru')
@@ -105,7 +105,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Vite
     "http://127.0.0.1:3000",
     "http://127.0.0.1:5173",
-    "https://your-vercel-app.vercel.app",  # ваш Vercel домен
+    "phax-vercel-production-e515.up.railway.app",  # ваш Vercel домен
 ]
 
 CORS_ALLOW_CREDENTIALS = True
