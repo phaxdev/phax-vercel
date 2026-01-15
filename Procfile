@@ -1,2 +1,2 @@
-release: cd backend/portfolio && python manage.py migrate --noinput && python manage.py loaddata ../../data.json
+release: cd backend/portfolio && echo "Current dir:" && pwd && echo "Files here:" && ls -la && echo "Parent dir files:" && ls -la ../.. && echo "Running migrations..." && python manage.py migrate --noinput && echo "Running loaddata..." && python manage.py loaddata ../../data.json && echo "Loaddata complete!"
 web: cd backend/portfolio && gunicorn portfolio.wsgi
