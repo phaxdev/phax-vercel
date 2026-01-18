@@ -25,20 +25,26 @@ class ContactMessage(models.Model):
         if not is_new and self.pk:
             old_instance = ContactMessage.objects.get(pk=self.pk)
             if old_instance.admin_reply != self.admin_reply and self.admin_reply:
-                try:
-                    self.send_reply_email()
-                    self.status = 'replied'
-                    from django.utils import timezone
-                    self.replied_at = timezone.now()
-                except Exception as e:
-                    print(f"Ошибка отправки email: {e}")
-        
+                print(f"🔄 Попытка отправить email на {self.email}")
+            try:
+                self.send_reply_email()
+                self.status = 'replied'
+                from django.utils import timezone
+                self.replied_at = timezone.now()
+                print(f"✅ Email успешно отправлен на {self.email}")
+            except Exception as e:
+                print(f"❌ ОШИБКА отправки email: {type(e).__name__}: {str(e)}")
+                import traceback
+                traceback.print_exc()
+    
         super().save(*args, **kwargs)
     
     def send_reply_email(self):
         """Отправка ответа на email пользователя"""
+        print(f"📧 Формирование письма для {self.email}")
+    
         subject = f"Ответ на ваше сообщение от PhaxDev"
-        
+    
         message_body = f"""Здравствуйте, {self.name}!
 
 Благодарим вас за обращение.
@@ -57,20 +63,24 @@ class ContactMessage(models.Model):
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Если у вас остались вопросы, вы можете ответить на это письмо.
-
 С уважением,
 Команда PhaxDev
 {settings.EMAIL_HOST_USER if hasattr(settings, 'EMAIL_HOST_USER') else settings.DEFAULT_FROM_EMAIL}
 """
-        
+    
+        from_email = settings.DEFAULT_FROM_EMAIL
+        print(f"📤 Отправка от {from_email} к {self.email}")
+        print(f"📋 Тема: {subject}")
+    
         send_mail(
             subject=subject,
             message=message_body,
-            from_email=settings.DEFAULT_FROM_EMAIL,
+            from_email=from_email,
             recipient_list=[self.email],
             fail_silently=False,
         )
+    
+        print(f"🎉 send_mail выполнен успешно!")
     
     def __str__(self):
         return f"{self.name} - {self.email}"
