@@ -15,8 +15,9 @@ class ContactMessage(models.Model):
     phone = models.CharField(max_length=20, blank=True, verbose_name="Телефон")
     message = models.TextField(verbose_name="Сообщение")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='new')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='new', verbose_name="Статус")
     admin_reply = models.TextField(blank=True, verbose_name="Ответ администратора")
+    replied_at = models.DateTimeField(null=True, blank=True, verbose_name="Дата ответа")
     
     def save(self, *args, **kwargs):
         # Если добавлен ответ администратора, отправляем email
@@ -24,28 +25,48 @@ class ContactMessage(models.Model):
         if not is_new and self.pk:
             old_instance = ContactMessage.objects.get(pk=self.pk)
             if old_instance.admin_reply != self.admin_reply and self.admin_reply:
-                self.send_reply_email()
-                self.status = 'replied'
+                try:
+                    self.send_reply_email()
+                    self.status = 'replied'
+                    from django.utils import timezone
+                    self.replied_at = timezone.now()
+                except Exception as e:
+                    print(f"Ошибка отправки email: {e}")
         
         super().save(*args, **kwargs)
     
     def send_reply_email(self):
         """Отправка ответа на email пользователя"""
         subject = f"Ответ на ваше сообщение от PhaxDev"
-        message = f"""Здравствуйте, {self.name}!
+        
+        message_body = f"""Здравствуйте, {self.name}!
 
-Спасибо за ваше сообщение.
+Благодарим вас за обращение.
 
-Наш ответ:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📝 Ваше сообщение:
+
+{self.message}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💬 Наш ответ:
+
 {self.admin_reply}
 
----
-С уваженimportm,
-Команда PhaxDev"""
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Если у вас остались вопросы, вы можете ответить на это письмо.
+
+С уважением,
+Команда PhaxDev
+{settings.EMAIL_HOST_USER if hasattr(settings, 'EMAIL_HOST_USER') else settings.DEFAULT_FROM_EMAIL}
+"""
         
         send_mail(
             subject=subject,
-            message=message,
+            message=message_body,
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[self.email],
             fail_silently=False,
@@ -58,6 +79,7 @@ class ContactMessage(models.Model):
         verbose_name = "Контактное сообщение"
         verbose_name_plural = "Контактные сообщения"
         ordering = ['-created_at']
+
 
 class Project(models.Model):
     title = models.CharField(max_length=200, verbose_name="Название проекта")
@@ -89,6 +111,7 @@ class Project(models.Model):
     def get_technologies_list(self):
         return [tech.strip() for tech in self.technologies.split(',')]
 
+
 class Skill(models.Model):
     CATEGORY_CHOICES = [
         ('frontend', 'Frontend'),
@@ -112,6 +135,7 @@ class Skill(models.Model):
     def __str__(self):
         return f"{self.name} ({self.get_category_display()})"
 
+
 class Experience(models.Model):
     company = models.CharField(max_length=200, verbose_name="Компания")
     position = models.CharField(max_length=200, verbose_name="Должность")
@@ -128,6 +152,7 @@ class Experience(models.Model):
 
     def __str__(self):
         return f"{self.position} at {self.company}"
+
 
 class Profile(models.Model):
     name = models.CharField(max_length=100, verbose_name="Имя")

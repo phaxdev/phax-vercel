@@ -169,12 +169,11 @@ CLOUDINARY_STORAGE = {
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-# Email настройки
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.mail.ru'
 EMAIL_PORT = 465
-EMAIL_USE_SSL = True
-EMAIL_HOST_USER = 'phaxdev.info@internet.ru'
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')  # ⚠️ ИСПРАВЛЕНО!
-DEFAULT_FROM_EMAIL = 'phaxdev.info@internet.ru'
-SERVER_EMAIL = 'phaxdev.info@internet.ru'
+EMAIL_USE_SSL = True  # Mail.ru использует SSL, а не TLS!
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  # ваш email@mail.ru
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  # пароль приложения
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
+SERVER_EMAIL = os.getenv('EMAIL_HOST_USER')
