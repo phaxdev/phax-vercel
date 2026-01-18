@@ -22,10 +22,14 @@ class ContactMessage(models.Model):
     def save(self, *args, **kwargs):
         # Если добавлен ответ администратора, отправляем email
         is_new = self._state.adding
+        should_send = False
         if not is_new and self.pk:
             old_instance = ContactMessage.objects.get(pk=self.pk)
             if old_instance.admin_reply != self.admin_reply and self.admin_reply:
-                print(f"🔄 Попытка отправить email на {self.email}")
+                should_send = True
+
+        if should_send:
+            print(f"🔄 Попытка отправить email на {self.email}")
             try:
                 self.send_reply_email()
                 self.status = 'replied'
@@ -68,7 +72,7 @@ class ContactMessage(models.Model):
 {settings.EMAIL_HOST_USER if hasattr(settings, 'EMAIL_HOST_USER') else settings.DEFAULT_FROM_EMAIL}
 """
     
-        from_email = settings.DEFAULT_FROM_EMAIL
+        from_email = getattr(settings, 'ADMIN_EMAIL', None) or getattr(settings, 'DEFAULT_FROM_EMAIL', None)
         print(f"📤 Отправка от {from_email} к {self.email}")
         print(f"📋 Тема: {subject}")
     
