@@ -169,11 +169,13 @@ CLOUDINARY_STORAGE = {
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
+# Email настройки для internet.ru (домен Mail.ru Group)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_HOST = 'smtp.internet.ru'  # ← ВАЖНО! Не smtp.mail.ru
 EMAIL_PORT = 465
-EMAIL_USE_SSL = True  # Mail.ru использует SSL, а не TLS!
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  # ваш email@mail.ru
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  # пароль приложения
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  # ваш_email@internet.ru
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
 SERVER_EMAIL = os.getenv('EMAIL_HOST_USER')
