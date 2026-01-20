@@ -636,7 +636,7 @@ const Portfolio = () => {
                     grabCursor={true}
                     centeredSlides={true}
                     centeredSlidesBounds={true} // Важно! Удерживает слайды по центру
-                    slidesPerView={1.2} // Чуть больше 1 для эффекта
+                    slidesPerView={1} // Чуть больше 1 для эффекта
                     spaceBetween={30}
                     loop={true}
                     loopAdditionalSlides={2}
