@@ -1,5 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Github, Linkedin, Mail, Send, ExternalLink, Code, Database, Server, Tool, Laptop, Briefcase, Calendar, MapPin, Phone, Star, X, Menu } from 'lucide-react';
+// Импортируем иконки из react-icons/fa
+import { 
+  FaGithub, 
+  FaLinkedin, 
+  FaEnvelope, 
+  FaPaperPlane, 
+  FaExternalLinkAlt, 
+  FaCode, 
+  FaDatabase, 
+  FaServer, 
+  FaWrench, 
+  FaLaptop, 
+  FaBriefcase, 
+  FaCalendarAlt, 
+  FaMapMarkerAlt, 
+  FaPhone, 
+  FaStar, 
+  FaTimes, 
+  FaBars 
+} from 'react-icons/fa';
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -212,11 +231,11 @@ const Portfolio = () => {
 
   const getSkillIcon = (category) => {
     switch (category) {
-      case 'frontend': return <Code size={20} />;
-      case 'backend': return <Server size={20} />;
-      case 'database': return <Database size={20} />;
-      case 'tools': return <Tool size={20} />;
-      default: return <Laptop size={20} />;
+      case 'frontend': return <FaCode size={20} />;
+      case 'backend': return <FaServer size={20} />;
+      case 'database': return <FaDatabase size={20} />;
+      case 'tools': return <FaWrench size={20} />;
+      default: return <FaLaptop size={20} />;
     }
   };
 
@@ -253,7 +272,7 @@ const Portfolio = () => {
           <div className="flex items-center justify-between mb-12">
             <h1 className="text-xl font-bold">{profile?.name?.split(' ')[0] || 'Portfolio'}</h1>
             <button onClick={() => setSidebarOpen(false)} className="lg:hidden">
-              <X size={20} />
+              <FaTimes size={20} />
             </button>
           </div>
           
@@ -272,17 +291,17 @@ const Portfolio = () => {
           <div className="absolute bottom-6 left-6 right-6 space-y-2">
             {profile?.github_url && (
               <a href={profile.github_url} target="_blank" rel="noopener noreferrer" className="flex items-center text-gray-400 hover:text-white transition-colors">
-                <Github size={16} className="mr-2" /> GitHub
+                <FaGithub size={16} className="mr-2" /> GitHub
               </a>
             )}
             {profile?.linkedin_url && (
               <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="flex items-center text-gray-400 hover:text-white transition-colors">
-                <Linkedin size={16} className="mr-2" /> LinkedIn
+                <FaLinkedin size={16} className="mr-2" /> LinkedIn
               </a>
             )}
             {profile?.telegram_url && (
               <a href={profile.telegram_url} target="_blank" rel="noopener noreferrer" className="flex items-center text-gray-400 hover:text-white transition-colors">
-                <Send size={16} className="mr-2" /> Telegram
+                <FaPaperPlane size={16} className="mr-2" /> Telegram
               </a>
             )}
           </div>
@@ -294,7 +313,7 @@ const Portfolio = () => {
         onClick={() => setSidebarOpen(true)}
         className="lg:hidden fixed top-6 left-6 z-40 w-10 h-10 flex items-center justify-center bg-white text-black"
       >
-        <Menu size={20} />
+        <FaBars size={20} />
       </button>
 
       {/* Основной контент */}
@@ -365,7 +384,7 @@ const Portfolio = () => {
           <h2 className="text-4xl font-bold mb-12">Проекты</h2>
           {safeProjects.length === 0 ? (
             <div className="border border-gray-800 p-12 text-center">
-              <Code size={48} className="mx-auto mb-4 text-gray-700" />
+              <FaCode size={48} className="mx-auto mb-4 text-gray-700" />
               <p className="text-gray-500">Проекты не добавлены</p>
             </div>
           ) : (
@@ -386,12 +405,12 @@ const Portfolio = () => {
                     <div className="flex gap-4 text-sm">
                       {project.github_url && (
                         <a href={project.github_url} target="_blank" rel="noopener noreferrer" className="flex items-center hover:text-gray-400">
-                          <Github size={16} className="mr-1" /> Код
+                          <FaGithub size={16} className="mr-1" /> Код
                         </a>
                       )}
                       {project.live_url && (
                         <a href={project.live_url} target="_blank" rel="noopener noreferrer" className="flex items-center hover:text-gray-400">
-                          <ExternalLink size={16} className="mr-1" /> Демо
+                          <FaExternalLinkAlt size={16} className="mr-1" /> Демо
                         </a>
                       )}
                     </div>
@@ -437,7 +456,7 @@ const Portfolio = () => {
           <h2 className="text-4xl font-bold mb-12">Опыт работы</h2>
           {safeExperience.length === 0 ? (
             <div className="border border-gray-800 p-12 text-center">
-              <Briefcase size={48} className="mx-auto mb-4 text-gray-700" />
+              <FaBriefcase size={48} className="mx-auto mb-4 text-gray-700" />
               <p className="text-gray-500">Опыт работы не добавлен</p>
             </div>
           ) : (
@@ -468,7 +487,7 @@ const Portfolio = () => {
               {profile?.email && (
                 <a href={`mailto:${profile.email}`} className="block border border-gray-800 p-4 hover:border-white transition-colors">
                   <div className="flex items-center">
-                    <Mail size={20} className="mr-3" />
+                    <FaEnvelope size={20} className="mr-3" />
                     <div>
                       <div className="text-xs text-gray-500">Email</div>
                       <div className="font-medium">{profile.email}</div>
@@ -479,7 +498,7 @@ const Portfolio = () => {
               {profile?.github_url && (
                 <a href={profile.github_url} target="_blank" rel="noopener noreferrer" className="block border border-gray-800 p-4 hover:border-white transition-colors">
                   <div className="flex items-center">
-                    <Github size={20} className="mr-3" />
+                    <FaGithub size={20} className="mr-3" />
                     <div>
                       <div className="text-xs text-gray-500">GitHub</div>
                       <div className="font-medium">Профиль на GitHub</div>
@@ -490,7 +509,7 @@ const Portfolio = () => {
               {profile?.linkedin_url && (
                 <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="block border border-gray-800 p-4 hover:border-white transition-colors">
                   <div className="flex items-center">
-                    <Linkedin size={20} className="mr-3" />
+                    <FaLinkedin size={20} className="mr-3" />
                     <div>
                       <div className="text-xs text-gray-500">LinkedIn</div>
                       <div className="font-medium">Профиль на LinkedIn</div>
@@ -501,7 +520,7 @@ const Portfolio = () => {
               {profile?.telegram_url && (
                 <a href={profile.telegram_url} target="_blank" rel="noopener noreferrer" className="block border border-gray-800 p-4 hover:border-white transition-colors">
                   <div className="flex items-center">
-                    <Send size={20} className="mr-3" />
+                    <FaPaperPlane size={20} className="mr-3" />
                     <div>
                       <div className="text-xs text-gray-500">Telegram</div>
                       <div className="font-medium">Написать в Telegram</div>
