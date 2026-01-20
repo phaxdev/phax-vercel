@@ -12,7 +12,6 @@ const SEO = ({
 }) => {
   return (
     <Helmet>
-      <meta name="yandex-verification" content="7ed509f8867db47d" />
       {/* Базовые мета-теги */}
       <title>{title}</title>
       <meta name="description" content={description} />
