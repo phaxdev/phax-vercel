@@ -213,6 +213,8 @@ const Portfolio = () => {
                 setLoading(true);
                 setApiStatus('Подключение к сайту...');
 
+                const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+
                 // Загружаем все данные параллельно
                 const [projectsRes, skillsRes, experienceRes, profileRes] = await Promise.allSettled([
                     fetch(`${API_URL}/projects/`).then(r => r.ok ? r.json() : []),
