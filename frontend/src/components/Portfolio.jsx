@@ -227,7 +227,7 @@ const LoadingScreen = ({ apiStatus }) => {
                 <LoadingSpinner />
                 <p className="text-white text-sm tracking-widest uppercase mb-4">{apiStatus}</p>
                 <p className="text-neutral-600 text-xs">
-                    API: Текущий адрес: {window.location.hostname}:${window.location.port}
+                    API: Текущий адрес: {window.location.hostname}:{window.location.port}
                 </p>
             </div>
         </div>
