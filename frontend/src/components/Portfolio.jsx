@@ -197,19 +197,25 @@ const ProjectCard = ({ project, isActive }) => {
         }
     }, [isActive]);
 
-    const getTechIcon = (tech) => {
-        const techLower = tech.toLowerCase();
-        if (techLower.includes('react') || techLower.includes('vue') || techLower.includes('angular')) {
-            return <FaCode className="text-sm" />;
-        } else if (techLower.includes('node') || techLower.includes('express') || techLower.includes('nest')) {
-            return <FaServer className="text-sm" />;
-        } else if (techLower.includes('sql') || techLower.includes('mongo') || techLower.includes('postgres')) {
-            return <FaDatabase className="text-sm" />;
-        } else if (techLower.includes('mobile') || techLower.includes('react native') || techLower.includes('flutter')) {
-            return <FaMobile className="text-sm" />;
+    // Функция для получения технологий (обработка разных форматов из API)
+    const getTechnologies = () => {
+        if (!project) return [];
+        
+        // Проверяем разные варианты полей из API
+        if (Array.isArray(project.technologies)) {
+            return project.technologies;
         }
-        return <FaRocket className="text-sm" />;
+        if (Array.isArray(project.technologies_list)) {
+            return project.technologies_list;
+        }
+        if (project.technologies && typeof project.technologies === 'string') {
+            // Если это строка, пробуем разбить по запятой
+            return project.technologies.split(',').map(t => t.trim());
+        }
+        return [];
     };
+
+    const technologies = getTechnologies();
 
     return (
         <div
@@ -225,7 +231,9 @@ const ProjectCard = ({ project, isActive }) => {
             <div className="relative z-10">
                 {/* Год и статус */}
                 <div className="flex justify-between items-center mb-6">
-                    <span className="text-xs tracking-widest text-neutral-500 uppercase">{project.year || '2024'}</span>
+                    <span className="text-xs tracking-widest text-neutral-500 uppercase">
+                        {project.year || new Date().getFullYear()}
+                    </span>
                     {isActive && (
                         <span className="px-3 py-1 bg-white text-black text-xs tracking-widest rounded-full animate-pulse">
                             ACTIVE
@@ -234,32 +242,28 @@ const ProjectCard = ({ project, isActive }) => {
                 </div>
 
                 {/* Заголовок */}
-                <h3 className="text-3xl md:text-4xl font-light mb-4 tracking-tight">{project.title}</h3>
+                <h3 className="text-3xl md:text-4xl font-light mb-4 tracking-tight">
+                    {project.title || 'Проект без названия'}
+                </h3>
 
                 {/* Описание */}
-                <p className="text-neutral-400 mb-8 leading-relaxed">{project.short_description || project.description || 'Описание проекта'}</p>
+                <p className="text-neutral-400 mb-8 leading-relaxed">
+                    {project.short_description || project.description || 'Описание проекта будет добавлено позже'}
+                </p>
 
                 {/* Технологии */}
-                <div className="flex flex-wrap gap-3 mb-8">
-                    {project.technologies && project.technologies.map((tech, index) => (
-                        <span
-                            key={index}
-                            className="px-4 py-2 border border-neutral-800 rounded-full text-sm tracking-wider flex items-center gap-2 hover:border-white hover:bg-white/5 transition-all duration-300"
-                        >
-                            {getTechIcon(tech)}
-                            {tech}
-                        </span>
-                    ))}
-                    {project.technologies_list && project.technologies_list.map((tech, index) => (
-                        <span
-                            key={index}
-                            className="px-4 py-2 border border-neutral-800 rounded-full text-sm tracking-wider flex items-center gap-2 hover:border-white hover:bg-white/5 transition-all duration-300"
-                        >
-                            {getTechIcon(tech)}
-                            {tech}
-                        </span>
-                    ))}
-                </div>
+                {technologies.length > 0 && (
+                    <div className="flex flex-wrap gap-3 mb-8">
+                        {technologies.map((tech, index) => (
+                            <span
+                                key={index}
+                                className="px-4 py-2 border border-neutral-800 rounded-full text-sm tracking-wider hover:border-white hover:bg-white/5 transition-all duration-300"
+                            >
+                                {tech}
+                            </span>
+                        ))}
+                    </div>
+                )}
 
                 {/* Ссылки */}
                 <div className="flex gap-6">
@@ -268,9 +272,8 @@ const ProjectCard = ({ project, isActive }) => {
                             href={project.github_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-2 text-sm tracking-widest uppercase hover:text-white transition-colors group/link"
+                            className="text-sm tracking-widest uppercase hover:text-white transition-colors group/link"
                         >
-                            <FaGithub className="group-hover/link:scale-110 transition-transform" />
                             <span className="border-b border-transparent group-hover/link:border-white">GITHUB</span>
                         </a>
                     )}
@@ -279,9 +282,8 @@ const ProjectCard = ({ project, isActive }) => {
                             href={project.live_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-2 text-sm tracking-widest uppercase hover:text-white transition-colors group/link"
+                            className="text-sm tracking-widest uppercase hover:text-white transition-colors group/link"
                         >
-                            <FaExternalLinkAlt className="group-hover/link:scale-110 transition-transform" />
                             <span className="border-b border-transparent group-hover/link:border-white">ДЕМО</span>
                         </a>
                     )}
