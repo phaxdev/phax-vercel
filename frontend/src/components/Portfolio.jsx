@@ -1,22 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { HelmetProvider, Helmet } from 'react-helmet-async'; // Импортируем оба
 import background1 from './background1.png';
 import background2 from './background2.png';
 import background3 from './background3.png';
 import background4 from './background4.png';
 import background5 from './background5.png';
-import { Helmet } from 'react-helmet-async'; // ДОБАВЬ ЭТОТ ИМПОРТ
 
-// ... (все остальные импорты и константы остаются без изменений)
-
+// SEO компонент
 const SEO = ({ 
   title = "Разработка сайтов и ботов под ключ | Full Stack Developer",
   description = "Профессиональная разработка сайтов, Telegram ботов, скриптов Lua. Создание сайтов под ключ, верстка макетов, мини-приложения в Telegram. Фиксированные цены, гарантия качества.",
   keywords = "разработка сайтов, создание сайтов, telegram боты, Lua скрипты, верстка макетов, мини-приложения, fullstack разработчик, заказать сайт",
   ogImage = "/og-image.jpg",
-  ogUrl = "https://ваш-сайт.ru",
+  ogUrl = "https://phax.online",
   type = "website",
-  author = "Алексей Петров"
+  author = "phax"
 }) => {
   return (
     <Helmet>
@@ -1211,120 +1210,121 @@ const Portfolio = () => {
     const safeProjects = Array.isArray(projects) ? projects : [];
 
     return (
-        <div className="min-h-screen bg-black text-white font-sans">
-            {/* ДОБАВЬ СЕО КОМПОНЕНТ ЗДЕСЬ */}
-            <SEO 
-                title="Разработчик сайтов | Создание Telegram ботов | Lua скрипты под ключ"
-                description="Профессиональный fullstack разработчик. Делаю сайты под ключ от 25.000₽, Telegram боты, мини-приложения, скрипты Lua. Гарантия 6 месяцев. Срок от 2 недель."
-                keywords="заказать сайт недорого, разработка сайтов москва, создать телеграм бота, программист на Lua, верстка макетов Figma, разработка мини-приложений, fullstack разработчик, веб-разработка под ключ"
-                ogUrl={window.location.href}
-                author={profile?.name || 'Алексей Петров'}
-            />
-            
-            <nav className="fixed w-full bg-black/95 backdrop-blur-sm z-50 border-b border-neutral-900">
-                <div className="container mx-auto px-6 py-6">
-                    <div className="flex justify-between items-center">
-                        <div className="text-sm tracking-widest uppercase font-light">{profile?.name?.split(' ')[0] || 'Portfolio'}</div>
-                        <div className="hidden md:flex space-x-12">
-                            {menuItems.map(item => (
-                                <button key={item.id} onClick={() => handleScroll(item.id)} className="text-xs tracking-widest text-neutral-400 hover:text-white transition-colors uppercase">{item.label}</button>
-                            ))}
+        <HelmetProvider> {/* ВАЖНО: оборачиваем всё в HelmetProvider */}
+            <div className="min-h-screen bg-black text-white font-sans">
+                <SEO 
+                    title="Разработчик сайтов | Создание Telegram ботов | Lua скрипты под ключ"
+                    description="Профессиональный fullstack разработчик. Делаю сайты под ключ от 25.000₽, Telegram боты, мини-приложения, скрипты Lua. Гарантия 6 месяцев. Срок от 2 недель."
+                    keywords="заказать сайт недорого, разработка сайтов москва, создать телеграм бота, программист на Lua, верстка макетов Figma, разработка мини-приложений, fullstack разработчик, веб-разработка под ключ"
+                    ogUrl={window.location.href}
+                    author={profile?.name || 'Алексей Петров'}
+                />
+                
+                <nav className="fixed w-full bg-black/95 backdrop-blur-sm z-50 border-b border-neutral-900">
+                    <div className="container mx-auto px-6 py-6">
+                        <div className="flex justify-between items-center">
+                            <div className="text-sm tracking-widest uppercase font-light">{profile?.name?.split(' ')[0] || 'Portfolio'}</div>
+                            <div className="hidden md:flex space-x-12">
+                                {menuItems.map(item => (
+                                    <button key={item.id} onClick={() => handleScroll(item.id)} className="text-xs tracking-widest text-neutral-400 hover:text-white transition-colors uppercase">{item.label}</button>
+                                ))}
+                            </div>
+                            <button className="md:hidden text-neutral-400 hover:text-white transition-colors text-sm tracking-widest" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                                {isMenuOpen ? 'ЗАКРЫТЬ' : 'МЕНЮ'}
+                            </button>
                         </div>
-                        <button className="md:hidden text-neutral-400 hover:text-white transition-colors text-sm tracking-widest" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                            {isMenuOpen ? 'ЗАКРЫТЬ' : 'МЕНЮ'}
-                        </button>
+                        {isMenuOpen && (
+                            <div className="md:hidden mt-8 pb-8 space-y-6">
+                                {menuItems.map(item => (
+                                    <button key={item.id} onClick={() => handleScroll(item.id)} className="block w-full text-left text-sm tracking-widest text-neutral-400 hover:text-white transition-colors uppercase">{item.label}</button>
+                                ))}
+                            </div>
+                        )}
                     </div>
-                    {isMenuOpen && (
-                        <div className="md:hidden mt-8 pb-8 space-y-6">
-                            {menuItems.map(item => (
-                                <button key={item.id} onClick={() => handleScroll(item.id)} className="block w-full text-left text-sm tracking-widest text-neutral-400 hover:text-white transition-colors uppercase">{item.label}</button>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            </nav>
+                </nav>
 
-            <HeroSection profile={profile} safeProjects={safeProjects} handleScroll={handleScroll}/>
+                <HeroSection profile={profile} safeProjects={safeProjects} handleScroll={handleScroll}/>
 
-            <section id="about" className="py-32 border-t border-neutral-900 relative">
-                <div className="absolute inset-0 z-0 opacity-5">
-                    <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background2})`, filter: 'grayscale(100%)'}}></div>
-                </div>
-                <div className="container mx-auto px-6 relative z-10">
-                    <div className="max-w-3xl mx-auto">
-                        <h2 className="text-xs tracking-widest text-neutral-500 uppercase mb-12 text-center">ОБО МНЕ</h2>
-                        <div className="text-center space-y-8">
-                            <p className="text-2xl md:text-3xl font-light leading-relaxed text-neutral-300">
-                                {profile?.bio || 'Информация о вас появится здесь после добавления в админ-панель.'}
-                            </p>
-                            {(profile?.email || profile?.location) && (
-                                <div className="flex justify-center gap-12 pt-12 text-sm tracking-wide text-neutral-500">
-                                    {profile?.email && <div>EMAIL: {profile.email}</div>}
-                                    {profile?.location && <div>ЛОКАЦИЯ: {profile.location}</div>}
-                                </div>
-                            )}
+                <section id="about" className="py-32 border-t border-neutral-900 relative">
+                    <div className="absolute inset-0 z-0 opacity-5">
+                        <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background2})`, filter: 'grayscale(100%)'}}></div>
+                    </div>
+                    <div className="container mx-auto px-6 relative z-10">
+                        <div className="max-w-3xl mx-auto">
+                            <h2 className="text-xs tracking-widest text-neutral-500 uppercase mb-12 text-center">ОБО МНЕ</h2>
+                            <div className="text-center space-y-8">
+                                <p className="text-2xl md:text-3xl font-light leading-relaxed text-neutral-300">
+                                    {profile?.bio || 'Информация о вас появится здесь после добавления в админ-панель.'}
+                                </p>
+                                {(profile?.email || profile?.location) && (
+                                    <div className="flex justify-center gap-12 pt-12 text-sm tracking-wide text-neutral-500">
+                                        {profile?.email && <div>EMAIL: {profile.email}</div>}
+                                        {profile?.location && <div>ЛОКАЦИЯ: {profile.location}</div>}
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <section id="projects" className="py-32 border-t border-neutral-900 relative overflow-hidden">
-                <div className="absolute inset-0 z-0 opacity-10">
-                    <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background3})`, filter: 'grayscale(100%) blur(0.5px)'}}></div>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black pointer-events-none"></div>
-                <div className="container mx-auto px-6 relative z-10">
-                    <div className="text-center mb-20">
-                        <h2 className="text-xs tracking-widest text-neutral-500 uppercase mb-4">ПРОЕКТЫ</h2>
-                        <p className="text-5xl md:text-7xl font-light tracking-tight">РАБОТЫ<span className="text-neutral-600">.</span></p>
-                        <p className="text-neutral-400 text-sm tracking-widest uppercase mt-4">СВАЙПАЙТЕ → ДЛЯ ПРОСМОТРА</p>
+                <section id="projects" className="py-32 border-t border-neutral-900 relative overflow-hidden">
+                    <div className="absolute inset-0 z-0 opacity-10">
+                        <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background3})`, filter: 'grayscale(100%) blur(0.5px)'}}></div>
                     </div>
-                    <ProjectsSwiper projects={safeProjects} />
-                </div>
-            </section>
-
-            <WorkProcess />
-
-            <PricingSection />
-
-            <section id="contact" className="py-32 border-t border-neutral-900 relative">
-                <div className="absolute inset-0 z-0 opacity-5">
-                    <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background3})`, filter: 'grayscale(100%) blur(0.5px)'}}></div>
-                </div>
-                <div className="container mx-auto px-6 relative z-10">
-                    <h2 className="text-xs tracking-widest text-neutral-500 uppercase mb-20 text-center">КОНТАКТЫ</h2>
-                    <ContactForm />
-                    {(profile?.github_url || profile?.linkedin_url || profile?.telegram_url) && (
-                        <div className="flex justify-center gap-12 mt-20 text-xs tracking-widest uppercase">
-                            {profile?.github_url && <a href={profile.github_url} target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-white transition-colors">GITHUB</a>}
-                            {profile?.linkedin_url && <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-white transition-colors">LINKEDIN</a>}
-                            {profile?.telegram_url && <a href={profile.telegram_url} target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-white transition-colors">TELEGRAM</a>}
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black pointer-events-none"></div>
+                    <div className="container mx-auto px-6 relative z-10">
+                        <div className="text-center mb-20">
+                            <h2 className="text-xs tracking-widest text-neutral-500 uppercase mb-4">ПРОЕКТЫ</h2>
+                            <p className="text-5xl md:text-7xl font-light tracking-tight">РАБОТЫ<span className="text-neutral-600">.</span></p>
+                            <p className="text-neutral-400 text-sm tracking-widest uppercase mt-4">СВАЙПАЙТЕ → ДЛЯ ПРОСМОТРА</p>
                         </div>
-                    )}
-                </div>
-            </section>
-
-            <footer className="py-12 border-t border-neutral-900">
-                <div className="container mx-auto px-6">
-                    <div className="text-center space-y-4">
-                        <p className="text-xs tracking-widest text-neutral-500 uppercase">© {new Date().getFullYear()} {profile?.name || 'Алексей Петров'}</p>
-                        <p className="text-xs text-neutral-700">MADE BY DEV</p>
-                        <p className="text-xs text-neutral-800 tracking-widest">Статус API: {apiStatus}</p>
+                        <ProjectsSwiper projects={safeProjects} />
                     </div>
-                </div>
-            </footer>
+                </section>
 
-            <style jsx global>{`
-                .animate-pulse-once { animation: pulse-once 1s ease-in-out; }
-                .animate-shimmer { animation: shimmer 2s infinite linear; }
-                .animate-spin-slow { animation: spin-slow 2s linear infinite; }
-                .animate-fade-in { animation: fade-in 0.8s ease-out forwards; }
-                @keyframes pulse-once { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
-                @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
-                @keyframes spin-slow { from { transform: translateX(-50%) translateY(-50%) rotate(0deg); } to { transform: translateX(-50%) translateY(-50%) rotate(360deg); } }
-                @keyframes fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-            `}</style>
-        </div>
+                <WorkProcess />
+
+                <PricingSection />
+
+                <section id="contact" className="py-32 border-t border-neutral-900 relative">
+                    <div className="absolute inset-0 z-0 opacity-5">
+                        <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background3})`, filter: 'grayscale(100%) blur(0.5px)'}}></div>
+                    </div>
+                    <div className="container mx-auto px-6 relative z-10">
+                        <h2 className="text-xs tracking-widest text-neutral-500 uppercase mb-20 text-center">КОНТАКТЫ</h2>
+                        <ContactForm />
+                        {(profile?.github_url || profile?.linkedin_url || profile?.telegram_url) && (
+                            <div className="flex justify-center gap-12 mt-20 text-xs tracking-widest uppercase">
+                                {profile?.github_url && <a href={profile.github_url} target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-white transition-colors">GITHUB</a>}
+                                {profile?.linkedin_url && <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-white transition-colors">LINKEDIN</a>}
+                                {profile?.telegram_url && <a href={profile.telegram_url} target="_blank" rel="noopener noreferrer" className="text-neutral-400 hover:text-white transition-colors">TELEGRAM</a>}
+                            </div>
+                        )}
+                    </div>
+                </section>
+
+                <footer className="py-12 border-t border-neutral-900">
+                    <div className="container mx-auto px-6">
+                        <div className="text-center space-y-4">
+                            <p className="text-xs tracking-widest text-neutral-500 uppercase">© {new Date().getFullYear()} {profile?.name || 'Алексей Петров'}</p>
+                            <p className="text-xs text-neutral-700">MADE BY DEV</p>
+                            <p className="text-xs text-neutral-800 tracking-widest">Статус API: {apiStatus}</p>
+                        </div>
+                    </div>
+                </footer>
+
+                <style jsx global>{`
+                    .animate-pulse-once { animation: pulse-once 1s ease-in-out; }
+                    .animate-shimmer { animation: shimmer 2s infinite linear; }
+                    .animate-spin-slow { animation: spin-slow 2s linear infinite; }
+                    .animate-fade-in { animation: fade-in 0.8s ease-out forwards; }
+                    @keyframes pulse-once { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
+                    @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+                    @keyframes spin-slow { from { transform: translateX(-50%) translateY(-50%) rotate(0deg); } to { transform: translateX(-50%) translateY(-50%) rotate(360deg); } }
+                    @keyframes fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+                `}</style>
+            </div>
+        </HelmetProvider>
     );
 };
 

@@ -1,9 +1,16 @@
+// src/App.js
 import React from 'react';
-import Portfolio from './components/Portfolio';
-import './index.css';
+import { HelmetProvider } from 'react-helmet-async';
+import Portfolio from './Portfolio';
+import SEO from './SEO';
 
 function App() {
-    return <Portfolio />;
+  return (
+    <HelmetProvider>
+      <SEO />
+      <Portfolio />
+    </HelmetProvider>
+  );
 }
 
 export default App;
