@@ -212,10 +212,8 @@ const Portfolio = () => {
             try {
                 setLoading(true);
                 setApiStatus('Подключение к сайту...');
-
-                const API_URL = process.env.REACT_APP_API_URL || <p className="text-neutral-600 text-xs">
-                    phax.online
-                </p>;
+                
+                const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
                 // Загружаем все данные параллельно
                 const [projectsRes, skillsRes, experienceRes, profileRes] = await Promise.allSettled([
@@ -295,7 +293,9 @@ const Portfolio = () => {
                     <div className="w-1 h-20 bg-white mx-auto mb-8 animate-pulse"></div>
                     <p className="text-white text-sm tracking-widest uppercase mb-4">{apiStatus}</p>
                     <p className="text-neutral-600 text-xs">
-                        API: {process.env.REACT_APP_API_URL || 'http://localhost:8000/api'}
+                        API: {process.env.REACT_APP_API_URL || <p className="text-neutral-600 text-xs">
+                    phax.online
+                </p>}
                     </p>
                 </div>
             </div>
