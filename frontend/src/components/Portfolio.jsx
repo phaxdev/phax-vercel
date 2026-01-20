@@ -404,13 +404,14 @@ const Portfolio = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-black">
-                <div className="text-center">
-                    <div className="w-1 h-20 bg-white mx-auto mb-8 animate-pulse"></div>
-                    <p className="text-white text-sm tracking-widest uppercase mb-4">{apiStatus}</p>
-                    <p className="text-neutral-600 text-xs tracking-widest">
-                        PHAX.ONLINE
-                    </p>
+                        <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black">
+                <div className="glass p-8 rounded-2xl backdrop-blur-xl border border-white/10 shadow-2xl">
+                    <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-300 border-t-transparent mb-6 mx-auto"></div>
+                    <h2 className="text-2xl font-bold text-white mb-2 text-center">Загрузка портфолио</h2>
+                    <p className="text-gray-300 text-center">{apiStatus}</p>
+                    <div className="mt-4 text-sm text-gray-400 text-center">
+                        Текущий адрес: {window.location.hostname}:{window.location.port}
+                    </div>
                 </div>
             </div>
         );
@@ -842,7 +843,7 @@ const Portfolio = () => {
                             MADE BY DEV
                         </p>
                         <p className="text-xs text-neutral-800 tracking-widest">
-                            PHAX.ONLINE
+                            Статус API: {apiStatus}
                         </p>
                     </div>
                 </div>
