@@ -510,8 +510,11 @@ const Portfolio = () => {
     const safeSkills = Array.isArray(skills) ? skills : [];
     const safeExperience = Array.isArray(experience) ? experience : [];
 
-// Анимированная карточка проекта (исправленная)
-const ProjectCard = ({ project, isActive }) => {
+    const ProjectsSwiper = ({ projects }) => {
+        const swiperRef = useRef(null);
+        const [activeIndex, setActiveIndex] = useState(0);
+
+    const ProjectCard = ({ project, isActive }) => {
     const cardRef = useRef(null);
 
     useEffect(() => {
@@ -654,6 +657,60 @@ const ProjectCard = ({ project, isActive }) => {
         </div>
     );
 };
+
+        // Более простой и стабильный подход
+        return (
+            <div className="relative">
+                <Swiper
+                    ref={swiperRef}
+                    modules={[Navigation, Pagination, Autoplay]}
+                    spaceBetween={50}
+                    slidesPerView={1}
+                    centeredSlides={true}
+                    loop={true}
+                    speed={600}
+                    autoplay={{
+                        delay: 5000,
+                        disableOnInteraction: false,
+                    }}
+                    pagination={{
+                        clickable: true,
+                    }}
+                    navigation={{
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
+                    }}
+                    onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+                    className="!overflow-visible"
+                >
+                    {displayProjects.map((project, index) => (
+                        <SwiperSlide key={project.id || index}>
+                            <div className="flex justify-center">
+                                <div className="w-full max-w-2xl">
+                                    <ProjectCard
+                                        project={project}
+                                        isActive={index === activeIndex}
+                                    />
+                                </div>
+                            </div>
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+
+                {/* Кастомные кнопки */}
+                <div className="swiper-button-prev absolute left-0 top-1/2 -translate-y-1/2 z-10">
+                    <button className="w-12 h-12 border-2 border-white rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                        ←
+                    </button>
+                </div>
+                <div className="swiper-button-next absolute right-0 top-1/2 -translate-y-1/2 z-10">
+                    <button className="w-12 h-12 border-2 border-white rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                        →
+                    </button>
+                </div>
+            </div>
+        );
+    };
 
     return (
         <div className="min-h-screen bg-black text-white font-sans">
