@@ -6,6 +6,111 @@ import background3 from './background3.png';
 import background4 from './background4.png';
 import background5 from './background5.png';
 
+// Черно-белые SVG иконки для ПРОЦЕССА РАБОТЫ
+const ProcessIcons = {
+    Consultation: () => (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+    ),
+    Prototype: () => (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        </svg>
+    ),
+    Development: () => (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+        </svg>
+    ),
+    Testing: () => (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+    ),
+    Launch: () => (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+    ),
+    Support: () => (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+    ),
+    Transparency: () => (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+        </svg>
+    ),
+    Communication: () => (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+    ),
+    Quality: () => (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+        </svg>
+    )
+};
+
+// Черно-белые SVG иконки для ПРАЙС-ЛИСТА
+const PricingIcons = {
+    Website: () => (
+        <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+        </svg>
+    ),
+    Layout: () => (
+        <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+        </svg>
+    ),
+    Lua: () => (
+        <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+        </svg>
+    ),
+    TelegramBot: () => (
+        <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+    ),
+    MiniApp: () => (
+        <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+        </svg>
+    ),
+    ConsultationPricing: () => (
+        <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+        </svg>
+    ),
+    FixedPrice: () => (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+    ),
+    Speed: () => (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+    ),
+    Warranty: () => (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+        </svg>
+    ),
+    Support24: () => (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+    )
+};
+
 const ContactForm = () => {
     const [formData, setFormData] = useState({
         name: '', email: '', message: ''
@@ -139,7 +244,7 @@ const HeroSection = ({ profile, safeProjects, handleScroll }) => (
                 <div className="flex justify-center gap-16 pt-8 animate-fade-in" style={{animationDelay: '0.4s'}}>
                     <div className="text-center"><div className="text-4xl font-light mb-2">{safeProjects.length}</div><div className="text-xs tracking-widest text-neutral-500 uppercase">Проектов</div></div>
                     <div className="text-center"><div className="text-4xl font-light mb-2">3+</div><div className="text-xs tracking-widest text-neutral-500 uppercase">Года опыта</div></div>
-                    <div className="text-center"><div className="text-4xl font-light mb-2">5</div><div className="text-xs tracking-widest text-neutral-500 uppercase">Услуг</div></div>
+                    <div className="text-center"><div className="text-4xl font-light mb-2">6</div><div className="text-xs tracking-widest text-neutral-500 uppercase">Услуг</div></div>
                 </div>
                 <div className="flex justify-center gap-6 pt-12 animate-fade-in" style={{animationDelay: '0.6s'}}>
                     <button onClick={() => handleScroll('contact')} className="px-10 py-4 border-2 border-white text-sm tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-300">СВЯЗАТЬСЯ</button>
@@ -251,7 +356,7 @@ const ProjectsSwiper = ({ projects }) => {
     );
 };
 
-// Секция "Процесс работы"
+// Секция "Процесс работы" с черно-белыми иконками
 const WorkProcess = () => {
     const [activeStep, setActiveStep] = useState(0);
     
@@ -261,43 +366,49 @@ const WorkProcess = () => {
             title: 'КОНСУЛЬТАЦИЯ',
             description: 'Обсуждение проекта, анализ требований, определение сроков и бюджета',
             duration: '1-2 дня',
-            icon: '💬'
+            icon: 'Consultation'
         },
         {
             number: '02',
             title: 'ПРОТОТИП',
             description: 'Создание wireframes и прототипа для визуализации концепции',
             duration: '3-5 дней',
-            icon: '📐'
+            icon: 'Prototype'
         },
         {
             number: '03',
             title: 'РАЗРАБОТКА',
             description: 'Поэтапная разработка с регулярными демонстрациями прогресса',
             duration: 'Зависит от проекта',
-            icon: '⚡'
+            icon: 'Development'
         },
         {
             number: '04',
             title: 'ТЕСТИРОВАНИЕ',
             description: 'Всестороннее тестирование и финальные корректировки',
             duration: '3-7 дней',
-            icon: '🔍'
+            icon: 'Testing'
         },
         {
             number: '05',
             title: 'ЗАПУСК',
             description: 'Деплой проекта, документация и обучение использованию',
             duration: '1-2 дня',
-            icon: '🚀'
+            icon: 'Launch'
         },
         {
             number: '06',
             title: 'ПОДДЕРЖКА',
             description: 'Техническая поддержка и дальнейшее развитие проекта',
             duration: 'Постоянно',
-            icon: '🛡️'
+            icon: 'Support'
         }
+    ];
+
+    const processStats = [
+        { icon: 'Transparency', value: '100%', title: 'ПРОЗРАЧНОСТЬ', description: 'Регулярные отчеты и демонстрации' },
+        { icon: 'Communication', value: '24/7', title: 'КОММУНИКАЦИЯ', description: 'Поддержка в Telegram и почте' },
+        { icon: 'Quality', value: '✓', title: 'ГАРАНТИЯ КАЧЕСТВА', description: 'Тестирование и фиксы после запуска' }
     ];
 
     useEffect(() => {
@@ -340,92 +451,98 @@ const WorkProcess = () => {
                     <div className="hidden lg:flex items-center justify-between mb-20 relative">
                         <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 -translate-y-1/2 z-0"></div>
                         
-                        {processSteps.map((step, index) => (
-                            <div key={step.number} className="relative z-10">
-                                <button
-                                    onClick={() => setActiveStep(index)}
-                                    className={`flex flex-col items-center transition-all duration-500 ${
-                                        activeStep === index ? 'scale-110' : 'opacity-70 hover:opacity-100'
-                                    }`}
-                                >
-                                    <div className={`w-16 h-16 rounded-full border-2 flex items-center justify-center mb-4 transition-all duration-300 ${
-                                        activeStep === index 
-                                            ? 'border-white bg-white text-black' 
-                                            : 'border-neutral-700 bg-black text-white'
-                                    }`}>
-                                        <span className="text-2xl">{step.icon}</span>
-                                    </div>
-                                    
-                                    <div className={`text-xs tracking-widest uppercase mb-2 transition-colors ${
-                                        activeStep === index ? 'text-white' : 'text-neutral-500'
-                                    }`}>
-                                        {step.number}
-                                    </div>
-                                    
-                                    <h3 className={`text-sm tracking-widest uppercase text-center transition-colors ${
-                                        activeStep === index ? 'text-white' : 'text-neutral-400'
-                                    }`}>
-                                        {step.title}
-                                    </h3>
-                                    
-                                    {index < processSteps.length - 1 && (
-                                        <div className="absolute top-8 left-full w-24 h-0.5 bg-neutral-800 -translate-x-1/2"></div>
-                                    )}
-                                </button>
-                            </div>
-                        ))}
+                        {processSteps.map((step, index) => {
+                            const IconComponent = ProcessIcons[step.icon];
+                            return (
+                                <div key={step.number} className="relative z-10">
+                                    <button
+                                        onClick={() => setActiveStep(index)}
+                                        className={`flex flex-col items-center transition-all duration-500 ${
+                                            activeStep === index ? 'scale-110' : 'opacity-70 hover:opacity-100'
+                                        }`}
+                                    >
+                                        <div className={`w-16 h-16 rounded-full border-2 flex items-center justify-center mb-4 transition-all duration-300 ${
+                                            activeStep === index 
+                                                ? 'border-white bg-white text-black' 
+                                                : 'border-neutral-700 bg-black'
+                                        }`}>
+                                            <IconComponent />
+                                        </div>
+                                        
+                                        <div className={`text-xs tracking-widest uppercase mb-2 transition-colors ${
+                                            activeStep === index ? 'text-white' : 'text-neutral-500'
+                                        }`}>
+                                            {step.number}
+                                        </div>
+                                        
+                                        <h3 className={`text-sm tracking-widest uppercase text-center transition-colors ${
+                                            activeStep === index ? 'text-white' : 'text-neutral-400'
+                                        }`}>
+                                            {step.title}
+                                        </h3>
+                                        
+                                        {index < processSteps.length - 1 && (
+                                            <div className="absolute top-8 left-full w-24 h-0.5 bg-neutral-800 -translate-x-1/2"></div>
+                                        )}
+                                    </button>
+                                </div>
+                            );
+                        })}
                     </div>
                     
                     <div className="lg:hidden space-y-8 mb-12">
-                        {processSteps.map((step, index) => (
-                            <div key={step.number} className="relative">
-                                {index < processSteps.length - 1 && (
-                                    <div className="absolute left-8 top-16 bottom-0 w-0.5 bg-neutral-800 -translate-x-1/2"></div>
-                                )}
-                                
-                                <button
-                                    onClick={() => setActiveStep(index)}
-                                    className={`flex items-start gap-6 w-full p-6 rounded-2xl transition-all duration-300 ${
-                                        activeStep === index 
-                                            ? 'bg-gradient-to-br from-black to-neutral-900 border-2 border-white' 
-                                            : 'border border-neutral-800 hover:border-neutral-600'
-                                    }`}
-                                >
-                                    <div className={`w-16 h-16 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
-                                        activeStep === index 
-                                            ? 'border-white bg-white text-black' 
-                                            : 'border-neutral-700 bg-black text-white'
-                                    }`}>
-                                        <span className="text-2xl">{step.icon}</span>
-                                    </div>
+                        {processSteps.map((step, index) => {
+                            const IconComponent = ProcessIcons[step.icon];
+                            return (
+                                <div key={step.number} className="relative">
+                                    {index < processSteps.length - 1 && (
+                                        <div className="absolute left-8 top-16 bottom-0 w-0.5 bg-neutral-800 -translate-x-1/2"></div>
+                                    )}
                                     
-                                    <div className="flex-1 text-left">
-                                        <div className="flex items-center gap-4 mb-2">
-                                            <span className={`text-sm tracking-widest uppercase ${
-                                                activeStep === index ? 'text-white' : 'text-neutral-500'
-                                            }`}>
-                                                {step.number}
-                                            </span>
-                                            <h3 className={`text-lg tracking-widest uppercase ${
-                                                activeStep === index ? 'text-white' : 'text-white'
-                                            }`}>
-                                                {step.title}
-                                            </h3>
-                                        </div>
-                                        <p className={`text-sm mb-3 ${
-                                            activeStep === index ? 'text-neutral-300' : 'text-neutral-500'
+                                    <button
+                                        onClick={() => setActiveStep(index)}
+                                        className={`flex items-start gap-6 w-full p-6 rounded-2xl transition-all duration-300 ${
+                                            activeStep === index 
+                                                ? 'bg-gradient-to-br from-black to-neutral-900 border-2 border-white' 
+                                                : 'border border-neutral-800 hover:border-neutral-600'
+                                        }`}
+                                    >
+                                        <div className={`w-16 h-16 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
+                                            activeStep === index 
+                                                ? 'border-white bg-white text-black' 
+                                                : 'border-neutral-700 bg-black'
                                         }`}>
-                                            {step.description}
-                                        </p>
-                                        <div className={`text-xs tracking-widest uppercase ${
-                                            activeStep === index ? 'text-neutral-400' : 'text-neutral-600'
-                                        }`}>
-                                            Длительность: {step.duration}
+                                            <IconComponent />
                                         </div>
-                                    </div>
-                                </button>
-                            </div>
-                        ))}
+                                        
+                                        <div className="flex-1 text-left">
+                                            <div className="flex items-center gap-4 mb-2">
+                                                <span className={`text-sm tracking-widest uppercase ${
+                                                    activeStep === index ? 'text-white' : 'text-neutral-500'
+                                                }`}>
+                                                    {step.number}
+                                                </span>
+                                                <h3 className={`text-lg tracking-widest uppercase ${
+                                                    activeStep === index ? 'text-white' : 'text-white'
+                                                }`}>
+                                                    {step.title}
+                                                </h3>
+                                            </div>
+                                            <p className={`text-sm mb-3 ${
+                                                activeStep === index ? 'text-neutral-300' : 'text-neutral-500'
+                                            }`}>
+                                                {step.description}
+                                            </p>
+                                            <div className={`text-xs tracking-widest uppercase ${
+                                                activeStep === index ? 'text-neutral-400' : 'text-neutral-600'
+                                            }`}>
+                                                Длительность: {step.duration}
+                                            </div>
+                                        </div>
+                                    </button>
+                                </div>
+                            );
+                        })}
                     </div>
                     
                     <div className="hidden lg:block">
@@ -468,7 +585,10 @@ const WorkProcess = () => {
                                         <div className="w-64 h-64 rounded-full border-4 border-white/10 flex items-center justify-center">
                                             <div className="w-48 h-48 rounded-full border-4 border-white/20 flex items-center justify-center">
                                                 <div className="w-32 h-32 rounded-full border-4 border-white/30 flex items-center justify-center">
-                                                    <span className="text-6xl">{processSteps[activeStep].icon}</span>
+                                                    {(() => {
+                                                        const IconComponent = ProcessIcons[processSteps[activeStep].icon];
+                                                        return <IconComponent />;
+                                                    })()}
                                                 </div>
                                             </div>
                                         </div>
@@ -515,21 +635,19 @@ const WorkProcess = () => {
                     
                     <div className="mt-20 pt-20 border-t border-neutral-900">
                         <div className="grid md:grid-cols-3 gap-8">
-                            <div className="text-center p-8 border border-neutral-800 rounded-3xl">
-                                <div className="text-5xl font-light mb-4">100%</div>
-                                <h4 className="text-sm tracking-widest uppercase mb-2">ПРОЗРАЧНОСТЬ</h4>
-                                <p className="text-neutral-400 text-sm">Регулярные отчеты и демонстрации</p>
-                            </div>
-                            <div className="text-center p-8 border border-neutral-800 rounded-3xl">
-                                <div className="text-5xl font-light mb-4">24/7</div>
-                                <h4 className="text-sm tracking-widest uppercase mb-2">КОММУНИКАЦИЯ</h4>
-                                <p className="text-neutral-400 text-sm">Поддержка в Telegram и почте</p>
-                            </div>
-                            <div className="text-center p-8 border border-neutral-800 rounded-3xl">
-                                <div className="text-5xl font-light mb-4">✓</div>
-                                <h4 className="text-sm tracking-widest uppercase mb-2">ГАРАНТИЯ КАЧЕСТВА</h4>
-                                <p className="text-neutral-400 text-sm">Тестирование и фиксы после запуска</p>
-                            </div>
+                            {processStats.map((stat, index) => {
+                                const IconComponent = ProcessIcons[stat.icon];
+                                return (
+                                    <div key={index} className="text-center p-8 border border-neutral-800 rounded-3xl">
+                                        <div className="flex justify-center mb-4">
+                                            <IconComponent />
+                                        </div>
+                                        <div className="text-5xl font-light mb-4">{stat.value}</div>
+                                        <h4 className="text-sm tracking-widest uppercase mb-2">{stat.title}</h4>
+                                        <p className="text-neutral-400 text-sm">{stat.description}</p>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                 </div>
@@ -548,7 +666,7 @@ const WorkProcess = () => {
     );
 };
 
-// Секция "Прайс-лист"
+// Секция "Прайс-лист" с черно-белыми иконками
 const PricingSection = () => {
     const [activeService, setActiveService] = useState(0);
     
@@ -568,7 +686,7 @@ const PricingSection = () => {
                 'Хостинг на 1 год в подарок'
             ],
             timeline: '2-4 недели',
-            icon: '🌐',
+            icon: 'Website',
             popular: true
         },
         {
@@ -586,7 +704,7 @@ const PricingSection = () => {
                 'Адаптив под все устройства'
             ],
             timeline: '1-2 недели',
-            icon: '✂️',
+            icon: 'Layout',
             popular: false
         },
         {
@@ -604,7 +722,7 @@ const PricingSection = () => {
                 'Тестирование и отладка'
             ],
             timeline: '1-3 недели',
-            icon: '🎮',
+            icon: 'Lua',
             popular: false
         },
         {
@@ -622,7 +740,7 @@ const PricingSection = () => {
                 'Ведение базы данных пользователей'
             ],
             timeline: '2-3 недели',
-            icon: '🤖',
+            icon: 'TelegramBot',
             popular: false
         },
         {
@@ -640,7 +758,7 @@ const PricingSection = () => {
                 'Масштабируемая архитектура'
             ],
             timeline: '3-5 недель',
-            icon: '📱',
+            icon: 'MiniApp',
             popular: false
         },
         {
@@ -658,12 +776,18 @@ const PricingSection = () => {
                 'Рекомендации по безопасности'
             ],
             timeline: '1-3 дня',
-            icon: '🎯',
+            icon: 'ConsultationPricing',
             popular: false
         }
     ];
 
-    // Автопереключение услуг
+    const benefits = [
+        { icon: 'FixedPrice', title: 'ФИКСИРОВАННАЯ ЦЕНА', description: 'Цена не меняется в процессе работы' },
+        { icon: 'Speed', title: 'СКОРОСТЬ РАБОТЫ', description: 'Средний срок разработки 2-3 недели' },
+        { icon: 'Warranty', title: 'ГАРАНТИЯ 6 МЕСЯЦЕВ', description: 'Исправляем баги бесплатно полгода' },
+        { icon: 'Support24', title: 'ПОДДЕРЖКА 24/7', description: 'Отвечаем в Telegram в любое время' }
+    ];
+
     useEffect(() => {
         const interval = setInterval(() => {
             setActiveService(prev => (prev + 1) % services.length);
@@ -677,7 +801,6 @@ const PricingSection = () => {
                 <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background5})`, filter: 'grayscale(100%) blur(1px)'}}></div>
             </div>
             
-            {/* Анимированный фон */}
             <div className="absolute inset-0">
                 {[...Array(8)].map((_, i) => (
                     <motion.div
@@ -711,67 +834,72 @@ const PricingSection = () => {
                 </p>
                 
                 <div className="max-w-6xl mx-auto">
-                    {/* Список услуг - горизонтальный скролл на мобильных */}
                     <div className="flex overflow-x-auto pb-8 mb-12 hide-scrollbar lg:overflow-visible lg:grid lg:grid-cols-3 lg:gap-8">
-                        {services.map((service, index) => (
-                            <button
-                                key={service.id}
-                                onClick={() => setActiveService(index)}
-                                className={`flex-shrink-0 w-80 lg:w-auto mx-2 lg:mx-0 rounded-2xl p-8 transition-all duration-500 ${
-                                    activeService === index
-                                        ? 'bg-gradient-to-br from-black to-neutral-900 border-2 border-white transform scale-105'
-                                        : 'bg-gradient-to-br from-black/50 to-neutral-900/50 border border-neutral-800 hover:border-neutral-600'
-                                }`}
-                            >
-                                <div className="flex items-start justify-between mb-6">
-                                    <div className={`text-4xl ${activeService === index ? 'animate-pulse' : ''}`}>
-                                        {service.icon}
+                        {services.map((service, index) => {
+                            const IconComponent = PricingIcons[service.icon];
+                            return (
+                                <button
+                                    key={service.id}
+                                    onClick={() => setActiveService(index)}
+                                    className={`flex-shrink-0 w-80 lg:w-auto mx-2 lg:mx-0 rounded-2xl p-8 transition-all duration-500 ${
+                                        activeService === index
+                                            ? 'bg-gradient-to-br from-black to-neutral-900 border-2 border-white transform scale-105'
+                                            : 'bg-gradient-to-br from-black/50 to-neutral-900/50 border border-neutral-800 hover:border-neutral-600'
+                                    }`}
+                                >
+                                    <div className="flex items-start justify-between mb-6">
+                                        <div className={`${activeService === index ? 'animate-pulse' : ''}`}>
+                                            <IconComponent />
+                                        </div>
+                                        {service.popular && (
+                                            <span className="px-3 py-1 bg-white text-black text-xs tracking-widest rounded-full">
+                                                ПОПУЛЯРНО
+                                            </span>
+                                        )}
                                     </div>
-                                    {service.popular && (
-                                        <span className="px-3 py-1 bg-white text-black text-xs tracking-widest rounded-full">
-                                            ПОПУЛЯРНО
-                                        </span>
-                                    )}
-                                </div>
-                                
-                                <h3 className="text-xl font-light mb-4 text-left tracking-tight">
-                                    {service.title}
-                                </h3>
-                                
-                                <div className="text-left mb-6">
-                                    <div className="text-3xl font-light mb-2">{service.price}</div>
-                                    <div className="text-sm text-neutral-400">Диапазон: {service.priceRange}</div>
-                                </div>
-                                
-                                <div className="text-left">
-                                    <div className="flex items-center gap-2 text-sm text-neutral-500 mb-4">
-                                        <span>⏱️</span>
-                                        <span>Срок: {service.timeline}</span>
+                                    
+                                    <h3 className="text-xl font-light mb-4 text-left tracking-tight">
+                                        {service.title}
+                                    </h3>
+                                    
+                                    <div className="text-left mb-6">
+                                        <div className="text-3xl font-light mb-2">{service.price}</div>
+                                        <div className="text-sm text-neutral-400">Диапазон: {service.priceRange}</div>
                                     </div>
-                                    {activeService === index && (
-                                        <motion.div
-                                            initial={{ opacity: 0, height: 0 }}
-                                            animate={{ opacity: 1, height: 'auto' }}
-                                            transition={{ duration: 0.3 }}
-                                            className="mt-4 pt-4 border-t border-neutral-800"
-                                        >
-                                            <p className="text-sm text-neutral-300 mb-3">{service.description}</p>
-                                            <div className="text-xs text-neutral-500">
-                                                {service.features.slice(0, 2).map((feature, i) => (
-                                                    <div key={i} className="flex items-center gap-2 mb-1">
-                                                        <span>✓</span>
-                                                        <span>{feature}</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </motion.div>
-                                    )}
-                                </div>
-                            </button>
-                        ))}
+                                    
+                                    <div className="text-left">
+                                        <div className="flex items-center gap-2 text-sm text-neutral-500 mb-4">
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Срок: {service.timeline}</span>
+                                        </div>
+                                        {activeService === index && (
+                                            <motion.div
+                                                initial={{ opacity: 0, height: 0 }}
+                                                animate={{ opacity: 1, height: 'auto' }}
+                                                transition={{ duration: 0.3 }}
+                                                className="mt-4 pt-4 border-t border-neutral-800"
+                                            >
+                                                <p className="text-sm text-neutral-300 mb-3">{service.description}</p>
+                                                <div className="text-xs text-neutral-500">
+                                                    {service.features.slice(0, 2).map((feature, i) => (
+                                                        <div key={i} className="flex items-center gap-2 mb-1">
+                                                            <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                                            </svg>
+                                                            <span>{feature}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </div>
+                                </button>
+                            );
+                        })}
                     </div>
                     
-                    {/* Детали выбранной услуги */}
                     <motion.div
                         key={activeService}
                         initial={{ opacity: 0, y: 20 }}
@@ -782,7 +910,12 @@ const PricingSection = () => {
                         <div className="grid lg:grid-cols-2 gap-12 items-start">
                             <div>
                                 <div className="flex items-center gap-6 mb-8">
-                                    <div className="text-5xl">{services[activeService].icon}</div>
+                                    <div className="text-5xl">
+                                        {(() => {
+                                            const IconComponent = PricingIcons[services[activeService].icon];
+                                            return <IconComponent />;
+                                        })()}
+                                    </div>
                                     <div>
                                         <h3 className="text-3xl font-light mb-2">{services[activeService].title}</h3>
                                         <div className="flex items-center gap-4">
@@ -823,7 +956,9 @@ const PricingSection = () => {
                                     {services[activeService].features.map((feature, index) => (
                                         <div key={index} className="flex items-start gap-3 p-4 border border-neutral-800 rounded-2xl hover:border-white transition-colors">
                                             <div className="w-6 h-6 rounded-full border border-white flex items-center justify-center flex-shrink-0 mt-0.5">
-                                                <span className="text-xs">✓</span>
+                                                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                                </svg>
                                             </div>
                                             <span className="text-neutral-300">{feature}</span>
                                         </div>
@@ -833,17 +968,36 @@ const PricingSection = () => {
                                 <div className="mt-8 p-6 border border-neutral-800 rounded-2xl bg-black/30">
                                     <h5 className="text-sm tracking-widest uppercase mb-3 text-neutral-400">ДОПОЛНИТЕЛЬНО</h5>
                                     <ul className="space-y-2 text-sm text-neutral-300">
-                                        <li className="flex items-center gap-2">• Бесплатная консультация перед началом</li>
-                                        <li className="flex items-center gap-2">• Фиксированная цена без скрытых платежей</li>
-                                        <li className="flex items-center gap-2">• Техническая поддержка после сдачи проекта</li>
-                                        <li className="flex items-center gap-2">• Гарантия на код 6 месяцев</li>
+                                        <li className="flex items-center gap-2">
+                                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            Бесплатная консультация перед началом
+                                        </li>
+                                        <li className="flex items-center gap-2">
+                                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            Фиксированная цена без скрытых платежей
+                                        </li>
+                                        <li className="flex items-center gap-2">
+                                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            Техническая поддержка после сдачи проекта
+                                        </li>
+                                        <li className="flex items-center gap-2">
+                                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            Гарантия на код 6 месяцев
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                     </motion.div>
                     
-                    {/* Навигация по услугам */}
                     <div className="flex justify-between items-center mb-12">
                         <button
                             onClick={() => setActiveService(prev => prev === 0 ? services.length - 1 : prev - 1)}
@@ -881,30 +1035,21 @@ const PricingSection = () => {
                         </button>
                     </div>
                     
-                    {/* Преимущества работы с нами */}
                     <div className="mt-20 pt-20 border-t border-neutral-900">
                         <h3 className="text-2xl font-light text-center mb-12 tracking-widest uppercase">ПОЧЕМУ ВЫБИРАЮТ НАС</h3>
                         <div className="grid md:grid-cols-4 gap-6">
-                            <div className="text-center p-6 border border-neutral-800 rounded-2xl">
-                                <div className="text-3xl mb-4">💎</div>
-                                <h4 className="text-sm tracking-widest uppercase mb-2">ФИКСИРОВАННАЯ ЦЕНА</h4>
-                                <p className="text-neutral-400 text-xs">Цена не меняется в процессе работы</p>
-                            </div>
-                            <div className="text-center p-6 border border-neutral-800 rounded-2xl">
-                                <div className="text-3xl mb-4">⚡</div>
-                                <h4 className="text-sm tracking-widest uppercase mb-2">СКОРОСТЬ РАБОТЫ</h4>
-                                <p className="text-neutral-400 text-xs">Средний срок разработки 2-3 недели</p>
-                            </div>
-                            <div className="text-center p-6 border border-neutral-800 rounded-2xl">
-                                <div className="text-3xl mb-4">🛡️</div>
-                                <h4 className="text-sm tracking-widest uppercase mb-2">ГАРАНТИЯ 6 МЕСЯЦЕВ</h4>
-                                <p className="text-neutral-400 text-xs">Исправляем баги бесплатно полгода</p>
-                            </div>
-                            <div className="text-center p-6 border border-neutral-800 rounded-2xl">
-                                <div className="text-3xl mb-4">📞</div>
-                                <h4 className="text-sm tracking-widest uppercase mb-2">ПОДДЕРЖКА 24/7</h4>
-                                <p className="text-neutral-400 text-xs">Отвечаем в Telegram в любое время</p>
-                            </div>
+                            {benefits.map((benefit, index) => {
+                                const IconComponent = PricingIcons[benefit.icon];
+                                return (
+                                    <div key={index} className="text-center p-6 border border-neutral-800 rounded-2xl">
+                                        <div className="flex justify-center mb-4">
+                                            <IconComponent />
+                                        </div>
+                                        <h4 className="text-sm tracking-widest uppercase mb-2">{benefit.title}</h4>
+                                        <p className="text-neutral-400 text-xs">{benefit.description}</p>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                 </div>
@@ -930,13 +1075,12 @@ const Portfolio = () => {
     const [projects, setProjects] = useState([]);
     const [profile, setProfile] = useState(null);
 
-    // Обновляем меню: меняем "ОПЫТ" на "ПРАЙС"
     const menuItems = [
         {id: 'home', label: 'ГЛАВНАЯ'}, 
         {id: 'about', label: 'ОБО МНЕ'}, 
         {id: 'projects', label: 'ПРОЕКТЫ'},
         {id: 'process', label: 'ПРОЦЕСС'},
-        {id: 'pricing', label: 'ПРАЙС'}, // Изменено здесь
+        {id: 'pricing', label: 'ПРАЙС'},
         {id: 'contact', label: 'КОНТАКТЫ'}
     ];
 
@@ -951,7 +1095,6 @@ const Portfolio = () => {
                 setLoading(true); setApiStatus('Подключение к сайту...');
                 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
                 
-                // Загружаем только проекты и профиль
                 const [projectsRes, profileRes] = await Promise.allSettled([
                     fetch(`${API_URL}/projects/`).then(r => r.ok ? r.json() : []),
                     fetch(`${API_URL}/profile/`).then(r => r.ok ? r.json() : getMockProfile())
@@ -1013,7 +1156,6 @@ const Portfolio = () => {
 
             <HeroSection profile={profile} safeProjects={safeProjects} handleScroll={handleScroll}/>
 
-            {/* Обо мне с background2 */}
             <section id="about" className="py-32 border-t border-neutral-900 relative">
                 <div className="absolute inset-0 z-0 opacity-5">
                     <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background2})`, filter: 'grayscale(100%)'}}></div>
@@ -1036,7 +1178,6 @@ const Portfolio = () => {
                 </div>
             </section>
 
-            {/* Проекты с background3 */}
             <section id="projects" className="py-32 border-t border-neutral-900 relative overflow-hidden">
                 <div className="absolute inset-0 z-0 opacity-10">
                     <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background3})`, filter: 'grayscale(100%) blur(0.5px)'}}></div>
@@ -1052,13 +1193,10 @@ const Portfolio = () => {
                 </div>
             </section>
 
-            {/* Процесс работы */}
             <WorkProcess />
 
-            {/* Прайс-лист вместо опыта */}
             <PricingSection />
 
-            {/* Контакты с background3 */}
             <section id="contact" className="py-32 border-t border-neutral-900 relative">
                 <div className="absolute inset-0 z-0 opacity-5">
                     <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background3})`, filter: 'grayscale(100%) blur(0.5px)'}}></div>
