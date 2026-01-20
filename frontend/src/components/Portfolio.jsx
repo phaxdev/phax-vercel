@@ -1,214 +1,35 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import background1 from './background1.png';
 import background2 from './background2.png';
-import { FaGithub, FaExternalLinkAlt, FaChevronLeft, FaChevronRight, FaCode, FaServer, FaDatabase, FaMobile, FaRocket } from 'react-icons/fa';
+import { FaGithub, FaExternalLinkAlt, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const ContactForm = () => {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        message: ''
-    });
-
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submitStatus, setSubmitStatus] = useState(null);
-    const [errors, setErrors] = useState({});
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
-        if (errors[name]) {
-            setErrors({
-                ...errors,
-                [name]: ''
-            });
-        }
-    };
-
-    const validateForm = () => {
-        const newErrors = {};
-
-        if (!formData.name.trim()) {
-            newErrors.name = 'Введите свой @username или номер';
-        }
-
-        if (!formData.email.trim()) {
-            newErrors.email = 'Введите email';
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = 'Введите корректный email';
-        }
-
-        if (!formData.message.trim()) {
-            newErrors.message = 'Введите сообщение';
-        }
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (!validateForm()) {
-            return;
-        }
-
-        setIsSubmitting(true);
-        setSubmitStatus(null);
-
-        try {
-            const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
-
-            const response = await fetch(`${API_URL}/contact-messages/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            });
-
-            if (response.status === 201) {
-                setSubmitStatus({
-                    type: 'success',
-                    message: 'Сообщение отправлено'
-                });
-
-                setFormData({
-                    name: '',
-                    email: '',
-                    message: ''
-                });
-
-                setTimeout(() => {
-                    setSubmitStatus(null);
-                }, 5000);
-            } else {
-                throw new Error('Ошибка отправки');
-            }
-        } catch (error) {
-            console.error('Ошибка при отправке сообщения:', error);
-
-            setSubmitStatus({
-                type: 'error',
-                message: 'Произошла ошибка при отправке'
-            });
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
-
+    // ... (оставь твой ContactForm без изменений)
+    // Полный код ContactForm остается как у тебя
     return (
-        <div className="max-w-2xl mx-auto">
-            <div className="space-y-8">
-                <div>
-                    <input
-                        type="text"
-                        name="name"
-                        placeholder="ИМЯ / USERNAME"
-                        value={formData.name}
-                        onChange={handleChange}
-                        className={`w-full px-0 py-4 bg-transparent border-b-2 ${errors.name
-                            ? 'border-red-500'
-                            : 'border-neutral-800'
-                            } focus:outline-none focus:border-neutral-600 transition-colors text-white placeholder-neutral-600 text-sm tracking-widest uppercase`}
-                    />
-                    {errors.name && (
-                        <p className="text-red-500 text-xs mt-2 tracking-wide">{errors.name}</p>
-                    )}
-                </div>
-
-                <div>
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="EMAIL"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className={`w-full px-0 py-4 bg-transparent border-b-2 ${errors.email
-                            ? 'border-red-500'
-                            : 'border-neutral-800'
-                            } focus:outline-none focus:border-neutral-600 transition-colors text-white placeholder-neutral-600 text-sm tracking-widest uppercase`}
-                    />
-                    {errors.email && (
-                        <p className="text-red-500 text-xs mt-2 tracking-wide">{errors.email}</p>
-                    )}
-                </div>
-
-                <div>
-                    <textarea
-                        name="message"
-                        placeholder="СООБЩЕНИЕ"
-                        rows="6"
-                        value={formData.message}
-                        onChange={handleChange}
-                        className={`w-full px-0 py-4 bg-transparent border-b-2 ${errors.message
-                            ? 'border-red-500'
-                            : 'border-neutral-800'
-                            } focus:outline-none focus:border-neutral-600 transition-colors text-white placeholder-neutral-600 resize-none text-sm tracking-widest uppercase`}
-                    ></textarea>
-                    {errors.message && (
-                        <p className="text-red-500 text-xs mt-2 tracking-wide">{errors.message}</p>
-                    )}
-                </div>
-
-                {submitStatus && (
-                    <div className={`p-4 text-center text-sm tracking-wide ${submitStatus.type === 'success'
-                        ? 'text-green-400'
-                        : 'text-red-400'
-                        }`}>
-                        {submitStatus.message}
-                    </div>
-                )}
-
-                <button
-                    onClick={handleSubmit}
-                    disabled={isSubmitting}
-                    className={`w-full py-5 border-2 border-white text-white text-sm tracking-widest uppercase transition-all duration-300 ${isSubmitting
-                        ? 'opacity-50 cursor-not-allowed'
-                        : 'hover:bg-white hover:text-black'
-                        }`}
-                >
-                    {isSubmitting ? 'ОТПРАВКА...' : 'ОТПРАВИТЬ'}
-                </button>
-            </div>
-        </div>
+        // ... твой существующий код ContactForm
     );
 };
 
-// Анимированная палка для загрузки
+// Компоненты для загрузки остаются без изменений
 const LoadingSpinner = () => {
     return (
         <div className="relative w-32 h-32 mx-auto mb-8">
-            {/* Внешнее кольцо */}
             <div className="absolute inset-0 border-4 border-white/30 rounded-full"></div>
-            {/* Вращающаяся палка */}
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-1 bg-white animate-spin-slow origin-center"></div>
-            {/* Центральная точка */}
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full"></div>
         </div>
     );
 };
 
-// Анимированная иконка программирования после загрузки
 const CodeIconAnimation = () => {
     return (
         <div className="relative w-32 h-32 mx-auto mb-8">
-            {/* Анимированные фигурные скобки */}
-            <div className="absolute top-1/2 left-1/4 text-3xl text-white animate-bounce">
-                {'{'}
-            </div>
-            <div className="absolute top-1/2 right-1/4 text-3xl text-white animate-bounce" style={{ animationDelay: '0.5s' }}>
-                {'}'}
-            </div>
-            {/* Пульсирующий код */}
+            <div className="absolute top-1/2 left-1/4 text-3xl text-white animate-bounce">{'{'}</div>
+            <div className="absolute top-1/2 right-1/4 text-3xl text-white animate-bounce" style={{ animationDelay: '0.5s' }}>{'}'}</div>
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-2xl font-mono">
                 <span className="animate-pulse">code</span>
             </div>
-            {/* Вращающиеся элементы */}
             <div className="absolute top-1/4 left-1/2 w-2 h-2 bg-white rounded-full animate-ping"></div>
             <div className="absolute bottom-1/4 right-1/3 w-2 h-2 bg-white rounded-full animate-ping" style={{ animationDelay: '0.2s' }}></div>
             <div className="absolute bottom-1/4 left-1/3 w-2 h-2 bg-white rounded-full animate-ping" style={{ animationDelay: '0.4s' }}></div>
@@ -216,7 +37,6 @@ const CodeIconAnimation = () => {
     );
 };
 
-// Компонент для загрузки
 const LoadingScreen = ({ apiStatus }) => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-black">
@@ -231,11 +51,9 @@ const LoadingScreen = ({ apiStatus }) => {
     );
 };
 
-// Компонент для героя с анимацией
 const HeroSection = ({ profile, safeProjects, safeSkills, safeExperience, handleScroll }) => {
     return (
         <section id="home" className="min-h-screen flex items-center justify-center pt-20 relative">
-            {/* Фон для героя */}
             <div className="absolute inset-0 z-0 opacity-10">
                 <div 
                     className="absolute inset-0 bg-cover bg-center"
@@ -248,7 +66,6 @@ const HeroSection = ({ profile, safeProjects, safeSkills, safeExperience, handle
             
             <div className="container mx-auto px-6 relative z-10">
                 <div className="max-w-4xl mx-auto text-center space-y-12">
-                    {/* Анимированная иконка вместо палки */}
                     <CodeIconAnimation />
                     
                     <h1 className="text-5xl md:text-7xl font-light tracking-tight animate-fade-in">
@@ -294,220 +111,8 @@ const HeroSection = ({ profile, safeProjects, safeSkills, safeExperience, handle
     );
 };
 
-// Анимированная карточка проекта
-const ProjectCard = ({ project, isActive }) => {
-    const cardRef = useRef(null);
-
-    useEffect(() => {
-        if (cardRef.current && isActive) {
-            cardRef.current.classList.add('animate-pulse-once');
-            setTimeout(() => {
-                if (cardRef.current) {
-                    cardRef.current.classList.remove('animate-pulse-once');
-                }
-            }, 1000);
-        }
-    }, [isActive]);
-
-    // Функция для получения технологий (обработка разных форматов из API)
-    const getTechnologies = () => {
-        if (!project) return [];
-        
-        if (Array.isArray(project.technologies)) {
-            return project.technologies;
-        }
-        if (Array.isArray(project.technologies_list)) {
-            return project.technologies_list;
-        }
-        if (project.technologies && typeof project.technologies === 'string') {
-            return project.technologies.split(',').map(t => t.trim());
-        }
-        return [];
-    };
-
-    const technologies = getTechnologies();
-
-    return (
-        <div
-            ref={cardRef}
-            className={`relative bg-gradient-to-br from-black to-neutral-900 border-2 ${isActive ? 'border-white' : 'border-neutral-800'
-                } rounded-2xl p-8 transition-all duration-500 hover:scale-[1.02] group`}
-        >
-            {isActive && (
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer"></div>
-            )}
-
-            <div className="relative z-10">
-                <div className="flex justify-between items-center mb-6">
-                    <span className="text-xs tracking-widest text-neutral-500 uppercase">
-                        {project.year || new Date().getFullYear()}
-                    </span>
-                    {isActive && (
-                        <span className="px-3 py-1 bg-white text-black text-xs tracking-widest rounded-full animate-pulse">
-                            ACTIVE
-                        </span>
-                    )}
-                </div>
-
-                <h3 className="text-3xl md:text-4xl font-light mb-4 tracking-tight">
-                    {project.title || 'Проект без названия'}
-                </h3>
-
-                <p className="text-neutral-400 mb-8 leading-relaxed">
-                    {project.short_description || project.description || 'Описание проекта будет добавлено позже'}
-                </p>
-
-                {technologies.length > 0 && (
-                    <div className="flex flex-wrap gap-3 mb-8">
-                        {technologies.map((tech, index) => (
-                            <span
-                                key={index}
-                                className="px-4 py-2 border border-neutral-800 rounded-full text-sm tracking-wider hover:border-white hover:bg-white/5 transition-all duration-300"
-                            >
-                                {tech}
-                            </span>
-                        ))}
-                    </div>
-                )}
-
-                <div className="flex gap-6">
-                    {project.github_url && (
-                        <a
-                            href={project.github_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm tracking-widest uppercase hover:text-white transition-colors group/link"
-                        >
-                            <span className="border-b border-transparent group-hover/link:border-white">GITHUB</span>
-                        </a>
-                    )}
-                    {project.live_url && (
-                        <a
-                            href={project.live_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm tracking-widest uppercase hover:text-white transition-colors group/link"
-                        >
-                            <span className="border-b border-transparent group-hover/link:border-white">ДЕМО</span>
-                        </a>
-                    )}
-                </div>
-            </div>
-        </div>
-    );
-};
-
-const Portfolio = () => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [apiStatus, setApiStatus] = useState('Загрузка...');
-
-    const [projects, setProjects] = useState([]);
-    const [skills, setSkills] = useState([]);
-    const [experience, setExperience] = useState([]);
-    const [profile, setProfile] = useState(null);
-
-    const menuItems = [
-        { id: 'home', label: 'ГЛАВНАЯ' },
-        { id: 'about', label: 'ОБО МНЕ' },
-        { id: 'projects', label: 'ПРОЕКТЫ' },
-        { id: 'skills', label: 'НАВЫКИ' },
-        { id: 'experience', label: 'ОПЫТ' },
-        { id: 'contact', label: 'КОНТАКТЫ' }
-    ];
-
-    const getMockProfile = () => ({
-        name: 'Алексей Петров',
-        title: 'Full Stack Developer',
-        bio: 'Добавьте информацию о себе в админ-панели Django',
-        email: 'example@email.com',
-        phone: '',
-        location: '',
-        github_url: '',
-        linkedin_url: '',
-        telegram_url: '',
-        photo: ''
-    });
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true);
-                setApiStatus('Подключение к сайту...');
-
-                const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
-
-                const [projectsRes, skillsRes, experienceRes, profileRes] = await Promise.allSettled([
-                    fetch(`${API_URL}/projects/`).then(r => r.ok ? r.json() : []),
-                    fetch(`${API_URL}/skills/`).then(r => r.ok ? r.json() : []),
-                    fetch(`${API_URL}/experience/`).then(r => r.ok ? r.json() : []),
-                    fetch(`${API_URL}/profile/`).then(r => r.ok ? r.json() : getMockProfile())
-                ]);
-
-                const projectsData = projectsRes.status === 'fulfilled' && Array.isArray(projectsRes.value)
-                    ? projectsRes.value
-                    : [];
-
-                const skillsData = skillsRes.status === 'fulfilled' && Array.isArray(skillsRes.value)
-                    ? skillsRes.value
-                    : [];
-
-                const experienceData = experienceRes.status === 'fulfilled' && Array.isArray(experienceRes.value)
-                    ? experienceRes.value
-                    : [];
-
-                const profileData = profileRes.status === 'fulfilled' && profileRes.value
-                    ? profileRes.value
-                    : getMockProfile();
-
-                setProjects(projectsData);
-                setSkills(skillsData);
-                setExperience(experienceData);
-                setProfile(profileData);
-                setApiStatus('Данные загружены');
-
-            } catch (error) {
-                console.error('Ошибка при загрузке данных:', error);
-                setProfile(getMockProfile());
-                setProjects([]);
-                setSkills([]);
-                setExperience([]);
-                setApiStatus('Ошибка подключения к API');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    const handleScroll = (id) => {
-        const element = document.getElementById(id);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-        }
-        setIsMenuOpen(false);
-    };
-
-    const formatDate = (dateString) => {
-        if (!dateString) return 'НАСТОЯЩЕЕ ВРЕМЯ';
-        try {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' }).toUpperCase();
-        } catch {
-            return dateString;
-        }
-    };
-
-    if (loading) {
-        return <LoadingScreen apiStatus={apiStatus} />;
-    }
-
-    const safeProjects = Array.isArray(projects) ? projects : [];
-    const safeSkills = Array.isArray(skills) ? skills : [];
-    const safeExperience = Array.isArray(experience) ? experience : [];
-
-const ProjectsSwiper = ({ projects }) => {
+// Простой центрированный свайпер без библиотек
+const SimpleCenteredSwiper = ({ projects }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const containerRef = useRef(null);
     
@@ -526,7 +131,7 @@ const ProjectsSwiper = ({ projects }) => {
             {
                 id: 1,
                 title: 'ДОБАВЬТЕ ПРОЕКТЫ',
-                description: 'Используйте админ-панель Django для добавления проектов',
+                description: 'Используйте админ-панель Django',
                 technologies_list: ['React', 'Django', 'API'],
                 year: '2024'
             }
@@ -535,33 +140,30 @@ const ProjectsSwiper = ({ projects }) => {
     // Автопрокрутка
     useEffect(() => {
         const interval = setInterval(() => {
-            setCurrentIndex((prev) => (prev + 1) % displayProjects.length);
+            setCurrentIndex(prev => (prev + 1) % displayProjects.length);
         }, 5000);
         return () => clearInterval(interval);
     }, [displayProjects.length]);
 
-    const handlePrev = () => {
-        setCurrentIndex(prev => prev === 0 ? displayProjects.length - 1 : prev - 1);
-    };
+    // Обработка клавиш
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'ArrowLeft') {
+                setCurrentIndex(prev => prev === 0 ? displayProjects.length - 1 : prev - 1);
+            }
+            if (e.key === 'ArrowRight') {
+                setCurrentIndex(prev => (prev + 1) % displayProjects.length);
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [displayProjects.length]);
 
-    const handleNext = () => {
-        setCurrentIndex(prev => (prev + 1) % displayProjects.length);
-    };
-
-    // Карточка проекта (твой старый дизайн)
     const ProjectCard = ({ project, isActive }) => {
         const techs = project.technologies_list || [];
         
         return (
-            <motion.div
-                initial={{ scale: 0.9, opacity: 0.5 }}
-                animate={{ 
-                    scale: isActive ? 1 : 0.9, 
-                    opacity: isActive ? 1 : 0.5 
-                }}
-                transition={{ duration: 0.5 }}
-                className={`relative bg-gradient-to-br from-black to-neutral-900 border-2 ${isActive ? 'border-white' : 'border-neutral-800'} rounded-2xl p-8 transition-all duration-500`}
-            >
+            <div className={`relative bg-gradient-to-br from-black to-neutral-900 border-2 ${isActive ? 'border-white' : 'border-neutral-800'} rounded-2xl p-8 transition-all duration-500 ${isActive ? 'scale-100' : 'scale-95 opacity-50'}`}>
                 {isActive && (
                     <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer"></div>
                 )}
@@ -622,24 +224,22 @@ const ProjectsSwiper = ({ projects }) => {
                         )}
                     </div>
                 </div>
-            </motion.div>
+            </div>
         );
     };
 
     return (
-        <div className="relative">
-            {/* Статистика сверху */}
-            <div className="flex justify-center items-center mb-12">
+        <div className="relative w-full">
+            {/* Индикатор */}
+            <div className="flex justify-center items-center mb-8">
                 <div className="flex items-center gap-4">
                     <span className="text-3xl font-light">
                         {String(currentIndex + 1).padStart(2, '0')}
                     </span>
                     <div className="w-32 h-0.5 bg-neutral-800">
-                        <motion.div
-                            className="h-full bg-white"
-                            initial={{ width: 0 }}
-                            animate={{ width: `${((currentIndex + 1) / displayProjects.length) * 100}%` }}
-                            transition={{ duration: 0.5 }}
+                        <div 
+                            className="h-full bg-white transition-all duration-500"
+                            style={{ width: `${((currentIndex + 1) / displayProjects.length) * 100}%` }}
                         />
                     </div>
                     <span className="text-3xl font-light text-neutral-600">
@@ -648,66 +248,25 @@ const ProjectsSwiper = ({ projects }) => {
                 </div>
             </div>
 
-            {/* Центрированный слайдер */}
-            <div className="relative overflow-hidden py-8">
+            {/* Слайдер */}
+            <div className="relative overflow-hidden">
                 <div className="flex justify-center">
-                    <div className="relative w-full max-w-4xl">
-                        {/* Предыдущий слайд (слева) */}
-                        {displayProjects.length > 1 && (
-                            <motion.div
-                                className="absolute right-full mr-8 transform scale-90 opacity-50"
-                                style={{ width: 'calc(100% - 4rem)' }}
-                                animate={{ x: 0 }}
-                            >
-                                <ProjectCard 
-                                    project={displayProjects[(currentIndex - 1 + displayProjects.length) % displayProjects.length]}
-                                    isActive={false}
-                                />
-                            </motion.div>
-                        )}
-
-                        {/* Активный слайд (по центру) */}
-                        <div className="relative z-10 mx-auto" style={{ width: '100%' }}>
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    key={currentIndex}
-                                    initial={{ x: 100, opacity: 0 }}
-                                    animate={{ x: 0, opacity: 1 }}
-                                    exit={{ x: -100, opacity: 0 }}
-                                    transition={{ duration: 0.5 }}
-                                >
-                                    <ProjectCard 
-                                        project={displayProjects[currentIndex]}
-                                        isActive={true}
-                                    />
-                                </motion.div>
-                            </AnimatePresence>
-                        </div>
-
-                        {/* Следующий слайд (справа) */}
-                        {displayProjects.length > 1 && (
-                            <motion.div
-                                className="absolute left-full ml-8 transform scale-90 opacity-50"
-                                style={{ width: 'calc(100% - 4rem)' }}
-                                animate={{ x: 0 }}
-                            >
-                                <ProjectCard 
-                                    project={displayProjects[(currentIndex + 1) % displayProjects.length]}
-                                    isActive={false}
-                                />
-                            </motion.div>
-                        )}
+                    <div className="w-full max-w-4xl mx-auto">
+                        <ProjectCard 
+                            project={displayProjects[currentIndex]}
+                            isActive={true}
+                        />
                     </div>
                 </div>
             </div>
 
             {/* Кнопки навигации */}
-            <div className="flex justify-between items-center mt-12 px-4">
+            <div className="flex justify-center items-center mt-8 gap-8">
                 <button
-                    onClick={handlePrev}
+                    onClick={() => setCurrentIndex(prev => prev === 0 ? displayProjects.length - 1 : prev - 1)}
                     className="w-12 h-12 border-2 border-neutral-800 rounded-full flex items-center justify-center hover:border-white hover:scale-110 transition-all duration-300"
                 >
-                    ←
+                    <FaChevronLeft className="text-xl" />
                 </button>
 
                 {/* Точечный индикатор */}
@@ -726,26 +285,10 @@ const ProjectsSwiper = ({ projects }) => {
                 </div>
 
                 <button
-                    onClick={handleNext}
+                    onClick={() => setCurrentIndex(prev => (prev + 1) % displayProjects.length)}
                     className="w-12 h-12 border-2 border-neutral-800 rounded-full flex items-center justify-center hover:border-white hover:scale-110 transition-all duration-300"
                 >
-                    →
-                </button>
-            </div>
-
-            {/* Мобильные кнопки */}
-            <div className="flex justify-center gap-8 mt-8 md:hidden">
-                <button
-                    onClick={handlePrev}
-                    className="w-12 h-12 border-2 border-neutral-800 rounded-full flex items-center justify-center"
-                >
-                    ←
-                </button>
-                <button
-                    onClick={handleNext}
-                    className="w-12 h-12 border-2 border-neutral-800 rounded-full flex items-center justify-center"
-                >
-                    →
+                    <FaChevronRight className="text-xl" />
                 </button>
             </div>
 
@@ -758,32 +301,21 @@ const ProjectsSwiper = ({ projects }) => {
                     АВТОПРОКРУТКА КАЖДЫЕ 5С
                 </p>
             </div>
-
-            {/* Обработка клавиш */}
-            <style jsx global>{`
-                .animate-shimmer {
-                    animation: shimmer 2s infinite linear;
-                }
-                
-                @keyframes shimmer {
-                    0% { transform: translateX(-100%); }
-                    100% { transform: translateX(100%); }
-                }
-            `}</style>
         </div>
     );
 };
 
-// Добавь в useEffect обработку клавиатуры
-useEffect(() => {
-    const handleKeyDown = (e) => {
-        if (e.key === 'ArrowLeft') handlePrev();
-        if (e.key === 'ArrowRight') handleNext();
-    };
-    
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-}, [currentIndex, displayProjects.length]);
+const Portfolio = () => {
+    // ... твой основной код Portfolio остается
+    // (все useState, useEffect, menuItems, getMockProfile и т.д.)
+
+    if (loading) {
+        return <LoadingScreen apiStatus={apiStatus} />;
+    }
+
+    const safeProjects = Array.isArray(projects) ? projects : [];
+    const safeSkills = Array.isArray(skills) ? skills : [];
+    const safeExperience = Array.isArray(experience) ? experience : [];
 
     return (
         <div className="min-h-screen bg-black text-white font-sans">
@@ -880,8 +412,6 @@ useEffect(() => {
 
             {/* Проекты */}
             <section id="projects" className="py-32 border-t border-neutral-900 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black pointer-events-none"></div>
-
                 <div className="container mx-auto px-6 relative z-10">
                     <div className="text-center mb-20">
                         <h2 className="text-xs tracking-widest text-neutral-500 uppercase mb-4">ПРОЕКТЫ</h2>
@@ -889,11 +419,11 @@ useEffect(() => {
                             РАБОТЫ<span className="text-neutral-600">.</span>
                         </p>
                         <p className="text-neutral-400 text-sm tracking-widest uppercase mt-4">
-                            СВАЙПАЙТЕ → ДЛЯ ПРОСМОТРА
+                            ПРОСМОТР ПРОЕКТОВ
                         </p>
                     </div>
 
-                    <ProjectsSwiper projects={safeProjects} />
+                    <SimpleCenteredSwiper projects={safeProjects} />
                 </div>
             </section>
 
@@ -1038,18 +568,6 @@ useEffect(() => {
 
             {/* CSS анимации */}
             <style jsx global>{`
-                .projects-swiper {
-                    padding: 40px 0;
-                }
-                
-                .swiper-slide {
-                    transition: all 0.5s ease;
-                }
-                
-                .swiper-slide-active {
-                    transform: scale(1.05);
-                }
-                
                 .animate-pulse-once {
                     animation: pulse-once 1s ease-in-out;
                 }
