@@ -1217,7 +1217,7 @@ const Portfolio = () => {
                     description="Профессиональный fullstack разработчик. Делаю сайты под ключ от 25.000₽, Telegram боты, мини-приложения, скрипты Lua. Гарантия 6 месяцев. Срок от 2 недель."
                     keywords="заказать сайт недорого, разработка сайтов москва, создать телеграм бота, программист на Lua, верстка макетов Figma, разработка мини-приложений, fullstack разработчик, веб-разработка под ключ"
                     ogUrl={window.location.href}
-                    author={profile?.name || 'Алексей Петров'}
+                    author={profile?.name || 'phax'}
                 />
                 
                 <nav className="fixed w-full bg-black/95 backdrop-blur-sm z-50 border-b border-neutral-900">
@@ -1306,7 +1306,7 @@ const Portfolio = () => {
                 <footer className="py-12 border-t border-neutral-900">
                     <div className="container mx-auto px-6">
                         <div className="text-center space-y-4">
-                            <p className="text-xs tracking-widest text-neutral-500 uppercase">© {new Date().getFullYear()} {profile?.name || 'Алексей Петров'}</p>
+                            <p className="text-xs tracking-widest text-neutral-500 uppercase">© {new Date().getFullYear()} {profile?.name || 'phax'}</p>
                             <p className="text-xs text-neutral-700">MADE BY DEV</p>
                             <p className="text-xs text-neutral-800 tracking-widest">Статус API: {apiStatus}</p>
                         </div>
