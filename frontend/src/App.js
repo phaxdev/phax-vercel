@@ -1,8 +1,8 @@
 // src/App.js
 import React from 'react';
 import { HelmetProvider } from 'react-helmet-async';
-import Portfolio from './components/Portfolio.jsx';
-import SEO from './components/SEO.jsx';
+import Portfolio from './components/Portfolio';
+import SEO from './components/SEO';
 
 function App() {
   return (
