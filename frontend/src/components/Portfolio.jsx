@@ -1,183 +1,178 @@
 import React, { useState, useEffect } from 'react';
 
 const ContactForm = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
-  
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null);
-  const [errors, setErrors] = useState({});
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        message: ''
     });
-    if (errors[name]) {
-      setErrors({
-        ...errors,
-        [name]: ''
-      });
-    }
-  };
 
-  const validateForm = () => {
-    const newErrors = {};
-    
-    if (!formData.name.trim()) {
-      newErrors.name = 'Введите свой @username или номер';
-    }
-    
-    if (!formData.email.trim()) {
-      newErrors.email = 'Введите email';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Введите корректный email';
-    }
-    
-    if (!formData.message.trim()) {
-      newErrors.message = 'Введите сообщение';
-    }
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState(null);
+    const [errors, setErrors] = useState({});
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
-    
-    setIsSubmitting(true);
-    setSubmitStatus(null);
-    
-    try {
-      const API_URL = process.env.REACT_APP_API_URL || 'http://www.phax.online';
-      
-      const response = await fetch(`${API_URL}/contact-messages/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      });
-      
-      if (response.status === 201) {
-        setSubmitStatus({
-          type: 'success',
-          message: 'Сообщение отправлено'
-        });
-        
+    const handleChange = (e) => {
+        const { name, value } = e.target;
         setFormData({
-          name: '',
-          email: '',
-          message: ''
+            ...formData,
+            [name]: value
         });
-        
-        setTimeout(() => {
-          setSubmitStatus(null);
-        }, 5000);
-      } else {
-        throw new Error('Ошибка отправки');
-      }
-    } catch (error) {
-      console.error('Ошибка при отправке сообщения:', error);
-      
-      setSubmitStatus({
-        type: 'error',
-        message: 'Произошла ошибка при отправке'
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+        if (errors[name]) {
+            setErrors({
+                ...errors,
+                [name]: ''
+            });
+        }
+    };
 
-  return (
-    <div className="max-w-2xl mx-auto">
-      <div className="space-y-8">
-        <div>
-          <input
-            type="text"
-            name="name"
-            placeholder="ИМЯ / USERNAME"
-            value={formData.name}
-            onChange={handleChange}
-            className={`w-full px-0 py-4 bg-transparent border-b-2 ${
-              errors.name 
-                ? 'border-red-500' 
-                : 'border-neutral-800'
-            } focus:outline-none focus:border-neutral-600 transition-colors text-white placeholder-neutral-600 text-sm tracking-widest uppercase`}
-          />
-          {errors.name && (
-            <p className="text-red-500 text-xs mt-2 tracking-wide">{errors.name}</p>
-          )}
+    const validateForm = () => {
+        const newErrors = {};
+
+        if (!formData.name.trim()) {
+            newErrors.name = 'Введите свой @username или номер';
+        }
+
+        if (!formData.email.trim()) {
+            newErrors.email = 'Введите email';
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            newErrors.email = 'Введите корректный email';
+        }
+
+        if (!formData.message.trim()) {
+            newErrors.message = 'Введите сообщение';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!validateForm()) {
+            return;
+        }
+
+        setIsSubmitting(true);
+        setSubmitStatus(null);
+
+        try {
+            const API_URL = process.env.REACT_APP_API_URL || 'https://localhost:8000/api';
+
+            const response = await fetch(`${API_URL}/contact-messages/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.status === 201) {
+                setSubmitStatus({
+                    type: 'success',
+                    message: 'Сообщение отправлено'
+                });
+
+                setFormData({
+                    name: '',
+                    email: '',
+                    message: ''
+                });
+
+                setTimeout(() => {
+                    setSubmitStatus(null);
+                }, 5000);
+            } else {
+                throw new Error('Ошибка отправки');
+            }
+        } catch (error) {
+            console.error('Ошибка при отправке сообщения:', error);
+
+            setSubmitStatus({
+                type: 'error',
+                message: 'Произошла ошибка при отправке'
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    return (
+        <div className="max-w-2xl mx-auto">
+            <div className="space-y-8">
+                <div>
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="ИМЯ / USERNAME"
+                        value={formData.name}
+                        onChange={handleChange}
+                        className={`w-full px-0 py-4 bg-transparent border-b-2 ${errors.name
+                                ? 'border-red-500'
+                                : 'border-neutral-800'
+                            } focus:outline-none focus:border-neutral-600 transition-colors text-white placeholder-neutral-600 text-sm tracking-widest uppercase`}
+                    />
+                    {errors.name && (
+                        <p className="text-red-500 text-xs mt-2 tracking-wide">{errors.name}</p>
+                    )}
+                </div>
+
+                <div>
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="EMAIL"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className={`w-full px-0 py-4 bg-transparent border-b-2 ${errors.email
+                                ? 'border-red-500'
+                                : 'border-neutral-800'
+                            } focus:outline-none focus:border-neutral-600 transition-colors text-white placeholder-neutral-600 text-sm tracking-widest uppercase`}
+                    />
+                    {errors.email && (
+                        <p className="text-red-500 text-xs mt-2 tracking-wide">{errors.email}</p>
+                    )}
+                </div>
+
+                <div>
+                    <textarea
+                        name="message"
+                        placeholder="СООБЩЕНИЕ"
+                        rows="6"
+                        value={formData.message}
+                        onChange={handleChange}
+                        className={`w-full px-0 py-4 bg-transparent border-b-2 ${errors.message
+                                ? 'border-red-500'
+                                : 'border-neutral-800'
+                            } focus:outline-none focus:border-neutral-600 transition-colors text-white placeholder-neutral-600 resize-none text-sm tracking-widest uppercase`}
+                    ></textarea>
+                    {errors.message && (
+                        <p className="text-red-500 text-xs mt-2 tracking-wide">{errors.message}</p>
+                    )}
+                </div>
+
+                {submitStatus && (
+                    <div className={`p-4 text-center text-sm tracking-wide ${submitStatus.type === 'success'
+                            ? 'text-green-400'
+                            : 'text-red-400'
+                        }`}>
+                        {submitStatus.message}
+                    </div>
+                )}
+
+                <button
+                    onClick={handleSubmit}
+                    disabled={isSubmitting}
+                    className={`w-full py-5 border-2 border-white text-white text-sm tracking-widest uppercase transition-all duration-300 ${isSubmitting
+                            ? 'opacity-50 cursor-not-allowed'
+                            : 'hover:bg-white hover:text-black'
+                        }`}
+                >
+                    {isSubmitting ? 'ОТПРАВКА...' : 'ОТПРАВИТЬ'}
+                </button>
+            </div>
         </div>
-
-        <div>
-          <input
-            type="email"
-            name="email"
-            placeholder="EMAIL"
-            value={formData.email}
-            onChange={handleChange}
-            className={`w-full px-0 py-4 bg-transparent border-b-2 ${
-              errors.email 
-                ? 'border-red-500' 
-                : 'border-neutral-800'
-            } focus:outline-none focus:border-neutral-600 transition-colors text-white placeholder-neutral-600 text-sm tracking-widest uppercase`}
-          />
-          {errors.email && (
-            <p className="text-red-500 text-xs mt-2 tracking-wide">{errors.email}</p>
-          )}
-        </div>
-
-        <div>
-          <textarea
-            name="message"
-            placeholder="СООБЩЕНИЕ"
-            rows="6"
-            value={formData.message}
-            onChange={handleChange}
-            className={`w-full px-0 py-4 bg-transparent border-b-2 ${
-              errors.message 
-                ? 'border-red-500' 
-                : 'border-neutral-800'
-            } focus:outline-none focus:border-neutral-600 transition-colors text-white placeholder-neutral-600 resize-none text-sm tracking-widest uppercase`}
-          ></textarea>
-          {errors.message && (
-            <p className="text-red-500 text-xs mt-2 tracking-wide">{errors.message}</p>
-          )}
-        </div>
-
-        {submitStatus && (
-          <div className={`p-4 text-center text-sm tracking-wide ${
-            submitStatus.type === 'success' 
-              ? 'text-green-400' 
-              : 'text-red-400'
-          }`}>
-            {submitStatus.message}
-          </div>
-        )}
-
-        <button
-          onClick={handleSubmit}
-          disabled={isSubmitting}
-          className={`w-full py-5 border-2 border-white text-white text-sm tracking-widest uppercase transition-all duration-300 ${
-            isSubmitting
-              ? 'opacity-50 cursor-not-allowed'
-              : 'hover:bg-white hover:text-black'
-          }`}
-        >
-          {isSubmitting ? 'ОТПРАВКА...' : 'ОТПРАВИТЬ'}
-        </button>
-      </div>
-    </div>
-  );
+    );
 };
 
 const Portfolio = () => {
@@ -218,7 +213,9 @@ const Portfolio = () => {
                 setLoading(true);
                 setApiStatus('Подключение к сайту...');
 
-                const API_URL = process.env.REACT_APP_API_URL || 'https://www.phax.online';
+                const API_URL = process.env.REACT_APP_API_URL || <p className="text-neutral-600 text-xs">
+                    phax.online
+                </p>;
 
                 // Загружаем все данные параллельно
                 const [projectsRes, skillsRes, experienceRes, profileRes] = await Promise.allSettled([
@@ -229,8 +226,8 @@ const Portfolio = () => {
                 ]);
 
                 // Обрабатываем результаты
-                const projectsData = projectsRes.status === 'fulfilled' && Array.isArray(projectsRes.value) 
-                    ? projectsRes.value 
+                const projectsData = projectsRes.status === 'fulfilled' && Array.isArray(projectsRes.value)
+                    ? projectsRes.value
                     : [];
 
                 const skillsData = skillsRes.status === 'fulfilled' && Array.isArray(skillsRes.value)
@@ -360,7 +357,7 @@ const Portfolio = () => {
                 <div className="container mx-auto px-6">
                     <div className="max-w-4xl mx-auto text-center space-y-12">
                         <div className="w-1 h-24 bg-white mx-auto"></div>
-                        
+
                         <h1 className="text-5xl md:text-7xl font-light tracking-tight">
                             {profile?.name || 'Разработчик'}
                         </h1>
