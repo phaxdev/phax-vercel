@@ -1,17 +1,182 @@
 import React, { useState, useEffect, useRef } from 'react';
-import background1 from './background1.png';
-import background2 from './background2.png';
 import { FaGithub, FaExternalLinkAlt, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const ContactForm = () => {
-    // ... (оставь твой ContactForm без изменений)
-    // Полный код ContactForm остается как у тебя
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        message: ''
+    });
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState(null);
+    const [errors, setErrors] = useState({});
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+        if (errors[name]) {
+            setErrors({
+                ...errors,
+                [name]: ''
+            });
+        }
+    };
+
+    const validateForm = () => {
+        const newErrors = {};
+
+        if (!formData.name.trim()) {
+            newErrors.name = 'Введите свой @username или номер';
+        }
+
+        if (!formData.email.trim()) {
+            newErrors.email = 'Введите email';
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            newErrors.email = 'Введите корректный email';
+        }
+
+        if (!formData.message.trim()) {
+            newErrors.message = 'Введите сообщение';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!validateForm()) {
+            return;
+        }
+
+        setIsSubmitting(true);
+        setSubmitStatus(null);
+
+        try {
+            const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+
+            const response = await fetch(`${API_URL}/contact-messages/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.status === 201) {
+                setSubmitStatus({
+                    type: 'success',
+                    message: 'Сообщение отправлено'
+                });
+
+                setFormData({
+                    name: '',
+                    email: '',
+                    message: ''
+                });
+
+                setTimeout(() => {
+                    setSubmitStatus(null);
+                }, 5000);
+            } else {
+                throw new Error('Ошибка отправки');
+            }
+        } catch (error) {
+            console.error('Ошибка при отправке сообщения:', error);
+
+            setSubmitStatus({
+                type: 'error',
+                message: 'Произошла ошибка при отправке'
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     return (
-        // ... твой существующий код ContactForm
+        <div className="max-w-2xl mx-auto">
+            <div className="space-y-8">
+                <div>
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="ИМЯ / USERNAME"
+                        value={formData.name}
+                        onChange={handleChange}
+                        className={`w-full px-0 py-4 bg-transparent border-b-2 ${errors.name
+                            ? 'border-red-500'
+                            : 'border-neutral-800'
+                            } focus:outline-none focus:border-neutral-600 transition-colors text-white placeholder-neutral-600 text-sm tracking-widest uppercase`}
+                    />
+                    {errors.name && (
+                        <p className="text-red-500 text-xs mt-2 tracking-wide">{errors.name}</p>
+                    )}
+                </div>
+
+                <div>
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="EMAIL"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className={`w-full px-0 py-4 bg-transparent border-b-2 ${errors.email
+                            ? 'border-red-500'
+                            : 'border-neutral-800'
+                            } focus:outline-none focus:border-neutral-600 transition-colors text-white placeholder-neutral-600 text-sm tracking-widest uppercase`}
+                    />
+                    {errors.email && (
+                        <p className="text-red-500 text-xs mt-2 tracking-wide">{errors.email}</p>
+                    )}
+                </div>
+
+                <div>
+                    <textarea
+                        name="message"
+                        placeholder="СООБЩЕНИЕ"
+                        rows="6"
+                        value={formData.message}
+                        onChange={handleChange}
+                        className={`w-full px-0 py-4 bg-transparent border-b-2 ${errors.message
+                            ? 'border-red-500'
+                            : 'border-neutral-800'
+                            } focus:outline-none focus:border-neutral-600 transition-colors text-white placeholder-neutral-600 resize-none text-sm tracking-widest uppercase`}
+                    ></textarea>
+                    {errors.message && (
+                        <p className="text-red-500 text-xs mt-2 tracking-wide">{errors.message}</p>
+                    )}
+                </div>
+
+                {submitStatus && (
+                    <div className={`p-4 text-center text-sm tracking-wide ${submitStatus.type === 'success'
+                        ? 'text-green-400'
+                        : 'text-red-400'
+                        }`}>
+                        {submitStatus.message}
+                    </div>
+                )}
+
+                <button
+                    onClick={handleSubmit}
+                    disabled={isSubmitting}
+                    className={`w-full py-5 border-2 border-white text-white text-sm tracking-widest uppercase transition-all duration-300 ${isSubmitting
+                        ? 'opacity-50 cursor-not-allowed'
+                        : 'hover:bg-white hover:text-black'
+                        }`}
+                >
+                    {isSubmitting ? 'ОТПРАВКА...' : 'ОТПРАВИТЬ'}
+                </button>
+            </div>
+        </div>
     );
 };
 
-// Компоненты для загрузки остаются без изменений
+// Анимированная палка для загрузки
 const LoadingSpinner = () => {
     return (
         <div className="relative w-32 h-32 mx-auto mb-8">
@@ -22,6 +187,7 @@ const LoadingSpinner = () => {
     );
 };
 
+// Анимированная иконка программирования
 const CodeIconAnimation = () => {
     return (
         <div className="relative w-32 h-32 mx-auto mb-8">
@@ -37,6 +203,7 @@ const CodeIconAnimation = () => {
     );
 };
 
+// Компонент для загрузки
 const LoadingScreen = ({ apiStatus }) => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-black">
@@ -44,26 +211,17 @@ const LoadingScreen = ({ apiStatus }) => {
                 <LoadingSpinner />
                 <p className="text-white text-sm tracking-widest uppercase mb-4">{apiStatus}</p>
                 <p className="text-neutral-600 text-xs">
-                    API: Текущий адрес: {window.location.hostname}:{window.location.port}
+                    API: {process.env.REACT_APP_API_URL || 'http://localhost:8000/api'}
                 </p>
             </div>
         </div>
     );
 };
 
+// Компонент для героя с анимацией
 const HeroSection = ({ profile, safeProjects, safeSkills, safeExperience, handleScroll }) => {
     return (
         <section id="home" className="min-h-screen flex items-center justify-center pt-20 relative">
-            <div className="absolute inset-0 z-0 opacity-10">
-                <div 
-                    className="absolute inset-0 bg-cover bg-center"
-                    style={{ 
-                        backgroundImage: `url(${background1})`,
-                        filter: 'grayscale(100%) blur(1px)'
-                    }}
-                ></div>
-            </div>
-            
             <div className="container mx-auto px-6 relative z-10">
                 <div className="max-w-4xl mx-auto text-center space-y-12">
                     <CodeIconAnimation />
@@ -111,10 +269,9 @@ const HeroSection = ({ profile, safeProjects, safeSkills, safeExperience, handle
     );
 };
 
-// Простой центрированный свайпер без библиотек
+// Простой центрированный свайпер
 const SimpleCenteredSwiper = ({ projects }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const containerRef = useRef(null);
     
     // Нормализуем проекты
     const displayProjects = Array.isArray(projects) && projects.length > 0 
@@ -159,6 +316,7 @@ const SimpleCenteredSwiper = ({ projects }) => {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [displayProjects.length]);
 
+    // Карточка проекта
     const ProjectCard = ({ project, isActive }) => {
         const techs = project.technologies_list || [];
         
@@ -251,7 +409,7 @@ const SimpleCenteredSwiper = ({ projects }) => {
             {/* Слайдер */}
             <div className="relative overflow-hidden">
                 <div className="flex justify-center">
-                    <div className="w-full max-w-4xl mx-auto">
+                    <div className="w-full max-w-4xl mx-auto px-4">
                         <ProjectCard 
                             project={displayProjects[currentIndex]}
                             isActive={true}
@@ -306,8 +464,106 @@ const SimpleCenteredSwiper = ({ projects }) => {
 };
 
 const Portfolio = () => {
-    // ... твой основной код Portfolio остается
-    // (все useState, useEffect, menuItems, getMockProfile и т.д.)
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [apiStatus, setApiStatus] = useState('Загрузка...');
+
+    const [projects, setProjects] = useState([]);
+    const [skills, setSkills] = useState([]);
+    const [experience, setExperience] = useState([]);
+    const [profile, setProfile] = useState(null);
+
+    const menuItems = [
+        { id: 'home', label: 'ГЛАВНАЯ' },
+        { id: 'about', label: 'ОБО МНЕ' },
+        { id: 'projects', label: 'ПРОЕКТЫ' },
+        { id: 'skills', label: 'НАВЫКИ' },
+        { id: 'experience', label: 'ОПЫТ' },
+        { id: 'contact', label: 'КОНТАКТЫ' }
+    ];
+
+    const getMockProfile = () => ({
+        name: 'Алексей Петров',
+        title: 'Full Stack Developer',
+        bio: 'Добавьте информацию о себе в админ-панели Django',
+        email: 'example@email.com',
+        phone: '',
+        location: '',
+        github_url: '',
+        linkedin_url: '',
+        telegram_url: '',
+        photo: ''
+    });
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                setApiStatus('Подключение к сайту...');
+
+                const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+
+                const [projectsRes, skillsRes, experienceRes, profileRes] = await Promise.allSettled([
+                    fetch(`${API_URL}/projects/`).then(r => r.ok ? r.json() : []),
+                    fetch(`${API_URL}/skills/`).then(r => r.ok ? r.json() : []),
+                    fetch(`${API_URL}/experience/`).then(r => r.ok ? r.json() : []),
+                    fetch(`${API_URL}/profile/`).then(r => r.ok ? r.json() : getMockProfile())
+                ]);
+
+                const projectsData = projectsRes.status === 'fulfilled' && Array.isArray(projectsRes.value)
+                    ? projectsRes.value
+                    : [];
+
+                const skillsData = skillsRes.status === 'fulfilled' && Array.isArray(skillsRes.value)
+                    ? skillsRes.value
+                    : [];
+
+                const experienceData = experienceRes.status === 'fulfilled' && Array.isArray(experienceRes.value)
+                    ? experienceRes.value
+                    : [];
+
+                const profileData = profileRes.status === 'fulfilled' && profileRes.value
+                    ? profileRes.value
+                    : getMockProfile();
+
+                setProjects(projectsData);
+                setSkills(skillsData);
+                setExperience(experienceData);
+                setProfile(profileData);
+                setApiStatus('Данные загружены');
+
+            } catch (error) {
+                console.error('Ошибка при загрузке данных:', error);
+                setProfile(getMockProfile());
+                setProjects([]);
+                setSkills([]);
+                setExperience([]);
+                setApiStatus('Ошибка подключения к API');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const handleScroll = (id) => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+        setIsMenuOpen(false);
+    };
+
+    const formatDate = (dateString) => {
+        if (!dateString) return 'НАСТОЯЩЕЕ ВРЕМЯ';
+        try {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' }).toUpperCase();
+        } catch {
+            return dateString;
+        }
+    };
 
     if (loading) {
         return <LoadingScreen apiStatus={apiStatus} />;
@@ -374,17 +630,7 @@ const Portfolio = () => {
 
             {/* Обо мне */}
             <section id="about" className="py-32 border-t border-neutral-900 relative">
-                <div className="absolute inset-0 z-0 opacity-5">
-                    <div 
-                        className="absolute inset-0 bg-cover bg-center"
-                        style={{ 
-                            backgroundImage: `url(${background2})`,
-                            filter: 'grayscale(100%)'
-                        }}
-                    ></div>
-                </div>
-                
-                <div className="container mx-auto px-6 relative z-10">
+                <div className="container mx-auto px-6">
                     <div className="max-w-3xl mx-auto">
                         <h2 className="text-xs tracking-widest text-neutral-500 uppercase mb-12 text-center">
                             ОБО МНЕ
@@ -411,8 +657,8 @@ const Portfolio = () => {
             </section>
 
             {/* Проекты */}
-            <section id="projects" className="py-32 border-t border-neutral-900 relative overflow-hidden">
-                <div className="container mx-auto px-6 relative z-10">
+            <section id="projects" className="py-32 border-t border-neutral-900 relative">
+                <div className="container mx-auto px-6">
                     <div className="text-center mb-20">
                         <h2 className="text-xs tracking-widest text-neutral-500 uppercase mb-4">ПРОЕКТЫ</h2>
                         <p className="text-5xl md:text-7xl font-light tracking-tight">
