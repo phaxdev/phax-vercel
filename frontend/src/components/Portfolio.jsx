@@ -566,7 +566,7 @@ const Portfolio = () => {
     };
 
     if (loading) {
-        return <LoadingScreen apiStatus={apiStatus} />;
+        return <LoadingScreen apiStatus={`Текущий адрес: ${window.location.hostname}:${window.location.port}`} />;
     }
 
     const safeProjects = Array.isArray(projects) ? projects : [];
