@@ -17,7 +17,6 @@ import {
   FaChevronDown,
   FaRocket,
   FaCrown,
-  FaSparkles,
   FaStar,
   FaBolt,
   FaGlobe,
@@ -460,7 +459,7 @@ const Portfolio = () => {
       <section id="home" className="relative min-h-screen flex items-center justify-center">
         <div className="container mx-auto px-6 py-20 text-center">
           <div className="inline-flex items-center space-x-2 mb-6 px-4 py-2 border border-white/30 rounded-full animate-pulse">
-            <FaSparkles />
+            <FaMagic />
             <span className="text-sm">ДОСТУПЕН ДЛЯ КРУПНЫХ ПРОЕКТОВ</span>
           </div>
 
