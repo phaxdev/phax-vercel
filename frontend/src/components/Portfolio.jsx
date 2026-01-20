@@ -57,7 +57,7 @@ const ContactForm = () => {
     setSubmitStatus(null);
     
     try {
-      const API_URL = 'http://localhost:8000/api';
+      const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
       
       const response = await fetch(`${API_URL}/contact-messages/`, {
         method: 'POST',
@@ -82,6 +82,8 @@ const ContactForm = () => {
         setTimeout(() => {
           setSubmitStatus(null);
         }, 5000);
+      } else {
+        throw new Error('Ошибка отправки');
       }
     } catch (error) {
       console.error('Ошибка при отправке сообщения:', error);
@@ -214,21 +216,56 @@ const Portfolio = () => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                setApiStatus('Подключение...');
+                setApiStatus('Подключение к серверу...');
 
-                setTimeout(() => {
-                    setProfile(getMockProfile());
-                    setProjects([]);
-                    setSkills([]);
-                    setExperience([]);
-                    setApiStatus('Готово');
-                    setLoading(false);
-                }, 1000);
+                const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+
+                // Загружаем все данные параллельно
+                const [projectsRes, skillsRes, experienceRes, profileRes] = await Promise.allSettled([
+                    fetch(`${API_URL}/projects/`).then(r => r.ok ? r.json() : []),
+                    fetch(`${API_URL}/skills/`).then(r => r.ok ? r.json() : []),
+                    fetch(`${API_URL}/experience/`).then(r => r.ok ? r.json() : []),
+                    fetch(`${API_URL}/profile/`).then(r => r.ok ? r.json() : getMockProfile())
+                ]);
+
+                // Обрабатываем результаты
+                const projectsData = projectsRes.status === 'fulfilled' && Array.isArray(projectsRes.value) 
+                    ? projectsRes.value 
+                    : [];
+
+                const skillsData = skillsRes.status === 'fulfilled' && Array.isArray(skillsRes.value)
+                    ? skillsRes.value
+                    : [];
+
+                const experienceData = experienceRes.status === 'fulfilled' && Array.isArray(experienceRes.value)
+                    ? experienceRes.value
+                    : [];
+
+                const profileData = profileRes.status === 'fulfilled' && profileRes.value
+                    ? profileRes.value
+                    : getMockProfile();
+
+                console.log('Загруженные данные:', {
+                    projects: projectsData.length,
+                    skills: skillsData.length,
+                    experience: experienceData.length,
+                    profile: profileData
+                });
+
+                setProjects(projectsData);
+                setSkills(skillsData);
+                setExperience(experienceData);
+                setProfile(profileData);
+                setApiStatus('Данные загружены');
 
             } catch (error) {
                 console.error('Ошибка при загрузке данных:', error);
                 setProfile(getMockProfile());
-                setApiStatus('Ошибка');
+                setProjects([]);
+                setSkills([]);
+                setExperience([]);
+                setApiStatus('Ошибка подключения к API');
+            } finally {
                 setLoading(false);
             }
         };
@@ -259,7 +296,10 @@ const Portfolio = () => {
             <div className="min-h-screen flex items-center justify-center bg-black">
                 <div className="text-center">
                     <div className="w-1 h-20 bg-white mx-auto mb-8 animate-pulse"></div>
-                    <p className="text-white text-sm tracking-widest uppercase">{apiStatus}</p>
+                    <p className="text-white text-sm tracking-widest uppercase mb-4">{apiStatus}</p>
+                    <p className="text-neutral-600 text-xs">
+                        API: {process.env.REACT_APP_API_URL || 'http://localhost:8000/api'}
+                    </p>
                 </div>
             </div>
         );
@@ -400,8 +440,11 @@ const Portfolio = () => {
                     {safeProjects.length === 0 ? (
                         <div className="text-center py-20">
                             <div className="w-1 h-16 bg-neutral-800 mx-auto mb-8"></div>
-                            <p className="text-neutral-500 text-sm tracking-wide uppercase">
+                            <p className="text-neutral-500 text-sm tracking-wide uppercase mb-4">
                                 Добавьте проекты через админ-панель
+                            </p>
+                            <p className="text-neutral-700 text-xs">
+                                Статус API: {apiStatus}
                             </p>
                         </div>
                     ) : (
@@ -597,6 +640,9 @@ const Portfolio = () => {
                         <p className="text-xs text-neutral-700">
                             MADE BY DEV
                         </p>
+                        <p className="text-xs text-neutral-800">
+                            API: {apiStatus}
+                        </p>
                     </div>
                 </div>
             </footer>
@@ -605,4 +651,3 @@ const Portfolio = () => {
 };
 
 export default Portfolio;
-
