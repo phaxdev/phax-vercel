@@ -126,30 +126,6 @@ class Project(models.Model):
         return [tech.strip() for tech in self.technologies.split(',')]
 
 
-class Skill(models.Model):
-    CATEGORY_CHOICES = [
-        ('frontend', 'Frontend'),
-        ('backend', 'Backend'),
-        ('database', 'Базы данных'),
-        ('tools', 'Инструменты'),
-        ('other', 'Другое'),
-    ]
-
-    name = models.CharField(max_length=100, verbose_name="Название навыка")
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, verbose_name="Категория")
-    level = models.IntegerField(default=50, verbose_name="Уровень (0-100)")
-    order = models.IntegerField(default=0, verbose_name="Порядок отображения")
-    is_active = models.BooleanField(default=True, verbose_name="Активный")
-
-    class Meta:
-        verbose_name = "Навык"
-        verbose_name_plural = "Навыки"
-        ordering = ['category', 'order']
-
-    def __str__(self):
-        return f"{self.name} ({self.get_category_display()})"
-
-
 class Experience(models.Model):
     company = models.CharField(max_length=200, verbose_name="Компания")
     position = models.CharField(max_length=200, verbose_name="Должность")

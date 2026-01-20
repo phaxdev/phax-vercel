@@ -2,10 +2,9 @@ from rest_framework import generics, permissions
 from django.http import JsonResponse, HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Project, Skill, Experience, Profile
+from .models import Project, Experience, Profile
 from .serializers import (
-    ProjectSerializer, SkillSerializer,
-    ExperienceSerializer, ProfileSerializer
+    ProjectSerializer, ExperienceSerializer, ProfileSerializer
 )
 from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAdminUser
@@ -46,7 +45,6 @@ def test_view(request):
         'endpoints': {
             'profile': '/api/profile/',
             'projects': '/api/projects/',
-            'skills': '/api/skills/',
             'experience': '/api/experience/'
         }
     })
@@ -54,11 +52,6 @@ def test_view(request):
 class ProjectListAPIView(generics.ListAPIView):
     queryset = Project.objects.filter(is_published=True).order_by('-created_at')
     serializer_class = ProjectSerializer
-    permission_classes = [permissions.AllowAny]
-
-class SkillListAPIView(generics.ListAPIView):
-    queryset = Skill.objects.filter(is_active=True).order_by('order')
-    serializer_class = SkillSerializer
     permission_classes = [permissions.AllowAny]
 
 class ExperienceListAPIView(generics.ListAPIView):

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Project, Skill, Experience, Profile, ContactMessage
+from .models import Project, Experience, Profile, ContactMessage
 
 class ContactMessageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,11 +33,6 @@ class ProjectSerializer(serializers.ModelSerializer):
                 return url.replace('http://', 'https://')
             return obj.image.url.replace('http://', 'https://')
         return None
-
-class SkillSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Skill
-        fields = ['id', 'name', 'category', 'level', 'order', 'is_active']
 
 class ExperienceSerializer(serializers.ModelSerializer):
     class Meta:

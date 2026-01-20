@@ -251,6 +251,319 @@ const ProjectsSwiper = ({ projects }) => {
     );
 };
 
+// Секция "Процесс работы"
+const WorkProcess = () => {
+    const [activeStep, setActiveStep] = useState(0);
+    
+    const processSteps = [
+        {
+            number: '01',
+            title: 'КОНСУЛЬТАЦИЯ',
+            description: 'Обсуждение проекта, анализ требований, определение сроков и бюджета',
+            duration: '1-2 дня',
+            icon: '💬'
+        },
+        {
+            number: '02',
+            title: 'ПРОТОТИП',
+            description: 'Создание wireframes и прототипа для визуализации концепции',
+            duration: '3-5 дней',
+            icon: '📐'
+        },
+        {
+            number: '03',
+            title: 'РАЗРАБОТКА',
+            description: 'Поэтапная разработка с регулярными демонстрациями прогресса',
+            duration: 'Зависит от проекта',
+            icon: '⚡'
+        },
+        {
+            number: '04',
+            title: 'ТЕСТИРОВАНИЕ',
+            description: 'Всестороннее тестирование и финальные корректировки',
+            duration: '3-7 дней',
+            icon: '🔍'
+        },
+        {
+            number: '05',
+            title: 'ЗАПУСК',
+            description: 'Деплой проекта, документация и обучение использованию',
+            duration: '1-2 дня',
+            icon: '🚀'
+        },
+        {
+            number: '06',
+            title: 'ПОДДЕРЖКА',
+            description: 'Техническая поддержка и дальнейшее развитие проекта',
+            duration: 'Постоянно',
+            icon: '🛡️'
+        }
+    ];
+
+    // Автопереключение шагов
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setActiveStep(prev => (prev + 1) % processSteps.length);
+        }, 4000);
+        return () => clearInterval(interval);
+    }, [processSteps.length]);
+
+    return (
+        <section id="process" className="py-32 border-t border-neutral-900 relative overflow-hidden">
+            <div className="absolute inset-0 z-0 opacity-5">
+                <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background4})`, filter: 'grayscale(100%)'}}></div>
+            </div>
+            
+            {/* Анимированные элементы фона */}
+            <div className="absolute inset-0">
+                {[...Array(3)].map((_, i) => (
+                    <div 
+                        key={i}
+                        className="absolute h-px bg-gradient-to-r from-transparent via-white/5 to-transparent animate-flow-line"
+                        style={{
+                            top: `${30 + i * 20}%`,
+                            animationDelay: `${i * 1}s`,
+                            width: '100%'
+                        }}
+                    ></div>
+                ))}
+            </div>
+            
+            <div className="container mx-auto px-6 relative z-10">
+                <h2 className="text-xs tracking-widest text-neutral-500 uppercase mb-4 text-center">ПРОЦЕСС</h2>
+                <p className="text-5xl md:text-7xl font-light tracking-tight text-center mb-12">
+                    РАБОТЫ<span className="text-neutral-600">.</span>
+                </p>
+                <p className="text-neutral-400 text-sm tracking-widest uppercase text-center mb-20 max-w-2xl mx-auto">
+                    ОТ ИДЕИ ДО ЗАПУСКА: 6 КЛЮЧЕВЫХ ЭТАПОВ
+                </p>
+                
+                <div className="max-w-6xl mx-auto">
+                    {/* Основной процесс - горизонтальный для десктопа, вертикальный для мобильных */}
+                    <div className="hidden lg:flex items-center justify-between mb-20 relative">
+                        {/* Линия процесса */}
+                        <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 -translate-y-1/2 z-0"></div>
+                        
+                        {processSteps.map((step, index) => (
+                            <div key={step.number} className="relative z-10">
+                                <button
+                                    onClick={() => setActiveStep(index)}
+                                    className={`flex flex-col items-center transition-all duration-500 ${
+                                        activeStep === index ? 'scale-110' : 'opacity-70 hover:opacity-100'
+                                    }`}
+                                >
+                                    {/* Шаг */}
+                                    <div className={`w-16 h-16 rounded-full border-2 flex items-center justify-center mb-4 transition-all duration-300 ${
+                                        activeStep === index 
+                                            ? 'border-white bg-white text-black' 
+                                            : 'border-neutral-700 bg-black text-white'
+                                    }`}>
+                                        <span className="text-2xl">{step.icon}</span>
+                                    </div>
+                                    
+                                    {/* Номер шага */}
+                                    <div className={`text-xs tracking-widest uppercase mb-2 transition-colors ${
+                                        activeStep === index ? 'text-white' : 'text-neutral-500'
+                                    }`}>
+                                        {step.number}
+                                    </div>
+                                    
+                                    {/* Название шага */}
+                                    <h3 className={`text-sm tracking-widest uppercase text-center transition-colors ${
+                                        activeStep === index ? 'text-white' : 'text-neutral-400'
+                                    }`}>
+                                        {step.title}
+                                    </h3>
+                                    
+                                    {/* Соединительная линия */}
+                                    {index < processSteps.length - 1 && (
+                                        <div className="absolute top-8 left-full w-24 h-0.5 bg-neutral-800 -translate-x-1/2"></div>
+                                    )}
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                    
+                    {/* Мобильная версия - вертикальный список */}
+                    <div className="lg:hidden space-y-8 mb-12">
+                        {processSteps.map((step, index) => (
+                            <div key={step.number} className="relative">
+                                {/* Вертикальная линия */}
+                                {index < processSteps.length - 1 && (
+                                    <div className="absolute left-8 top-16 bottom-0 w-0.5 bg-neutral-800 -translate-x-1/2"></div>
+                                )}
+                                
+                                <button
+                                    onClick={() => setActiveStep(index)}
+                                    className={`flex items-start gap-6 w-full p-6 rounded-2xl transition-all duration-300 ${
+                                        activeStep === index 
+                                            ? 'bg-gradient-to-br from-black to-neutral-900 border-2 border-white' 
+                                            : 'border border-neutral-800 hover:border-neutral-600'
+                                    }`}
+                                >
+                                    {/* Иконка */}
+                                    <div className={`w-16 h-16 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
+                                        activeStep === index 
+                                            ? 'border-white bg-white text-black' 
+                                            : 'border-neutral-700 bg-black text-white'
+                                    }`}>
+                                        <span className="text-2xl">{step.icon}</span>
+                                    </div>
+                                    
+                                    {/* Контент */}
+                                    <div className="flex-1 text-left">
+                                        <div className="flex items-center gap-4 mb-2">
+                                            <span className={`text-sm tracking-widest uppercase ${
+                                                activeStep === index ? 'text-white' : 'text-neutral-500'
+                                            }`}>
+                                                {step.number}
+                                            </span>
+                                            <h3 className={`text-lg tracking-widest uppercase ${
+                                                activeStep === index ? 'text-white' : 'text-white'
+                                            }`}>
+                                                {step.title}
+                                            </h3>
+                                        </div>
+                                        <p className={`text-sm mb-3 ${
+                                            activeStep === index ? 'text-neutral-300' : 'text-neutral-500'
+                                        }`}>
+                                            {step.description}
+                                        </p>
+                                        <div className={`text-xs tracking-widest uppercase ${
+                                            activeStep === index ? 'text-neutral-400' : 'text-neutral-600'
+                                        }`}>
+                                            Длительность: {step.duration}
+                                        </div>
+                                    </div>
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                    
+                    {/* Детали активного шага (для десктопа) */}
+                    <div className="hidden lg:block">
+                        <motion.div
+                            key={activeStep}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
+                            className="bg-gradient-to-br from-black to-neutral-900 border-2 border-neutral-800 rounded-3xl p-12"
+                        >
+                            <div className="grid md:grid-cols-3 gap-12 items-center">
+                                <div className="md:col-span-2">
+                                    <div className="flex items-center gap-6 mb-8">
+                                        <div className="text-6xl font-light">{processSteps[activeStep].number}</div>
+                                        <div>
+                                            <h3 className="text-3xl font-light mb-2">{processSteps[activeStep].title}</h3>
+                                            <p className="text-sm tracking-widest text-neutral-500 uppercase">
+                                                Этап {activeStep + 1} из {processSteps.length}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <p className="text-xl text-neutral-300 mb-8 leading-relaxed">
+                                        {processSteps[activeStep].description}
+                                    </p>
+                                    <div className="flex items-center gap-8">
+                                        <div className="px-6 py-3 border border-neutral-800 rounded-full">
+                                            <span className="text-sm tracking-widest uppercase">
+                                                Длительность: {processSteps[activeStep].duration}
+                                            </span>
+                                        </div>
+                                        <div className="px-6 py-3 border border-neutral-800 rounded-full">
+                                            <span className="text-sm tracking-widest uppercase">
+                                                Результат: {activeStep === 5 ? 'Поддержка' : 'Следующий этап'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex justify-center">
+                                    <div className="relative">
+                                        <div className="w-64 h-64 rounded-full border-4 border-white/10 flex items-center justify-center">
+                                            <div className="w-48 h-48 rounded-full border-4 border-white/20 flex items-center justify-center">
+                                                <div className="w-32 h-32 rounded-full border-4 border-white/30 flex items-center justify-center">
+                                                    <span className="text-6xl">{processSteps[activeStep].icon}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {/* Анимированные кольца */}
+                                        <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-white/5 animate-spin-slow"></div>
+                                        <div className="absolute inset-0 rounded-full border-4 border-transparent border-r-white/5 animate-spin-slow" style={{animationDirection: 'reverse'}}></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                        
+                        {/* Навигация */}
+                        <div className="flex justify-center gap-8 mt-12">
+                            <button
+                                onClick={() => setActiveStep(prev => prev === 0 ? processSteps.length - 1 : prev - 1)}
+                                className="w-12 h-12 border-2 border-neutral-800 rounded-full flex items-center justify-center hover:border-white hover:scale-110 transition-all duration-300"
+                            >
+                                ←
+                            </button>
+                            
+                            <div className="flex items-center gap-4">
+                                <span className="text-2xl font-light">
+                                    {String(activeStep + 1).padStart(2, '0')}
+                                </span>
+                                <div className="w-48 h-0.5 bg-neutral-800">
+                                    <motion.div
+                                        className="h-full bg-white"
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${((activeStep + 1) / processSteps.length) * 100}%` }}
+                                        transition={{ duration: 0.5 }}
+                                    />
+                                </div>
+                                <span className="text-2xl font-light text-neutral-600">
+                                    {String(processSteps.length).padStart(2, '0')}
+                                </span>
+                            </div>
+                            
+                            <button
+                                onClick={() => setActiveStep(prev => (prev + 1) % processSteps.length)}
+                                className="w-12 h-12 border-2 border-neutral-800 rounded-full flex items-center justify-center hover:border-white hover:scale-110 transition-all duration-300"
+                            >
+                                →
+                            </button>
+                        </div>
+                    </div>
+                    
+                    {/* Статистика процесса */}
+                    <div className="mt-20 pt-20 border-t border-neutral-900">
+                        <div className="grid md:grid-cols-3 gap-8">
+                            <div className="text-center p-8 border border-neutral-800 rounded-3xl">
+                                <div className="text-5xl font-light mb-4">100%</div>
+                                <h4 className="text-sm tracking-widest uppercase mb-2">ПРОЗРАЧНОСТЬ</h4>
+                                <p className="text-neutral-400 text-sm">Регулярные отчеты и демонстрации</p>
+                            </div>
+                            <div className="text-center p-8 border border-neutral-800 rounded-3xl">
+                                <div className="text-5xl font-light mb-4">24/7</div>
+                                <h4 className="text-sm tracking-widest uppercase mb-2">КОММУНИКАЦИЯ</h4>
+                                <p className="text-neutral-400 text-sm">Поддержка в Telegram и почте</p>
+                            </div>
+                            <div className="text-center p-8 border border-neutral-800 rounded-3xl">
+                                <div className="text-5xl font-light mb-4">✓</div>
+                                <h4 className="text-sm tracking-widest uppercase mb-2">ГАРАНТИЯ КАЧЕСТВА</h4>
+                                <p className="text-neutral-400 text-sm">Тестирование и фиксы после запуска</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <style jsx global>{`
+                @keyframes flow-line {
+                    0% { transform: translateX(-100%); }
+                    100% { transform: translateX(100%); }
+                }
+                .animate-flow-line {
+                    animation: flow-line 15s linear infinite;
+                }
+            `}</style>
+        </section>
+    );
+};
+
 const Portfolio = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -260,9 +573,14 @@ const Portfolio = () => {
     const [experience, setExperience] = useState([]);
     const [profile, setProfile] = useState(null);
 
+    // Обновляем меню: меняем "НАВЫКИ" на "ПРОЦЕСС"
     const menuItems = [
-        {id: 'home', label: 'ГЛАВНАЯ'}, {id: 'about', label: 'ОБО МНЕ'}, {id: 'projects', label: 'ПРОЕКТЫ'},
-        {id: 'skills', label: 'НАВЫКИ'}, {id: 'experience', label: 'ОПЫТ'}, {id: 'contact', label: 'КОНТАКТЫ'}
+        {id: 'home', label: 'ГЛАВНАЯ'}, 
+        {id: 'about', label: 'ОБО МНЕ'}, 
+        {id: 'projects', label: 'ПРОЕКТЫ'},
+        {id: 'process', label: 'ПРОЦЕСС'}, // Изменено здесь
+        {id: 'experience', label: 'ОПЫТ'}, 
+        {id: 'contact', label: 'КОНТАКТЫ'}
     ];
 
     const getMockProfile = () => ({
@@ -380,36 +698,8 @@ const Portfolio = () => {
                 </div>
             </section>
 
-            {/* Навыки с background4 */}
-            <section id="skills" className="py-32 border-t border-neutral-900 relative">
-                <div className="absolute inset-0 z-0 opacity-5">
-                    <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background4})`, filter: 'grayscale(100%)'}}></div>
-                </div>
-                <div className="container mx-auto px-6 relative z-10">
-                    <h2 className="text-xs tracking-widest text-neutral-500 uppercase mb-20 text-center">НАВЫКИ</h2>
-                    <div className="max-w-4xl mx-auto">
-                        {safeSkills.length === 0 ? (
-                            <div className="text-center py-12">
-                                <p className="text-neutral-500 text-sm tracking-wide uppercase">Навыки не добавлены</p>
-                            </div>
-                        ) : (
-                            <div className="space-y-12">
-                                {safeSkills.map((skill, index) => (
-                                    <div key={skill.id || index} className="border-b border-neutral-900 pb-8">
-                                        <div className="flex justify-between items-center mb-4">
-                                            <span className="text-sm tracking-widest uppercase">{skill.name}</span>
-                                            <span className="text-neutral-500 text-sm">{skill.level}%</span>
-                                        </div>
-                                        <div className="h-px bg-neutral-900 relative overflow-hidden">
-                                            <div className="h-full bg-white absolute top-0 left-0 transition-all duration-1000" style={{width: `${skill.level}%`}}></div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </section>
+            {/* Процесс работы вместо навыков */}
+            <WorkProcess />
 
             {/* Опыт с background5 */}
             <section id="experience" className="py-32 border-t border-neutral-900 relative">
@@ -445,7 +735,7 @@ const Portfolio = () => {
                 </div>
             </section>
 
-            {/* Контакты с background3 (можно изменить) */}
+            {/* Контакты с background3 */}
             <section id="contact" className="py-32 border-t border-neutral-900 relative">
                 <div className="absolute inset-0 z-0 opacity-5">
                     <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background3})`, filter: 'grayscale(100%) blur(0.5px)'}}></div>
