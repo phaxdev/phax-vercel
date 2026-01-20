@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaGithub, FaExternalLinkAlt, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
+import background1 from './background1.png';
+import background2 from './background2.png';
+import { FaGithub, FaExternalLinkAlt, FaChevronLeft, FaChevronRight, FaCode, FaServer, FaDatabase, FaMobile, FaRocket } from 'react-icons/fa';
 
 const ContactForm = () => {
     const [formData, setFormData] = useState({
@@ -180,22 +183,32 @@ const ContactForm = () => {
 const LoadingSpinner = () => {
     return (
         <div className="relative w-32 h-32 mx-auto mb-8">
+            {/* Внешнее кольцо */}
             <div className="absolute inset-0 border-4 border-white/30 rounded-full"></div>
+            {/* Вращающаяся палка */}
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-1 bg-white animate-spin-slow origin-center"></div>
+            {/* Центральная точка */}
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full"></div>
         </div>
     );
 };
 
-// Анимированная иконка программирования
+// Анимированная иконка программирования после загрузки
 const CodeIconAnimation = () => {
     return (
         <div className="relative w-32 h-32 mx-auto mb-8">
-            <div className="absolute top-1/2 left-1/4 text-3xl text-white animate-bounce">{'{'}</div>
-            <div className="absolute top-1/2 right-1/4 text-3xl text-white animate-bounce" style={{ animationDelay: '0.5s' }}>{'}'}</div>
+            {/* Анимированные фигурные скобки */}
+            <div className="absolute top-1/2 left-1/4 text-3xl text-white animate-bounce">
+                {'{'}
+            </div>
+            <div className="absolute top-1/2 right-1/4 text-3xl text-white animate-bounce" style={{ animationDelay: '0.5s' }}>
+                {'}'}
+            </div>
+            {/* Пульсирующий код */}
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-2xl font-mono">
                 <span className="animate-pulse">code</span>
             </div>
+            {/* Вращающиеся элементы */}
             <div className="absolute top-1/4 left-1/2 w-2 h-2 bg-white rounded-full animate-ping"></div>
             <div className="absolute bottom-1/4 right-1/3 w-2 h-2 bg-white rounded-full animate-ping" style={{ animationDelay: '0.2s' }}></div>
             <div className="absolute bottom-1/4 left-1/3 w-2 h-2 bg-white rounded-full animate-ping" style={{ animationDelay: '0.4s' }}></div>
@@ -211,7 +224,7 @@ const LoadingScreen = ({ apiStatus }) => {
                 <LoadingSpinner />
                 <p className="text-white text-sm tracking-widest uppercase mb-4">{apiStatus}</p>
                 <p className="text-neutral-600 text-xs">
-                    API: {process.env.REACT_APP_API_URL || 'http://localhost:8000/api'}
+                    API: Текущий адрес: {window.location.hostname}:{window.location.port}
                 </p>
             </div>
         </div>
@@ -222,8 +235,20 @@ const LoadingScreen = ({ apiStatus }) => {
 const HeroSection = ({ profile, safeProjects, safeSkills, safeExperience, handleScroll }) => {
     return (
         <section id="home" className="min-h-screen flex items-center justify-center pt-20 relative">
+            {/* Фон для героя */}
+            <div className="absolute inset-0 z-0 opacity-10">
+                <div 
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{ 
+                        backgroundImage: `url(${background1})`,
+                        filter: 'grayscale(100%) blur(1px)'
+                    }}
+                ></div>
+            </div>
+            
             <div className="container mx-auto px-6 relative z-10">
                 <div className="max-w-4xl mx-auto text-center space-y-12">
+                    {/* Анимированная иконка вместо палки */}
                     <CodeIconAnimation />
                     
                     <h1 className="text-5xl md:text-7xl font-light tracking-tight animate-fade-in">
@@ -269,11 +294,114 @@ const HeroSection = ({ profile, safeProjects, safeSkills, safeExperience, handle
     );
 };
 
-// Простой центрированный свайпер
-const SimpleCenteredSwiper = ({ projects }) => {
+// Анимированная карточка проекта
+const ProjectCard = ({ project, isActive }) => {
+    const cardRef = useRef(null);
+
+    useEffect(() => {
+        if (cardRef.current && isActive) {
+            cardRef.current.classList.add('animate-pulse-once');
+            setTimeout(() => {
+                if (cardRef.current) {
+                    cardRef.current.classList.remove('animate-pulse-once');
+                }
+            }, 1000);
+        }
+    }, [isActive]);
+
+    // Функция для получения технологий (обработка разных форматов из API)
+    const getTechnologies = () => {
+        if (!project) return [];
+        
+        if (Array.isArray(project.technologies)) {
+            return project.technologies;
+        }
+        if (Array.isArray(project.technologies_list)) {
+            return project.technologies_list;
+        }
+        if (project.technologies && typeof project.technologies === 'string') {
+            return project.technologies.split(',').map(t => t.trim());
+        }
+        return [];
+    };
+
+    const technologies = getTechnologies();
+
+    return (
+        <div
+            ref={cardRef}
+            className={`relative bg-gradient-to-br from-black to-neutral-900 border-2 ${
+                isActive ? 'border-white' : 'border-neutral-800'
+            } rounded-2xl p-8 transition-all duration-500 hover:scale-[1.02] group`}
+        >
+            {isActive && (
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer"></div>
+            )}
+
+            <div className="relative z-10">
+                <div className="flex justify-between items-center mb-6">
+                    <span className="text-xs tracking-widest text-neutral-500 uppercase">
+                        {project.year || new Date().getFullYear()}
+                    </span>
+                    {isActive && (
+                        <span className="px-3 py-1 bg-white text-black text-xs tracking-widest rounded-full animate-pulse">
+                            ACTIVE
+                        </span>
+                    )}
+                </div>
+
+                <h3 className="text-3xl md:text-4xl font-light mb-4 tracking-tight">
+                    {project.title || 'Проект без названия'}
+                </h3>
+
+                <p className="text-neutral-400 mb-8 leading-relaxed">
+                    {project.short_description || project.description || 'Описание проекта будет добавлено позже'}
+                </p>
+
+                {technologies.length > 0 && (
+                    <div className="flex flex-wrap gap-3 mb-8">
+                        {technologies.map((tech, index) => (
+                            <span
+                                key={index}
+                                className="px-4 py-2 border border-neutral-800 rounded-full text-sm tracking-wider hover:border-white hover:bg-white/5 transition-all duration-300"
+                            >
+                                {tech}
+                            </span>
+                        ))}
+                    </div>
+                )}
+
+                <div className="flex gap-6">
+                    {project.github_url && (
+                        <a
+                            href={project.github_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm tracking-widest uppercase hover:text-white transition-colors group/link"
+                        >
+                            <span className="border-b border-transparent group-hover/link:border-white">GITHUB</span>
+                        </a>
+                    )}
+                    {project.live_url && (
+                        <a
+                            href={project.live_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm tracking-widest uppercase hover:text-white transition-colors group/link"
+                        >
+                            <span className="border-b border-transparent group-hover/link:border-white">ДЕМО</span>
+                        </a>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// ProjectsSwiper с использованием framer-motion
+const ProjectsSwiper = ({ projects }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     
-    // Нормализуем проекты
     const displayProjects = Array.isArray(projects) && projects.length > 0 
         ? projects.map((p, i) => ({
             id: p.id || i,
@@ -288,7 +416,7 @@ const SimpleCenteredSwiper = ({ projects }) => {
             {
                 id: 1,
                 title: 'ДОБАВЬТЕ ПРОЕКТЫ',
-                description: 'Используйте админ-панель Django',
+                description: 'Используйте админ-панель Django для добавления проектов',
                 technologies_list: ['React', 'Django', 'API'],
                 year: '2024'
             }
@@ -297,107 +425,44 @@ const SimpleCenteredSwiper = ({ projects }) => {
     // Автопрокрутка
     useEffect(() => {
         const interval = setInterval(() => {
-            setCurrentIndex(prev => (prev + 1) % displayProjects.length);
+            setCurrentIndex((prev) => (prev + 1) % displayProjects.length);
         }, 5000);
         return () => clearInterval(interval);
     }, [displayProjects.length]);
 
+    const handlePrev = () => {
+        setCurrentIndex(prev => prev === 0 ? displayProjects.length - 1 : prev - 1);
+    };
+
+    const handleNext = () => {
+        setCurrentIndex(prev => (prev + 1) % displayProjects.length);
+    };
+
     // Обработка клавиш
     useEffect(() => {
         const handleKeyDown = (e) => {
-            if (e.key === 'ArrowLeft') {
-                setCurrentIndex(prev => prev === 0 ? displayProjects.length - 1 : prev - 1);
-            }
-            if (e.key === 'ArrowRight') {
-                setCurrentIndex(prev => (prev + 1) % displayProjects.length);
-            }
+            if (e.key === 'ArrowLeft') handlePrev();
+            if (e.key === 'ArrowRight') handleNext();
         };
+        
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [displayProjects.length]);
-
-    // Карточка проекта
-    const ProjectCard = ({ project, isActive }) => {
-        const techs = project.technologies_list || [];
-        
-        return (
-            <div className={`relative bg-gradient-to-br from-black to-neutral-900 border-2 ${isActive ? 'border-white' : 'border-neutral-800'} rounded-2xl p-8 transition-all duration-500 ${isActive ? 'scale-100' : 'scale-95 opacity-50'}`}>
-                {isActive && (
-                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer"></div>
-                )}
-
-                <div className="relative z-10">
-                    <div className="flex justify-between items-center mb-6">
-                        <span className="text-xs tracking-widest text-neutral-500 uppercase">
-                            {project.year}
-                        </span>
-                        {isActive && (
-                            <span className="px-3 py-1 bg-white text-black text-xs tracking-widest rounded-full animate-pulse">
-                                ACTIVE
-                            </span>
-                        )}
-                    </div>
-
-                    <h3 className="text-3xl md:text-4xl font-light mb-4 tracking-tight">
-                        {project.title}
-                    </h3>
-
-                    <p className="text-neutral-400 mb-8 leading-relaxed">
-                        {project.description}
-                    </p>
-
-                    {techs.length > 0 && (
-                        <div className="flex flex-wrap gap-3 mb-8">
-                            {techs.map((tech, index) => (
-                                <span
-                                    key={index}
-                                    className="px-4 py-2 border border-neutral-800 rounded-full text-sm tracking-wider hover:border-white hover:bg-white/5 transition-all duration-300"
-                                >
-                                    {tech}
-                                </span>
-                            ))}
-                        </div>
-                    )}
-
-                    <div className="flex gap-6">
-                        {project.github_url && (
-                            <a
-                                href={project.github_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-sm tracking-widest uppercase hover:text-white transition-colors"
-                            >
-                                GITHUB
-                            </a>
-                        )}
-                        {project.live_url && (
-                            <a
-                                href={project.live_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-sm tracking-widest uppercase hover:text-white transition-colors"
-                            >
-                                ДЕМО
-                            </a>
-                        )}
-                    </div>
-                </div>
-            </div>
-        );
-    };
+    }, [currentIndex, displayProjects.length]);
 
     return (
-        <div className="relative w-full">
-            {/* Индикатор */}
-            <div className="flex justify-center items-center mb-8">
+        <div className="relative">
+            {/* Статистика сверху */}
+            <div className="flex justify-center items-center mb-12">
                 <div className="flex items-center gap-4">
                     <span className="text-3xl font-light">
                         {String(currentIndex + 1).padStart(2, '0')}
                     </span>
                     <div className="w-32 h-0.5 bg-neutral-800">
-                        <div 
-                            className="h-full bg-white transition-all duration-500"
-                            style={{ width: `${((currentIndex + 1) / displayProjects.length) * 100}%` }}
+                        <motion.div
+                            className="h-full bg-white"
+                            initial={{ width: 0 }}
+                            animate={{ width: `${((currentIndex + 1) / displayProjects.length) * 100}%` }}
+                            transition={{ duration: 0.5 }}
                         />
                     </div>
                     <span className="text-3xl font-light text-neutral-600">
@@ -406,25 +471,38 @@ const SimpleCenteredSwiper = ({ projects }) => {
                 </div>
             </div>
 
-            {/* Слайдер */}
-            <div className="relative overflow-hidden">
+            {/* Центрированный слайдер */}
+            <div className="relative overflow-hidden py-8">
                 <div className="flex justify-center">
-                    <div className="w-full max-w-4xl mx-auto px-4">
-                        <ProjectCard 
-                            project={displayProjects[currentIndex]}
-                            isActive={true}
-                        />
+                    <div className="relative w-full max-w-4xl">
+                        {/* Активный слайд (по центру) */}
+                        <div className="relative z-10 mx-auto" style={{ width: '100%' }}>
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={currentIndex}
+                                    initial={{ x: 100, opacity: 0 }}
+                                    animate={{ x: 0, opacity: 1 }}
+                                    exit={{ x: -100, opacity: 0 }}
+                                    transition={{ duration: 0.5 }}
+                                >
+                                    <ProjectCard 
+                                        project={displayProjects[currentIndex]}
+                                        isActive={true}
+                                    />
+                                </motion.div>
+                            </AnimatePresence>
+                        </div>
                     </div>
                 </div>
             </div>
 
             {/* Кнопки навигации */}
-            <div className="flex justify-center items-center mt-8 gap-8">
+            <div className="flex justify-between items-center mt-12 px-4">
                 <button
-                    onClick={() => setCurrentIndex(prev => prev === 0 ? displayProjects.length - 1 : prev - 1)}
+                    onClick={handlePrev}
                     className="w-12 h-12 border-2 border-neutral-800 rounded-full flex items-center justify-center hover:border-white hover:scale-110 transition-all duration-300"
                 >
-                    <FaChevronLeft className="text-xl" />
+                    ←
                 </button>
 
                 {/* Точечный индикатор */}
@@ -443,10 +521,10 @@ const SimpleCenteredSwiper = ({ projects }) => {
                 </div>
 
                 <button
-                    onClick={() => setCurrentIndex(prev => (prev + 1) % displayProjects.length)}
+                    onClick={handleNext}
                     className="w-12 h-12 border-2 border-neutral-800 rounded-full flex items-center justify-center hover:border-white hover:scale-110 transition-all duration-300"
                 >
-                    <FaChevronRight className="text-xl" />
+                    →
                 </button>
             </div>
 
@@ -566,7 +644,7 @@ const Portfolio = () => {
     };
 
     if (loading) {
-        return <LoadingScreen apiStatus={`Текущий адрес: ${window.location.hostname}:${window.location.port}`} />;
+        return <LoadingScreen apiStatus={apiStatus} />;
     }
 
     const safeProjects = Array.isArray(projects) ? projects : [];
@@ -630,7 +708,17 @@ const Portfolio = () => {
 
             {/* Обо мне */}
             <section id="about" className="py-32 border-t border-neutral-900 relative">
-                <div className="container mx-auto px-6">
+                <div className="absolute inset-0 z-0 opacity-5">
+                    <div 
+                        className="absolute inset-0 bg-cover bg-center"
+                        style={{ 
+                            backgroundImage: `url(${background2})`,
+                            filter: 'grayscale(100%)'
+                        }}
+                    ></div>
+                </div>
+                
+                <div className="container mx-auto px-6 relative z-10">
                     <div className="max-w-3xl mx-auto">
                         <h2 className="text-xs tracking-widest text-neutral-500 uppercase mb-12 text-center">
                             ОБО МНЕ
@@ -657,19 +745,21 @@ const Portfolio = () => {
             </section>
 
             {/* Проекты */}
-            <section id="projects" className="py-32 border-t border-neutral-900 relative">
-                <div className="container mx-auto px-6">
+            <section id="projects" className="py-32 border-t border-neutral-900 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black pointer-events-none"></div>
+
+                <div className="container mx-auto px-6 relative z-10">
                     <div className="text-center mb-20">
                         <h2 className="text-xs tracking-widest text-neutral-500 uppercase mb-4">ПРОЕКТЫ</h2>
                         <p className="text-5xl md:text-7xl font-light tracking-tight">
                             РАБОТЫ<span className="text-neutral-600">.</span>
                         </p>
                         <p className="text-neutral-400 text-sm tracking-widest uppercase mt-4">
-                            ПРОСМОТР ПРОЕКТОВ
+                            СВАЙПАЙТЕ → ДЛЯ ПРОСМОТРА
                         </p>
                     </div>
 
-                    <SimpleCenteredSwiper projects={safeProjects} />
+                    <ProjectsSwiper projects={safeProjects} />
                 </div>
             </section>
 
@@ -814,6 +904,18 @@ const Portfolio = () => {
 
             {/* CSS анимации */}
             <style jsx global>{`
+                .projects-swiper {
+                    padding: 40px 0;
+                }
+                
+                .swiper-slide {
+                    transition: all 0.5s ease;
+                }
+                
+                .swiper-slide-active {
+                    transform: scale(1.05);
+                }
+                
                 .animate-pulse-once {
                     animation: pulse-once 1s ease-in-out;
                 }
