@@ -514,149 +514,166 @@ const Portfolio = () => {
         const swiperRef = useRef(null);
         const [activeIndex, setActiveIndex] = useState(0);
 
-    const ProjectCard = ({ project, isActive }) => {
-    const cardRef = useRef(null);
-
-    useEffect(() => {
-        if (cardRef.current && isActive) {
-            cardRef.current.classList.add('animate-pulse-once');
-            setTimeout(() => {
-                if (cardRef.current) {
-                    cardRef.current.classList.remove('animate-pulse-once');
-                }
-            }, 1000);
-        }
-    }, [isActive]);
-
-    // ЗАЩИТА: если project undefined/null
-    if (!project || typeof project !== 'object') {
-        return (
-            <div className="relative bg-gradient-to-br from-black to-neutral-900 border-2 border-neutral-800 rounded-2xl p-8">
-                <p className="text-neutral-500">Загрузка проекта...</p>
-            </div>
-        );
-    }
-
-    // ЗАЩИТА: безопасное получение технологий
-    const getTechnologies = () => {
-        try {
-            // Пробуем получить технологии из разных полей
-            let techs = [];
-            
-            // Вариант 1: technologies_list (скорее всего это поле из Django)
-            if (project.technologies_list && Array.isArray(project.technologies_list)) {
-                techs = project.technologies_list;
+        // ЗАЩИТА: нормализация данных
+        const safeProjects = React.useMemo(() => {
+            if (!Array.isArray(projects)) {
+                return [];
             }
-            // Вариант 2: technologies
-            else if (project.technologies) {
-                if (Array.isArray(project.technologies)) {
-                    techs = project.technologies;
+
+            return projects.map((p, index) => ({
+                id: p?.id || p?.pk || `project-${index}`,
+                title: p?.title || p?.name || `Проект ${index + 1}`,
+                description: p?.description || p?.short_description || '',
+                technologies_list: p?.technologies_list || p?.technologies || p?.tags || [],
+                year: p?.year || new Date().getFullYear(),
+                github_url: p?.github_url,
+                live_url: p?.live_url
+            }));
+        }, [projects]);
+
+        const ProjectCard = ({ project, isActive }) => {
+            const cardRef = useRef(null);
+
+            useEffect(() => {
+                if (cardRef.current && isActive) {
+                    cardRef.current.classList.add('animate-pulse-once');
+                    setTimeout(() => {
+                        if (cardRef.current) {
+                            cardRef.current.classList.remove('animate-pulse-once');
+                        }
+                    }, 1000);
                 }
-                // Если строка, разбиваем по запятой
-                else if (typeof project.technologies === 'string') {
-                    techs = project.technologies.split(',').map(t => t.trim()).filter(t => t);
+            }, [isActive]);
+
+            // ЗАЩИТА: если project undefined/null
+            if (!project || typeof project !== 'object') {
+                return (
+                    <div className="relative bg-gradient-to-br from-black to-neutral-900 border-2 border-neutral-800 rounded-2xl p-8">
+                        <p className="text-neutral-500">Загрузка проекта...</p>
+                    </div>
+                );
+            }
+
+            // ЗАЩИТА: безопасное получение технологий
+            const getTechnologies = () => {
+                try {
+                    // Пробуем получить технологии из разных полей
+                    let techs = [];
+
+                    // Вариант 1: technologies_list (скорее всего это поле из Django)
+                    if (project.technologies_list && Array.isArray(project.technologies_list)) {
+                        techs = project.technologies_list;
+                    }
+                    // Вариант 2: technologies
+                    else if (project.technologies) {
+                        if (Array.isArray(project.technologies)) {
+                            techs = project.technologies;
+                        }
+                        // Если строка, разбиваем по запятой
+                        else if (typeof project.technologies === 'string') {
+                            techs = project.technologies.split(',').map(t => t.trim()).filter(t => t);
+                        }
+                    }
+                    // Вариант 3: tags
+                    else if (project.tags && Array.isArray(project.tags)) {
+                        techs = project.tags;
+                    }
+
+                    // Фильтруем пустые значения
+                    return techs.filter(t => t != null && t !== '');
+                } catch (error) {
+                    console.error('Error getting technologies:', error);
+                    return [];
                 }
-            }
-            // Вариант 3: tags
-            else if (project.tags && Array.isArray(project.tags)) {
-                techs = project.tags;
-            }
-            
-            // Фильтруем пустые значения
-            return techs.filter(t => t != null && t !== '');
-        } catch (error) {
-            console.error('Error getting technologies:', error);
-            return [];
-        }
-    };
+            };
 
-    const technologies = getTechnologies();
+            const technologies = getTechnologies();
 
-    // ЗАЩИТА: безопасное получение других полей
-    const title = project.title || project.name || 'Проект без названия';
-    const description = project.short_description || project.description || project.details || 'Описание будет добавлено';
-    const year = project.year || project.year_created || new Date().getFullYear();
-    const githubUrl = project.github_url || project.github || '';
-    const liveUrl = project.live_url || project.demo_url || project.url || '';
+            // ЗАЩИТА: безопасное получение других полей
+            const title = project.title || project.name || 'Проект без названия';
+            const description = project.short_description || project.description || project.details || 'Описание будет добавлено';
+            const year = project.year || project.year_created || new Date().getFullYear();
+            const githubUrl = project.github_url || project.github || '';
+            const liveUrl = project.live_url || project.demo_url || project.url || '';
 
-    return (
-        <div
-            ref={cardRef}
-            className={`relative bg-gradient-to-br from-black to-neutral-900 border-2 ${isActive ? 'border-white' : 'border-neutral-800'
-                } rounded-2xl p-8 transition-all duration-500 hover:scale-[1.02] group`}
-        >
-            {isActive && (
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer"></div>
-            )}
-
-            <div className="relative z-10">
-                {/* Год и статус */}
-                <div className="flex justify-between items-center mb-6">
-                    <span className="text-xs tracking-widest text-neutral-500 uppercase">
-                        {year}
-                    </span>
+            return (
+                <div
+                    ref={cardRef}
+                    className={`relative bg-gradient-to-br from-black to-neutral-900 border-2 ${isActive ? 'border-white' : 'border-neutral-800'
+                        } rounded-2xl p-8 transition-all duration-500 hover:scale-[1.02] group`}
+                >
                     {isActive && (
-                        <span className="px-3 py-1 bg-white text-black text-xs tracking-widest rounded-full animate-pulse">
-                            ACTIVE
-                        </span>
+                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer"></div>
                     )}
-                </div>
 
-                {/* Заголовок */}
-                <h3 className="text-3xl md:text-4xl font-light mb-4 tracking-tight">
-                    {title}
-                </h3>
-
-                {/* Описание */}
-                <p className="text-neutral-400 mb-8 leading-relaxed">
-                    {description}
-                </p>
-
-                {/* Технологии - ТОЛЬКО если есть */}
-                {technologies.length > 0 ? (
-                    <div className="flex flex-wrap gap-3 mb-8">
-                        {technologies.map((tech, index) => (
-                            <span
-                                key={index}
-                                className="px-4 py-2 border border-neutral-800 rounded-full text-sm tracking-wider hover:border-white hover:bg-white/5 transition-all duration-300"
-                            >
-                                {tech}
+                    <div className="relative z-10">
+                        {/* Год и статус */}
+                        <div className="flex justify-between items-center mb-6">
+                            <span className="text-xs tracking-widest text-neutral-500 uppercase">
+                                {year}
                             </span>
-                        ))}
-                    </div>
-                ) : (
-                    <div className="mb-8">
-                        <p className="text-neutral-600 text-sm italic">Технологии не указаны</p>
-                    </div>
-                )}
+                            {isActive && (
+                                <span className="px-3 py-1 bg-white text-black text-xs tracking-widest rounded-full animate-pulse">
+                                    ACTIVE
+                                </span>
+                            )}
+                        </div>
 
-                {/* Ссылки */}
-                <div className="flex gap-6">
-                    {githubUrl && (
-                        <a
-                            href={githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm tracking-widest uppercase hover:text-white transition-colors group/link"
-                        >
-                            <span className="border-b border-transparent group-hover/link:border-white">GITHUB</span>
-                        </a>
-                    )}
-                    {liveUrl && (
-                        <a
-                            href={liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm tracking-widest uppercase hover:text-white transition-colors group/link"
-                        >
-                            <span className="border-b border-transparent group-hover/link:border-white">ДЕМО</span>
-                        </a>
-                    )}
+                        {/* Заголовок */}
+                        <h3 className="text-3xl md:text-4xl font-light mb-4 tracking-tight">
+                            {title}
+                        </h3>
+
+                        {/* Описание */}
+                        <p className="text-neutral-400 mb-8 leading-relaxed">
+                            {description}
+                        </p>
+
+                        {/* Технологии - ТОЛЬКО если есть */}
+                        {technologies.length > 0 ? (
+                            <div className="flex flex-wrap gap-3 mb-8">
+                                {technologies.map((tech, index) => (
+                                    <span
+                                        key={index}
+                                        className="px-4 py-2 border border-neutral-800 rounded-full text-sm tracking-wider hover:border-white hover:bg-white/5 transition-all duration-300"
+                                    >
+                                        {tech}
+                                    </span>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="mb-8">
+                                <p className="text-neutral-600 text-sm italic">Технологии не указаны</p>
+                            </div>
+                        )}
+
+                        {/* Ссылки */}
+                        <div className="flex gap-6">
+                            {githubUrl && (
+                                <a
+                                    href={githubUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-sm tracking-widest uppercase hover:text-white transition-colors group/link"
+                                >
+                                    <span className="border-b border-transparent group-hover/link:border-white">GITHUB</span>
+                                </a>
+                            )}
+                            {liveUrl && (
+                                <a
+                                    href={liveUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-sm tracking-widest uppercase hover:text-white transition-colors group/link"
+                                >
+                                    <span className="border-b border-transparent group-hover/link:border-white">ДЕМО</span>
+                                </a>
+                            )}
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    );
-};
+            );
+        };
 
         // Более простой и стабильный подход
         return (
