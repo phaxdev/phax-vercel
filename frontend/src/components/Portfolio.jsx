@@ -216,7 +216,7 @@ const Portfolio = () => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                setApiStatus('Подключение к серверу...');
+                setApiStatus('Подключение к сайту...');
 
                 const API_URL = process.env.REACT_APP_API_URL || 'https://www.phax.online';
 
