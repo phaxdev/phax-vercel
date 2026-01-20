@@ -267,7 +267,6 @@ const HeroSection = ({ profile, safeProjects, safeSkills, safeExperience, handle
                         <div className="text-center">
                             <div className="text-4xl font-light mb-2">{safeExperience.length}</div>
                             <div className="text-xs tracking-widest text-neutral-500 uppercase">Года опыта</div>
-                            <div className="text-xs tracking-widest text-neutral-500 uppercase">Года опыта</div>
                         </div>
                         <div className="text-center">
                             <div className="text-4xl font-light mb-2">{safeSkills.length}</div>
