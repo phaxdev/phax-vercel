@@ -1,10 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, EffectCoverflow, Autoplay, Mousewheel, Keyboard } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/effect-coverflow';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FaGithub, FaExternalLinkAlt, FaChevronLeft, FaChevronRight, FaCode, FaServer, FaDatabase, FaMobile, FaRocket } from 'react-icons/fa';
 
 const ContactForm = () => {
@@ -511,287 +506,283 @@ const Portfolio = () => {
     const safeSkills = Array.isArray(skills) ? skills : [];
     const safeExperience = Array.isArray(experience) ? experience : [];
 
-// Компонент свайпера проектов (с плавным бесконечным loop)
 const ProjectsSwiper = ({ projects }) => {
-    const swiperRef = useRef(null);
-    const [activeIndex, setActiveIndex] = useState(0);
-
-    const handlePrev = () => {
-        if (swiperRef.current?.swiper) {
-            swiperRef.current.swiper.slidePrev(800, false); // 800ms анимация
-        }
-    };
-
-    const handleNext = () => {
-        if (swiperRef.current?.swiper) {
-            swiperRef.current.swiper.slideNext(800, false);
-        }
-    };
-
-    // Нормализуем данные проектов
-    const displayProjects = React.useMemo(() => {
-        if (!Array.isArray(projects) || projects.length === 0) {
-            return [
-                {
-                    id: 1,
-                    title: 'ДОБАВЬТЕ ПРОЕКТЫ',
-                    description: 'Добавьте свои проекты через админ-панель Django',
-                    technologies: ['React', 'Django', 'API'],
-                    year: '2024',
-                },
-                {
-                    id: 2,
-                    title: 'СОЗДАЙТЕ ПЕРВЫЙ ПРОЕКТ',
-                    description: 'Используйте админ-панель для добавления проектов',
-                    technologies: ['Python', 'DRF', 'PostgreSQL'],
-                    year: '2024',
-                },
-                {
-                    id: 3,
-                    title: 'НАЧНИТЕ РАБОТАТЬ',
-                    description: 'Портфолио готово к наполнению проектами',
-                    technologies: ['JavaScript', 'CSS', 'HTML'],
-                    year: '2024',
-                }
-            ];
-        }
-
-        // Для loop режима нужно минимум 3 слайда
-        if (projects.length < 3) {
-            const duplicated = [...projects];
-            while (duplicated.length < 3) {
-                duplicated.push({
-                    ...projects[0],
-                    id: `dup-${duplicated.length}`,
-                    title: `${projects[0]?.title || 'Проект'} (${duplicated.length})`
-                });
-            }
-            return duplicated;
-        }
-
-        return projects.map((p, i) => ({
-            id: p.id || `project-${i}`,
-            title: p.title || `Проект ${i + 1}`,
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const containerRef = useRef(null);
+    
+    // Нормализуем проекты
+    const displayProjects = Array.isArray(projects) && projects.length > 0 
+        ? projects.map((p, i) => ({
+            id: p.id || i,
+            title: p.title || `Проект ${i+1}`,
             description: p.short_description || p.description || '',
-            technologies: Array.isArray(p.technologies_list) ? p.technologies_list : [],
+            technologies_list: p.technologies_list || p.technologies || [],
             year: p.year || new Date().getFullYear(),
             github_url: p.github_url,
             live_url: p.live_url
-        }));
-    }, [projects]);
-
-    // Инициализация Swiper с задержкой для корректного расчета размеров
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (swiperRef.current?.swiper) {
-                swiperRef.current.swiper.update();
-                swiperRef.current.swiper.loopCreate();
+        }))
+        : [
+            {
+                id: 1,
+                title: 'ДОБАВЬТЕ ПРОЕКТЫ',
+                description: 'Используйте админ-панель Django для добавления проектов',
+                technologies_list: ['React', 'Django', 'API'],
+                year: '2024'
             }
-        }, 100);
+        ];
 
-        return () => clearTimeout(timer);
-    }, [displayProjects]);
+    // Автопрокрутка
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentIndex((prev) => (prev + 1) % displayProjects.length);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, [displayProjects.length]);
+
+    const handlePrev = () => {
+        setCurrentIndex(prev => prev === 0 ? displayProjects.length - 1 : prev - 1);
+    };
+
+    const handleNext = () => {
+        setCurrentIndex(prev => (prev + 1) % displayProjects.length);
+    };
+
+    // Карточка проекта (твой старый дизайн)
+    const ProjectCard = ({ project, isActive }) => {
+        const techs = project.technologies_list || [];
+        
+        return (
+            <motion.div
+                initial={{ scale: 0.9, opacity: 0.5 }}
+                animate={{ 
+                    scale: isActive ? 1 : 0.9, 
+                    opacity: isActive ? 1 : 0.5 
+                }}
+                transition={{ duration: 0.5 }}
+                className={`relative bg-gradient-to-br from-black to-neutral-900 border-2 ${isActive ? 'border-white' : 'border-neutral-800'} rounded-2xl p-8 transition-all duration-500`}
+            >
+                {isActive && (
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer"></div>
+                )}
+
+                <div className="relative z-10">
+                    <div className="flex justify-between items-center mb-6">
+                        <span className="text-xs tracking-widest text-neutral-500 uppercase">
+                            {project.year}
+                        </span>
+                        {isActive && (
+                            <span className="px-3 py-1 bg-white text-black text-xs tracking-widest rounded-full animate-pulse">
+                                ACTIVE
+                            </span>
+                        )}
+                    </div>
+
+                    <h3 className="text-3xl md:text-4xl font-light mb-4 tracking-tight">
+                        {project.title}
+                    </h3>
+
+                    <p className="text-neutral-400 mb-8 leading-relaxed">
+                        {project.description}
+                    </p>
+
+                    {techs.length > 0 && (
+                        <div className="flex flex-wrap gap-3 mb-8">
+                            {techs.map((tech, index) => (
+                                <span
+                                    key={index}
+                                    className="px-4 py-2 border border-neutral-800 rounded-full text-sm tracking-wider hover:border-white hover:bg-white/5 transition-all duration-300"
+                                >
+                                    {tech}
+                                </span>
+                            ))}
+                        </div>
+                    )}
+
+                    <div className="flex gap-6">
+                        {project.github_url && (
+                            <a
+                                href={project.github_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-sm tracking-widest uppercase hover:text-white transition-colors"
+                            >
+                                GITHUB
+                            </a>
+                        )}
+                        {project.live_url && (
+                            <a
+                                href={project.live_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-sm tracking-widest uppercase hover:text-white transition-colors"
+                            >
+                                ДЕМО
+                            </a>
+                        )}
+                    </div>
+                </div>
+            </motion.div>
+        );
+    };
 
     return (
         <div className="relative">
-            {/* Кнопки навигации */}
-            <div className="flex justify-center md:justify-between items-center mb-12">
-                <button
-                    onClick={handlePrev}
-                    className="hidden md:flex w-16 h-16 border-2 border-neutral-800 rounded-full items-center justify-center hover:border-white hover:scale-110 transition-all duration-300"
-                >
-                    <FaChevronLeft className="text-2xl" />
-                </button>
-
-                {/* Индикатор */}
+            {/* Статистика сверху */}
+            <div className="flex justify-center items-center mb-12">
                 <div className="flex items-center gap-4">
                     <span className="text-3xl font-light">
-                        {String(activeIndex + 1).padStart(2, '0')}
+                        {String(currentIndex + 1).padStart(2, '0')}
                     </span>
                     <div className="w-32 h-0.5 bg-neutral-800">
-                        <div
-                            className="h-full bg-white transition-all duration-500"
-                            style={{ 
-                                width: `${((activeIndex + 1) / displayProjects.length) * 100}%`,
-                                transition: 'width 0.8s ease'
-                            }}
-                        ></div>
+                        <motion.div
+                            className="h-full bg-white"
+                            initial={{ width: 0 }}
+                            animate={{ width: `${((currentIndex + 1) / displayProjects.length) * 100}%` }}
+                            transition={{ duration: 0.5 }}
+                        />
                     </div>
                     <span className="text-3xl font-light text-neutral-600">
                         {String(displayProjects.length).padStart(2, '0')}
                     </span>
                 </div>
+            </div>
+
+            {/* Центрированный слайдер */}
+            <div className="relative overflow-hidden py-8">
+                <div className="flex justify-center">
+                    <div className="relative w-full max-w-4xl">
+                        {/* Предыдущий слайд (слева) */}
+                        {displayProjects.length > 1 && (
+                            <motion.div
+                                className="absolute right-full mr-8 transform scale-90 opacity-50"
+                                style={{ width: 'calc(100% - 4rem)' }}
+                                animate={{ x: 0 }}
+                            >
+                                <ProjectCard 
+                                    project={displayProjects[(currentIndex - 1 + displayProjects.length) % displayProjects.length]}
+                                    isActive={false}
+                                />
+                            </motion.div>
+                        )}
+
+                        {/* Активный слайд (по центру) */}
+                        <div className="relative z-10 mx-auto" style={{ width: '100%' }}>
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={currentIndex}
+                                    initial={{ x: 100, opacity: 0 }}
+                                    animate={{ x: 0, opacity: 1 }}
+                                    exit={{ x: -100, opacity: 0 }}
+                                    transition={{ duration: 0.5 }}
+                                >
+                                    <ProjectCard 
+                                        project={displayProjects[currentIndex]}
+                                        isActive={true}
+                                    />
+                                </motion.div>
+                            </AnimatePresence>
+                        </div>
+
+                        {/* Следующий слайд (справа) */}
+                        {displayProjects.length > 1 && (
+                            <motion.div
+                                className="absolute left-full ml-8 transform scale-90 opacity-50"
+                                style={{ width: 'calc(100% - 4rem)' }}
+                                animate={{ x: 0 }}
+                            >
+                                <ProjectCard 
+                                    project={displayProjects[(currentIndex + 1) % displayProjects.length]}
+                                    isActive={false}
+                                />
+                            </motion.div>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {/* Кнопки навигации */}
+            <div className="flex justify-between items-center mt-12 px-4">
+                <button
+                    onClick={handlePrev}
+                    className="w-12 h-12 border-2 border-neutral-800 rounded-full flex items-center justify-center hover:border-white hover:scale-110 transition-all duration-300"
+                >
+                    ←
+                </button>
+
+                {/* Точечный индикатор */}
+                <div className="flex gap-2">
+                    {displayProjects.map((_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => setCurrentIndex(index)}
+                            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                                index === currentIndex 
+                                    ? 'bg-white w-8' 
+                                    : 'bg-neutral-600 hover:bg-neutral-400'
+                            }`}
+                        />
+                    ))}
+                </div>
 
                 <button
                     onClick={handleNext}
-                    className="hidden md:flex w-16 h-16 border-2 border-neutral-800 rounded-full items-center justify-center hover:border-white hover:scale-110 transition-all duration-300"
+                    className="w-12 h-12 border-2 border-neutral-800 rounded-full flex items-center justify-center hover:border-white hover:scale-110 transition-all duration-300"
                 >
-                    <FaChevronRight className="text-2xl" />
+                    →
                 </button>
             </div>
 
-            {/* Сам свайпер */}
-            <Swiper
-                ref={swiperRef}
-                modules={[Navigation, Pagination, EffectCoverflow, Autoplay, Mousewheel, Keyboard]}
-                effect="coverflow"
-                coverflowEffect={{
-                    rotate: 0,
-                    stretch: 0,
-                    depth: 100,
-                    modifier: 2.5,
-                    slideShadows: true,
-                    scale: 0.9,
-                }}
-                grabCursor={true}
-                centeredSlides={true}
-                slidesPerView="auto"
-                spaceBetween={30}
-                loop={true}
-                loopAdditionalSlides={3}
-                speed={800}
-                autoplay={{
-                    delay: 5000,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: true,
-                    reverseDirection: false,
-                    waitForTransition: true,
-                }}
-                mousewheel={{
-                    forceToAxis: true,
-                    sensitivity: 0.5,
-                    eventsTarget: 'container',
-                }}
-                keyboard={{
-                    enabled: true,
-                    onlyInViewport: true,
-                }}
-                onSlideChange={(swiper) => {
-                    setActiveIndex(swiper.realIndex);
-                }}
-                onInit={(swiper) => {
-                    // Настройки для плавного loop
-                    swiper.loopCreate();
-                    swiper.update();
-                }}
-                className="projects-swiper"
-                breakpoints={{
-                    320: {
-                        slidesPerView: 1,
-                        spaceBetween: 20,
-                        effect: 'slide',
-                        coverflowEffect: {
-                            rotate: 0,
-                            stretch: 0,
-                            depth: 0,
-                            modifier: 1,
-                        }
-                    },
-                    768: {
-                        slidesPerView: 'auto',
-                        spaceBetween: 40,
-                        effect: 'coverflow',
-                        coverflowEffect: {
-                            rotate: 10,
-                            stretch: 0,
-                            depth: 100,
-                            modifier: 1.5,
-                            slideShadows: false,
-                        }
-                    },
-                    1024: {
-                        slidesPerView: 'auto',
-                        spaceBetween: 50,
-                        effect: 'coverflow',
-                        coverflowEffect: {
-                            rotate: 0,
-                            stretch: 0,
-                            depth: 150,
-                            modifier: 2.5,
-                            slideShadows: false,
-                        }
-                    }
-                }}
-                // Дополнительные настройки для плавности
-                resistanceRatio={0.5}
-                watchOverflow={true}
-                observer={true}
-                observeParents={true}
-                parallax={true}
-            >
-                {displayProjects.map((project, index) => (
-                    <SwiperSlide 
-                        key={`${project.id}-${index}`}
-                        className="!w-full md:!w-[600px] lg:!w-[700px] transition-all duration-500"
-                    >
-                        {({ isActive }) => (
-                            <ProjectCard
-                                project={project}
-                                isActive={isActive}
-                            />
-                        )}
-                    </SwiperSlide>
-                ))}
-            </Swiper>
-
             {/* Мобильные кнопки */}
-            <div className="flex justify-center gap-8 mt-12 md:hidden">
+            <div className="flex justify-center gap-8 mt-8 md:hidden">
                 <button
                     onClick={handlePrev}
-                    className="w-12 h-12 border-2 border-neutral-800 rounded-full items-center justify-center flex hover:border-white transition-all duration-300 active:scale-95"
+                    className="w-12 h-12 border-2 border-neutral-800 rounded-full flex items-center justify-center"
                 >
-                    <FaChevronLeft />
+                    ←
                 </button>
                 <button
                     onClick={handleNext}
-                    className="w-12 h-12 border-2 border-neutral-800 rounded-full items-center justify-center flex hover:border-white transition-all duration-300 active:scale-95"
+                    className="w-12 h-12 border-2 border-neutral-800 rounded-full flex items-center justify-center"
                 >
-                    <FaChevronRight />
+                    →
                 </button>
             </div>
 
             {/* Инструкция */}
-            <div className="text-center mt-12">
+            <div className="text-center mt-8">
                 <p className="text-neutral-600 text-xs tracking-widest uppercase">
-                    ← СВАЙП / СКРОЛЛ →
+                    ← КЛИК / КЛАВИШИ →
                 </p>
                 <p className="text-neutral-700 text-xs mt-2">
-                    АВТОПРОКРУТКА 5С
+                    АВТОПРОКРУТКА КАЖДЫЕ 5С
                 </p>
             </div>
 
-            {/* Дополнительный CSS для плавности */}
+            {/* Обработка клавиш */}
             <style jsx global>{`
-                .projects-swiper {
-                    padding: 40px 0;
-                    overflow: visible !important;
+                .animate-shimmer {
+                    animation: shimmer 2s infinite linear;
                 }
                 
-                .swiper-slide {
-                    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) !important;
-                    opacity: 0.5;
-                    scale: 0.9;
-                }
-                
-                .swiper-slide-active {
-                    opacity: 1;
-                    scale: 1;
-                    z-index: 10;
-                }
-                
-                .swiper-slide-next,
-                .swiper-slide-prev {
-                    opacity: 0.8;
-                    scale: 0.95;
-                }
-                
-                .swiper-wrapper {
-                    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+                @keyframes shimmer {
+                    0% { transform: translateX(-100%); }
+                    100% { transform: translateX(100%); }
                 }
             `}</style>
         </div>
     );
 };
+
+// Добавь в useEffect обработку клавиатуры
+useEffect(() => {
+    const handleKeyDown = (e) => {
+        if (e.key === 'ArrowLeft') handlePrev();
+        if (e.key === 'ArrowRight') handleNext();
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+}, [currentIndex, displayProjects.length]);
 
     return (
         <div className="min-h-screen bg-black text-white font-sans">
