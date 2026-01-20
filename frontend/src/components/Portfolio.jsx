@@ -510,251 +510,60 @@ const Portfolio = () => {
     const safeSkills = Array.isArray(skills) ? skills : [];
     const safeExperience = Array.isArray(experience) ? experience : [];
 
-    // Компонент свайпера проектов (с плавным бесконечным loop)
     const ProjectsSwiper = ({ projects }) => {
         const swiperRef = useRef(null);
         const [activeIndex, setActiveIndex] = useState(0);
 
-        const handlePrev = () => {
-            if (swiperRef.current?.swiper) {
-                swiperRef.current.swiper.slidePrev(800, false); // 800ms анимация
-            }
-        };
-
-        const handleNext = () => {
-            if (swiperRef.current?.swiper) {
-                swiperRef.current.swiper.slideNext(800, false);
-            }
-        };
-
-        // Нормализуем данные проектов
-        const displayProjects = React.useMemo(() => {
-            if (!Array.isArray(projects) || projects.length === 0) {
-                return [
-                    {
-                        id: 1,
-                        title: 'ДОБАВЬТЕ ПРОЕКТЫ',
-                        description: 'Добавьте свои проекты через админ-панель Django',
-                        technologies: ['React', 'Django', 'API'],
-                        year: '2024',
-                    },
-                    {
-                        id: 2,
-                        title: 'СОЗДАЙТЕ ПЕРВЫЙ ПРОЕКТ',
-                        description: 'Используйте админ-панель для добавления проектов',
-                        technologies: ['Python', 'DRF', 'PostgreSQL'],
-                        year: '2024',
-                    },
-                    {
-                        id: 3,
-                        title: 'НАЧНИТЕ РАБОТАТЬ',
-                        description: 'Портфолио готово к наполнению проектами',
-                        technologies: ['JavaScript', 'CSS', 'HTML'],
-                        year: '2024',
-                    }
-                ];
-            }
-
-            // Для loop режима нужно минимум 3 слайда
-            if (projects.length < 3) {
-                const duplicated = [...projects];
-                while (duplicated.length < 3) {
-                    duplicated.push({
-                        ...projects[0],
-                        id: `dup-${duplicated.length}`,
-                        title: `${projects[0]?.title || 'Проект'} (${duplicated.length})`
-                    });
-                }
-                return duplicated;
-            }
-
-            return projects.map((p, i) => ({
-                id: p.id || `project-${i}`,
-                title: p.title || `Проект ${i + 1}`,
-                description: p.short_description || p.description || '',
-                technologies: Array.isArray(p.technologies_list) ? p.technologies_list : [],
-                year: p.year || new Date().getFullYear(),
-                github_url: p.github_url,
-                live_url: p.live_url
-            }));
-        }, [projects]);
-
-        // Инициализация Swiper с задержкой для корректного расчета размеров
-        useEffect(() => {
-            const timer = setTimeout(() => {
-                if (swiperRef.current?.swiper) {
-                    swiperRef.current.swiper.update();
-                    swiperRef.current.swiper.loopCreate();
-                }
-            }, 100);
-
-            return () => clearTimeout(timer);
-        }, [displayProjects]);
-
+        // Более простой и стабильный подход
         return (
             <div className="relative">
-                {/* Кнопки навигации */}
-                <div className="flex justify-center md:justify-between items-center mb-12">
-                    <button
-                        onClick={handlePrev}
-                        className="hidden md:flex w-16 h-16 border-2 border-neutral-800 rounded-full items-center justify-center hover:border-white hover:scale-110 transition-all duration-300"
-                    >
-                        <FaChevronLeft className="text-2xl" />
-                    </button>
-
-                    {/* Индикатор */}
-                    <div className="flex items-center gap-4">
-                        <span className="text-3xl font-light">
-                            {String(activeIndex + 1).padStart(2, '0')}
-                        </span>
-                        <div className="w-32 h-0.5 bg-neutral-800">
-                            <div
-                                className="h-full bg-white transition-all duration-500"
-                                style={{
-                                    width: `${((activeIndex + 1) / displayProjects.length) * 100}%`,
-                                    transition: 'width 0.8s ease'
-                                }}
-                            ></div>
-                        </div>
-                        <span className="text-3xl font-light text-neutral-600">
-                            {String(displayProjects.length).padStart(2, '0')}
-                        </span>
-                    </div>
-
-                    <button
-                        onClick={handleNext}
-                        className="hidden md:flex w-16 h-16 border-2 border-neutral-800 rounded-full items-center justify-center hover:border-white hover:scale-110 transition-all duration-300"
-                    >
-                        <FaChevronRight className="text-2xl" />
-                    </button>
-                </div>
-
-                {/* Сам свайпер */}
                 <Swiper
                     ref={swiperRef}
-                    modules={[Navigation, Pagination, Autoplay, Mousewheel, Keyboard]}
-                    grabCursor={true}
+                    modules={[Navigation, Pagination, Autoplay]}
+                    spaceBetween={50}
+                    slidesPerView={1}
                     centeredSlides={true}
-                    centeredSlidesBounds={true} // Важно! Удерживает слайды по центру
-                    slidesPerView={1} // Чуть больше 1 для эффекта
-                    spaceBetween={30}
                     loop={true}
-                    loopAdditionalSlides={2}
-                    loopFillGroupWithBlank={false}
                     speed={600}
                     autoplay={{
                         delay: 5000,
                         disableOnInteraction: false,
                     }}
-                    mousewheel={{
-                        forceToAxis: true,
+                    pagination={{
+                        clickable: true,
                     }}
-                    keyboard={{
-                        enabled: true,
+                    navigation={{
+                        nextEl: '.swiper-button-next',
+                        prevEl: '.swiper-button-prev',
                     }}
-                    onSlideChange={(swiper) => {
-                        setActiveIndex(swiper.realIndex);
-                    }}
-                    // Исправление центровки
-                    onSlideChangeTransitionEnd={(swiper) => {
-                        swiper.slideTo(swiper.activeIndex, 0, false); // Мгновенная корректировка
-                    }}
-                    className="projects-swiper"
-                    breakpoints={{
-                        320: {
-                            slidesPerView: 1,
-                            spaceBetween: 20,
-                            centeredSlides: true,
-                            centeredSlidesBounds: true,
-                        },
-                        768: {
-                            slidesPerView: 1.2,
-                            spaceBetween: 30,
-                            centeredSlides: true,
-                            centeredSlidesBounds: true,
-                        },
-                        1024: {
-                            slidesPerView: 1.5,
-                            spaceBetween: 40,
-                            centeredSlides: true,
-                            centeredSlidesBounds: true,
-                        }
-                    }}
-                    // Дополнительные настройки
-                    watchSlidesProgress={true}
-                    resistanceRatio={0}
-                    slideToClickedSlide={false}
+                    onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+                    className="!overflow-visible"
                 >
                     {displayProjects.map((project, index) => (
-                        <SwiperSlide
-                            key={`${project.id}-${index}`}
-                            className="!w-full md:!w-[600px] lg:!w-[700px] transition-all duration-500"
-                        >
-                            {({ isActive }) => (
-                                <ProjectCard
-                                    project={project}
-                                    isActive={isActive}
-                                />
-                            )}
+                        <SwiperSlide key={project.id || index}>
+                            <div className="flex justify-center">
+                                <div className="w-full max-w-2xl">
+                                    <ProjectCard
+                                        project={project}
+                                        isActive={index === activeIndex}
+                                    />
+                                </div>
+                            </div>
                         </SwiperSlide>
                     ))}
                 </Swiper>
 
-                {/* Мобильные кнопки */}
-                <div className="flex justify-center gap-8 mt-12 md:hidden">
-                    <button
-                        onClick={handlePrev}
-                        className="w-12 h-12 border-2 border-neutral-800 rounded-full items-center justify-center flex hover:border-white transition-all duration-300 active:scale-95"
-                    >
-                        <FaChevronLeft />
-                    </button>
-                    <button
-                        onClick={handleNext}
-                        className="w-12 h-12 border-2 border-neutral-800 rounded-full items-center justify-center flex hover:border-white transition-all duration-300 active:scale-95"
-                    >
-                        <FaChevronRight />
+                {/* Кастомные кнопки */}
+                <div className="swiper-button-prev absolute left-0 top-1/2 -translate-y-1/2 z-10">
+                    <button className="w-12 h-12 border-2 border-white rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                        ←
                     </button>
                 </div>
-
-                {/* Инструкция */}
-                <div className="text-center mt-12">
-                    <p className="text-neutral-600 text-xs tracking-widest uppercase">
-                        ← СВАЙП / СКРОЛЛ →
-                    </p>
-                    <p className="text-neutral-700 text-xs mt-2">
-                        АВТОПРОКРУТКА 5С
-                    </p>
+                <div className="swiper-button-next absolute right-0 top-1/2 -translate-y-1/2 z-10">
+                    <button className="w-12 h-12 border-2 border-white rounded-full flex items-center justify-center hover:bg-white hover:text-black transition-all">
+                        →
+                    </button>
                 </div>
-
-                {/* Дополнительный CSS для плавности */}
-                <style jsx global>{`
-                .projects-swiper {
-                    padding: 40px 0;
-                    overflow: visible !important;
-                }
-                
-                .swiper-slide {
-                    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) !important;
-                    opacity: 0.5;
-                    scale: 0.9;
-                }
-                
-                .swiper-slide-active {
-                    opacity: 1;
-                    scale: 1;
-                    z-index: 10;
-                }
-                
-                .swiper-slide-next,
-                .swiper-slide-prev {
-                    opacity: 0.8;
-                    scale: 0.95;
-                }
-                
-                .swiper-wrapper {
-                    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
-                }
-            `}</style>
             </div>
         );
     };
