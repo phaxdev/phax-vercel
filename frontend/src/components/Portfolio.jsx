@@ -182,6 +182,121 @@ const ContactForm = () => {
     );
 };
 
+// Анимированная палка для загрузки
+const LoadingSpinner = () => {
+    return (
+        <div className="relative w-32 h-32 mx-auto mb-8">
+            {/* Внешнее кольцо */}
+            <div className="absolute inset-0 border-4 border-white/30 rounded-full"></div>
+            {/* Вращающаяся палка */}
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-1 bg-white animate-spin-slow origin-center"></div>
+            {/* Центральная точка */}
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full"></div>
+        </div>
+    );
+};
+
+// Анимированная иконка программирования после загрузки
+const CodeIconAnimation = () => {
+    return (
+        <div className="relative w-32 h-32 mx-auto mb-8">
+            {/* Анимированные фигурные скобки */}
+            <div className="absolute top-1/2 left-1/4 text-3xl text-white animate-bounce">
+                {'{'}
+            </div>
+            <div className="absolute top-1/2 right-1/4 text-3xl text-white animate-bounce" style={{ animationDelay: '0.5s' }}>
+                {'}'}
+            </div>
+            {/* Пульсирующий код */}
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-2xl font-mono">
+                <span className="animate-pulse">code</span>
+            </div>
+            {/* Вращающиеся элементы */}
+            <div className="absolute top-1/4 left-1/2 w-2 h-2 bg-white rounded-full animate-ping"></div>
+            <div className="absolute bottom-1/4 right-1/3 w-2 h-2 bg-white rounded-full animate-ping" style={{ animationDelay: '0.2s' }}></div>
+            <div className="absolute bottom-1/4 left-1/3 w-2 h-2 bg-white rounded-full animate-ping" style={{ animationDelay: '0.4s' }}></div>
+        </div>
+    );
+};
+
+// Компонент для загрузки
+const LoadingScreen = ({ apiStatus }) => {
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-black">
+            <div className="text-center">
+                <LoadingSpinner />
+                <p className="text-white text-sm tracking-widest uppercase mb-4">{apiStatus}</p>
+                <p className="text-neutral-600 text-xs">
+                    API: {process.env.REACT_APP_API_URL || 'http://localhost:8000/api'}
+                </p>
+            </div>
+        </div>
+    );
+};
+
+// Компонент для героя с анимацией
+const HeroSection = ({ profile, safeProjects, safeSkills, safeExperience, handleScroll }) => {
+    return (
+        <section id="home" className="min-h-screen flex items-center justify-center pt-20 relative">
+            {/* Фон для героя */}
+            <div className="absolute inset-0 z-0 opacity-10">
+                <div 
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{ 
+                        backgroundImage: 'url("./background1.png")',
+                        filter: 'grayscale(100%) blur(1px)'
+                    }}
+                ></div>
+            </div>
+            
+            <div className="container mx-auto px-6 relative z-10">
+                <div className="max-w-4xl mx-auto text-center space-y-12">
+                    {/* Анимированная иконка вместо палки */}
+                    <CodeIconAnimation />
+                    
+                    <h1 className="text-5xl md:text-7xl font-light tracking-tight animate-fade-in">
+                        {profile?.name || 'Разработчик'}
+                    </h1>
+
+                    <p className="text-sm tracking-widest text-neutral-400 uppercase animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                        {profile?.title || 'Full Stack Developer'}
+                    </p>
+
+                    <div className="flex justify-center gap-16 pt-8 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+                        <div className="text-center">
+                            <div className="text-4xl font-light mb-2">{safeProjects.length}</div>
+                            <div className="text-xs tracking-widest text-neutral-500 uppercase">Проектов</div>
+                        </div>
+                        <div className="text-center">
+                            <div className="text-4xl font-light mb-2">{safeExperience.length}</div>
+                            <div className="text-xs tracking-widest text-neutral-500 uppercase">Года опыта</div>
+                        </div>
+                        <div className="text-center">
+                            <div className="text-4xl font-light mb-2">{safeSkills.length}</div>
+                            <div className="text-xs tracking-widest text-neutral-500 uppercase">Навыков</div>
+                        </div>
+                    </div>
+
+                    <div className="flex justify-center gap-6 pt-12 animate-fade-in" style={{ animationDelay: '0.6s' }}>
+                        <button
+                            onClick={() => handleScroll('contact')}
+                            className="px-10 py-4 border-2 border-white text-sm tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-300"
+                        >
+                            СВЯЗАТЬСЯ
+                        </button>
+                        <button
+                            onClick={() => handleScroll('projects')}
+                            className="px-10 py-4 border-2 border-neutral-700 text-neutral-400 text-sm tracking-widest uppercase hover:border-white hover:text-white transition-all duration-300"
+                        >
+                            ПРОЕКТЫ
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+};
+
 // Анимированная карточка проекта
 const ProjectCard = ({ project, isActive }) => {
     const cardRef = useRef(null);
@@ -201,7 +316,6 @@ const ProjectCard = ({ project, isActive }) => {
     const getTechnologies = () => {
         if (!project) return [];
         
-        // Проверяем разные варианты полей из API
         if (Array.isArray(project.technologies)) {
             return project.technologies;
         }
@@ -209,7 +323,6 @@ const ProjectCard = ({ project, isActive }) => {
             return project.technologies_list;
         }
         if (project.technologies && typeof project.technologies === 'string') {
-            // Если это строка, пробуем разбить по запятой
             return project.technologies.split(',').map(t => t.trim());
         }
         return [];
@@ -223,13 +336,11 @@ const ProjectCard = ({ project, isActive }) => {
             className={`relative bg-gradient-to-br from-black to-neutral-900 border-2 ${isActive ? 'border-white' : 'border-neutral-800'
                 } rounded-2xl p-8 transition-all duration-500 hover:scale-[1.02] group`}
         >
-            {/* Блестящий эффект при активации */}
             {isActive && (
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer"></div>
             )}
 
             <div className="relative z-10">
-                {/* Год и статус */}
                 <div className="flex justify-between items-center mb-6">
                     <span className="text-xs tracking-widest text-neutral-500 uppercase">
                         {project.year || new Date().getFullYear()}
@@ -241,17 +352,14 @@ const ProjectCard = ({ project, isActive }) => {
                     )}
                 </div>
 
-                {/* Заголовок */}
                 <h3 className="text-3xl md:text-4xl font-light mb-4 tracking-tight">
                     {project.title || 'Проект без названия'}
                 </h3>
 
-                {/* Описание */}
                 <p className="text-neutral-400 mb-8 leading-relaxed">
                     {project.short_description || project.description || 'Описание проекта будет добавлено позже'}
                 </p>
 
-                {/* Технологии */}
                 {technologies.length > 0 && (
                     <div className="flex flex-wrap gap-3 mb-8">
                         {technologies.map((tech, index) => (
@@ -265,7 +373,6 @@ const ProjectCard = ({ project, isActive }) => {
                     </div>
                 )}
 
-                {/* Ссылки */}
                 <div className="flex gap-6">
                     {project.github_url && (
                         <a
@@ -333,7 +440,6 @@ const Portfolio = () => {
 
                 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
-                // Загружаем все данные параллельно
                 const [projectsRes, skillsRes, experienceRes, profileRes] = await Promise.allSettled([
                     fetch(`${API_URL}/projects/`).then(r => r.ok ? r.json() : []),
                     fetch(`${API_URL}/skills/`).then(r => r.ok ? r.json() : []),
@@ -341,7 +447,6 @@ const Portfolio = () => {
                     fetch(`${API_URL}/profile/`).then(r => r.ok ? r.json() : getMockProfile())
                 ]);
 
-                // Обрабатываем результаты
                 const projectsData = projectsRes.status === 'fulfilled' && Array.isArray(projectsRes.value)
                     ? projectsRes.value
                     : [];
@@ -357,13 +462,6 @@ const Portfolio = () => {
                 const profileData = profileRes.status === 'fulfilled' && profileRes.value
                     ? profileRes.value
                     : getMockProfile();
-
-                console.log('Загруженные данные:', {
-                    projects: projectsData.length,
-                    skills: skillsData.length,
-                    experience: experienceData.length,
-                    profile: profileData
-                });
 
                 setProjects(projectsData);
                 setSkills(skillsData);
@@ -405,17 +503,7 @@ const Portfolio = () => {
     };
 
     if (loading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-black">
-                <div className="text-center">
-                    <div className="w-1 h-20 bg-white mx-auto mb-8 animate-pulse"></div>
-                    <p className="text-white text-sm tracking-widest uppercase mb-4">{apiStatus}</p>
-                    <p className="text-neutral-600 text-xs tracking-widest">
-                        Текущий адрес: {window.location.hostname}:{window.location.port}
-                    </p>
-                </div>
-            </div>
-        );
+        return <LoadingScreen apiStatus={apiStatus} />;
     }
 
     const safeProjects = Array.isArray(projects) ? projects : [];
@@ -439,7 +527,6 @@ const Portfolio = () => {
             }
         };
 
-        // Если нет проектов из API, показываем демо
         const displayProjects = projects && projects.length > 0 ? projects : [
             {
                 id: 1,
@@ -452,7 +539,6 @@ const Portfolio = () => {
 
         return (
             <div className="relative">
-                {/* Кнопки навигации */}
                 <div className="flex justify-center md:justify-between items-center mb-12">
                     <button
                         onClick={handlePrev}
@@ -461,7 +547,6 @@ const Portfolio = () => {
                         <FaChevronLeft className="text-2xl" />
                     </button>
 
-                    {/* Индикатор */}
                     <div className="flex items-center gap-4">
                         <span className="text-3xl font-light">
                             {String(activeIndex + 1).padStart(2, '0')}
@@ -485,7 +570,6 @@ const Portfolio = () => {
                     </button>
                 </div>
 
-                {/* Сам свайпер */}
                 <Swiper
                     ref={swiperRef}
                     modules={[Navigation, Pagination, EffectCoverflow, Autoplay, Mousewheel, Keyboard]}
@@ -539,7 +623,6 @@ const Portfolio = () => {
                     ))}
                 </Swiper>
 
-                {/* Мобильные кнопки */}
                 <div className="flex justify-center gap-8 mt-12 md:hidden">
                     <button
                         onClick={handlePrev}
@@ -555,7 +638,6 @@ const Portfolio = () => {
                     </button>
                 </div>
 
-                {/* Инструкция */}
                 <div className="text-center mt-12">
                     <p className="text-neutral-600 text-xs tracking-widest uppercase">
                         ← СВАЙП / СКРОЛЛ →
@@ -615,55 +697,27 @@ const Portfolio = () => {
             </nav>
 
             {/* Герой */}
-            <section id="home" className="min-h-screen flex items-center justify-center pt-20">
-                <div className="container mx-auto px-6">
-                    <div className="max-w-4xl mx-auto text-center space-y-12">
-                        <div className="w-1 h-24 bg-white mx-auto"></div>
-
-                        <h1 className="text-5xl md:text-7xl font-light tracking-tight">
-                            {profile?.name || 'Разработчик'}
-                        </h1>
-
-                        <p className="text-sm tracking-widest text-neutral-400 uppercase">
-                            {profile?.title || 'Full Stack Developer'}
-                        </p>
-
-                        <div className="flex justify-center gap-16 pt-8">
-                            <div className="text-center">
-                                <div className="text-4xl font-light mb-2">{safeProjects.length}</div>
-                                <div className="text-xs tracking-widest text-neutral-500 uppercase">Проектов</div>
-                            </div>
-                            <div className="text-center">
-                                <div className="text-4xl font-light mb-2">{safeExperience.length}</div>
-                                <div className="text-xs tracking-widest text-neutral-500 uppercase">Года опыта</div>
-                            </div>
-                            <div className="text-center">
-                                <div className="text-4xl font-light mb-2">{safeSkills.length}</div>
-                                <div className="text-xs tracking-widest text-neutral-500 uppercase">Навыков</div>
-                            </div>
-                        </div>
-
-                        <div className="flex justify-center gap-6 pt-12">
-                            <button
-                                onClick={() => handleScroll('contact')}
-                                className="px-10 py-4 border-2 border-white text-sm tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-300"
-                            >
-                                СВЯЗАТЬСЯ
-                            </button>
-                            <button
-                                onClick={() => handleScroll('projects')}
-                                className="px-10 py-4 border-2 border-neutral-700 text-neutral-400 text-sm tracking-widest uppercase hover:border-white hover:text-white transition-all duration-300"
-                            >
-                                ПРОЕКТЫ
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <HeroSection 
+                profile={profile}
+                safeProjects={safeProjects}
+                safeSkills={safeSkills}
+                safeExperience={safeExperience}
+                handleScroll={handleScroll}
+            />
 
             {/* Обо мне */}
-            <section id="about" className="py-32 border-t border-neutral-900">
-                <div className="container mx-auto px-6">
+            <section id="about" className="py-32 border-t border-neutral-900 relative">
+                <div className="absolute inset-0 z-0 opacity-5">
+                    <div 
+                        className="absolute inset-0 bg-cover bg-center"
+                        style={{ 
+                            backgroundImage: 'url("./background2.png")',
+                            filter: 'grayscale(100%)'
+                        }}
+                    ></div>
+                </div>
+                
+                <div className="container mx-auto px-6 relative z-10">
                     <div className="max-w-3xl mx-auto">
                         <h2 className="text-xs tracking-widest text-neutral-500 uppercase mb-12 text-center">
                             ОБО МНЕ
@@ -691,11 +745,9 @@ const Portfolio = () => {
 
             {/* Проекты */}
             <section id="projects" className="py-32 border-t border-neutral-900 relative overflow-hidden">
-                {/* Анимированный фон */}
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black pointer-events-none"></div>
 
                 <div className="container mx-auto px-6 relative z-10">
-                    {/* Заголовок */}
                     <div className="text-center mb-20">
                         <h2 className="text-xs tracking-widest text-neutral-500 uppercase mb-4">ПРОЕКТЫ</h2>
                         <p className="text-5xl md:text-7xl font-light tracking-tight">
@@ -706,7 +758,6 @@ const Portfolio = () => {
                         </p>
                     </div>
 
-                    {/* Свайпер */}
                     <ProjectsSwiper projects={safeProjects} />
                 </div>
             </section>
@@ -880,6 +931,24 @@ const Portfolio = () => {
                 @keyframes shimmer {
                     0% { transform: translateX(-100%); }
                     100% { transform: translateX(100%); }
+                }
+                
+                @keyframes spin-slow {
+                    from { transform: translateX(-50%) translateY(-50%) rotate(0deg); }
+                    to { transform: translateX(-50%) translateY(-50%) rotate(360deg); }
+                }
+                
+                .animate-spin-slow {
+                    animation: spin-slow 2s linear infinite;
+                }
+                
+                @keyframes fade-in {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                
+                .animate-fade-in {
+                    animation: fade-in 0.8s ease-out forwards;
                 }
             `}</style>
         </div>
