@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import background1 from './background1.png';
+import background2 from './background2.png';
 import { FaGithub, FaExternalLinkAlt, FaChevronLeft, FaChevronRight, FaCode, FaServer, FaDatabase, FaMobile, FaRocket } from 'react-icons/fa';
 
 const ContactForm = () => {
@@ -238,7 +240,7 @@ const HeroSection = ({ profile, safeProjects, safeSkills, safeExperience, handle
                 <div 
                     className="absolute inset-0 bg-cover bg-center"
                     style={{ 
-                        backgroundImage: 'url("./background1.png")',
+                        backgroundImage: `url(${background1})`,
                         filter: 'grayscale(100%) blur(1px)'
                     }}
                 ></div>
@@ -845,7 +847,7 @@ useEffect(() => {
                     <div 
                         className="absolute inset-0 bg-cover bg-center"
                         style={{ 
-                            backgroundImage: 'url("./background2.png")',
+                            backgroundImage: `url(${background2})`,
                             filter: 'grayscale(100%)'
                         }}
                     ></div>
