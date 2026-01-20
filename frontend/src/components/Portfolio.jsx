@@ -639,17 +639,16 @@ const Portfolio = () => {
                         rotate: 0,
                         stretch: 0,
                         depth: 100,
-                        modifier: 2.5,
-                        slideShadows: true,
-                        scale: 0.9,
+                        modifier: 1,
+                        slideShadows: false,
                     }}
                     grabCursor={true}
                     centeredSlides={true}
-                    centeredSlidesBounds={true}
-                    slidesPerView={1.2}
+                    centeredSlidesBounds={true} // Важно! Удерживает слайды по центру
+                    slidesPerView={1.2} // Чуть больше 1 для эффекта
                     spaceBetween={30}
                     loop={true}
-                    loopAdditionalSlides={3}
+                    loopAdditionalSlides={2}
                     loopFillGroupWithBlank={false}
                     speed={600}
                     autoplay={{
@@ -665,6 +664,7 @@ const Portfolio = () => {
                     onSlideChange={(swiper) => {
                         setActiveIndex(swiper.realIndex);
                     }}
+                    // Исправление центровки
                     onSlideChangeTransitionEnd={(swiper) => {
                         swiper.slideTo(swiper.activeIndex, 0, false); // Мгновенная корректировка
                     }}
@@ -673,47 +673,26 @@ const Portfolio = () => {
                         320: {
                             slidesPerView: 1,
                             spaceBetween: 20,
-                            effect: 'slide',
-                            coverflowEffect: {
-                                rotate: 0,
-                                stretch: 0,
-                                depth: 0,
-                                modifier: 1,
-                            }
+                            centeredSlides: true,
+                            centeredSlidesBounds: true,
                         },
                         768: {
-                            slidesPerView: 'auto',
-                            spaceBetween: 40,
-                            effect: 'coverflow',
-                            coverflowEffect: {
-                                rotate: 10,
-                                stretch: 0,
-                                depth: 100,
-                                modifier: 1.5,
-                                slideShadows: false,
-                            }
+                            slidesPerView: 1.2,
+                            spaceBetween: 30,
+                            centeredSlides: true,
+                            centeredSlidesBounds: true,
                         },
                         1024: {
-                            slidesPerView: 'auto',
-                            spaceBetween: 50,
-                            effect: 'coverflow',
-                            coverflowEffect: {
-                                rotate: 0,
-                                stretch: 0,
-                                depth: 150,
-                                modifier: 2.5,
-                                slideShadows: false,
-                            }
+                            slidesPerView: 1.5,
+                            spaceBetween: 40,
+                            centeredSlides: true,
+                            centeredSlidesBounds: true,
                         }
                     }}
-                    // Дополнительные настройки для плавности
-                    resistanceRatio={0.5}
+                    // Дополнительные настройки
                     watchSlidesProgress={true}
+                    resistanceRatio={0}
                     slideToClickedSlide={false}
-                    watchOverflow={true}
-                    observer={true}
-                    observeParents={true}
-                    parallax={true}
                 >
                     {displayProjects.map((project, index) => (
                         <SwiperSlide
