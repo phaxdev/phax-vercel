@@ -57,7 +57,7 @@ const ContactForm = () => {
         setSubmitStatus(null);
 
         try {
-            const API_URL = process.env.REACT_APP_API_URL || 'https://localhost:8000/api';
+            const API_URL = process.env.REACT_APP_API_URL;
 
             const response = await fetch(`${API_URL}/contact-messages/`, {
                 method: 'POST',
