@@ -108,8 +108,8 @@ const ContactForm = () => {
                         value={formData.name}
                         onChange={handleChange}
                         className={`w-full px-0 py-4 bg-transparent border-b-2 ${errors.name
-                                ? 'border-red-500'
-                                : 'border-neutral-800'
+                            ? 'border-red-500'
+                            : 'border-neutral-800'
                             } focus:outline-none focus:border-neutral-600 transition-colors text-white placeholder-neutral-600 text-sm tracking-widest uppercase`}
                     />
                     {errors.name && (
@@ -125,8 +125,8 @@ const ContactForm = () => {
                         value={formData.email}
                         onChange={handleChange}
                         className={`w-full px-0 py-4 bg-transparent border-b-2 ${errors.email
-                                ? 'border-red-500'
-                                : 'border-neutral-800'
+                            ? 'border-red-500'
+                            : 'border-neutral-800'
                             } focus:outline-none focus:border-neutral-600 transition-colors text-white placeholder-neutral-600 text-sm tracking-widest uppercase`}
                     />
                     {errors.email && (
@@ -142,8 +142,8 @@ const ContactForm = () => {
                         value={formData.message}
                         onChange={handleChange}
                         className={`w-full px-0 py-4 bg-transparent border-b-2 ${errors.message
-                                ? 'border-red-500'
-                                : 'border-neutral-800'
+                            ? 'border-red-500'
+                            : 'border-neutral-800'
                             } focus:outline-none focus:border-neutral-600 transition-colors text-white placeholder-neutral-600 resize-none text-sm tracking-widest uppercase`}
                     ></textarea>
                     {errors.message && (
@@ -153,8 +153,8 @@ const ContactForm = () => {
 
                 {submitStatus && (
                     <div className={`p-4 text-center text-sm tracking-wide ${submitStatus.type === 'success'
-                            ? 'text-green-400'
-                            : 'text-red-400'
+                        ? 'text-green-400'
+                        : 'text-red-400'
                         }`}>
                         {submitStatus.message}
                     </div>
@@ -164,8 +164,8 @@ const ContactForm = () => {
                     onClick={handleSubmit}
                     disabled={isSubmitting}
                     className={`w-full py-5 border-2 border-white text-white text-sm tracking-widest uppercase transition-all duration-300 ${isSubmitting
-                            ? 'opacity-50 cursor-not-allowed'
-                            : 'hover:bg-white hover:text-black'
+                        ? 'opacity-50 cursor-not-allowed'
+                        : 'hover:bg-white hover:text-black'
                         }`}
                 >
                     {isSubmitting ? 'ОТПРАВКА...' : 'ОТПРАВИТЬ'}
@@ -212,8 +212,8 @@ const Portfolio = () => {
             try {
                 setLoading(true);
                 setApiStatus('Подключение к сайту...');
-                
-                const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+
+                const API_URL = process.env.REACT_APP_API_URL;
 
                 // Загружаем все данные параллельно
                 const [projectsRes, skillsRes, experienceRes, profileRes] = await Promise.allSettled([
@@ -294,8 +294,8 @@ const Portfolio = () => {
                     <p className="text-white text-sm tracking-widest uppercase mb-4">{apiStatus}</p>
                     <p className="text-neutral-600 text-xs">
                         API: {process.env.REACT_APP_API_URL || <p className="text-neutral-600 text-xs">
-                    phax.online
-                </p>}
+                            phax.online
+                        </p>}
                     </p>
                 </div>
             </div>
