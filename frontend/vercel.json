@@ -3,7 +3,16 @@
   "outputDirectory": "build",
   "installCommand": "npm install",
   "framework": "create-react-app",
+  "routes": [
+    {
+      "src": "/yandex_d31f048098361040.html",
+      "dest": "/yandex_d31f048098361040.html"
+    }
+  ],
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/((?!yandex_).*)",
+      "destination": "/index.html"
+    }
   ]
 }
