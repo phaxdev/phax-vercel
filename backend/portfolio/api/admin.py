@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Project, Experience, Profile, ContactMessage
+from .models import Project, Profile, ContactMessage
 from django.utils.html import format_html
     
 @admin.register(ContactMessage)
@@ -35,12 +35,6 @@ class ProjectAdmin(admin.ModelAdmin):
             return format_html('<img src="{}" width="50" height="50" style="object-fit: cover;" />', obj.image.url)
         return "Нет изображения"
     image_preview.short_description = "Превью"
-
-@admin.register(Experience)
-class ExperienceAdmin(admin.ModelAdmin):
-    list_display = ('position', 'company', 'start_date', 'end_date', 'is_current')
-    list_filter = ('is_current', 'company')
-    search_fields = ('position', 'company', 'description')
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):

@@ -125,25 +125,6 @@ class Project(models.Model):
     def get_technologies_list(self):
         return [tech.strip() for tech in self.technologies.split(',')]
 
-
-class Experience(models.Model):
-    company = models.CharField(max_length=200, verbose_name="Компания")
-    position = models.CharField(max_length=200, verbose_name="Должность")
-    description = models.TextField(verbose_name="Описание обязанностей")
-    start_date = models.DateField(verbose_name="Дата начала")
-    end_date = models.DateField(null=True, blank=True, verbose_name="Дата окончания")
-    is_current = models.BooleanField(default=False, verbose_name="Текущее место работы")
-    order = models.IntegerField(default=0, verbose_name="Порядок отображения")
-
-    class Meta:
-        verbose_name = "Опыт работы"
-        verbose_name_plural = "Опыт работы"
-        ordering = ['-start_date']
-
-    def __str__(self):
-        return f"{self.position} at {self.company}"
-
-
 class Profile(models.Model):
     name = models.CharField(max_length=100, verbose_name="Имя")
     title = models.CharField(max_length=200, verbose_name="Должность/Специализация")

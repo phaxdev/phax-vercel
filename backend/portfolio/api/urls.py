@@ -7,7 +7,6 @@ router.register(r'contact-messages', ContactMessageViewSet, basename='contact-me
 
 from .views import (
     ProjectListAPIView, 
-    ExperienceListAPIView, 
     ProfileDetailAPIView,
     test_view,
     health_check
@@ -16,7 +15,6 @@ from .views import (
 urlpatterns = [
     path('', test_view, name='api-root'),
     path('projects/', ProjectListAPIView.as_view(), name='projects'),
-    path('experience/', ExperienceListAPIView.as_view(), name='experience'),
     path('profile/', ProfileDetailAPIView.as_view(), name='profile'),
     path('health/', health_check, name='health-check'),
     path('', include(router.urls)),

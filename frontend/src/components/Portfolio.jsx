@@ -122,7 +122,7 @@ const LoadingScreen = ({ apiStatus }) => (
     </div>
 );
 
-const HeroSection = ({ profile, safeProjects, safeSkills, safeExperience, handleScroll }) => (
+const HeroSection = ({ profile, safeProjects, handleScroll }) => (
     <section id="home" className="min-h-screen flex items-center justify-center pt-20 relative">
         <div className="absolute inset-0 z-0 opacity-10">
             <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background1})`, filter: 'grayscale(100%) blur(1px)'}}></div>
@@ -138,12 +138,12 @@ const HeroSection = ({ profile, safeProjects, safeSkills, safeExperience, handle
                 </p>
                 <div className="flex justify-center gap-16 pt-8 animate-fade-in" style={{animationDelay: '0.4s'}}>
                     <div className="text-center"><div className="text-4xl font-light mb-2">{safeProjects.length}</div><div className="text-xs tracking-widest text-neutral-500 uppercase">Проектов</div></div>
-                    <div className="text-center"><div className="text-4xl font-light mb-2">{safeExperience.length}</div><div className="text-xs tracking-widest text-neutral-500 uppercase">Года опыта</div></div>
-                    <div className="text-center"><div className="text-4xl font-light mb-2">{safeSkills.length}</div><div className="text-xs tracking-widest text-neutral-500 uppercase">Навыков</div></div>
+                    <div className="text-center"><div className="text-4xl font-light mb-2">3+</div><div className="text-xs tracking-widest text-neutral-500 uppercase">Года опыта</div></div>
+                    <div className="text-center"><div className="text-4xl font-light mb-2">5</div><div className="text-xs tracking-widest text-neutral-500 uppercase">Услуг</div></div>
                 </div>
                 <div className="flex justify-center gap-6 pt-12 animate-fade-in" style={{animationDelay: '0.6s'}}>
                     <button onClick={() => handleScroll('contact')} className="px-10 py-4 border-2 border-white text-sm tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-300">СВЯЗАТЬСЯ</button>
-                    <button onClick={() => handleScroll('projects')} className="px-10 py-4 border-2 border-neutral-700 text-neutral-400 text-sm tracking-widest uppercase hover:border-white hover:text-white transition-all duration-300">ПРОЕКТЫ</button>
+                    <button onClick={() => handleScroll('pricing')} className="px-10 py-4 border-2 border-neutral-700 text-neutral-400 text-sm tracking-widest uppercase hover:border-white hover:text-white transition-all duration-300">ПРАЙС</button>
                 </div>
             </div>
         </div>
@@ -300,7 +300,6 @@ const WorkProcess = () => {
         }
     ];
 
-    // Автопереключение шагов
     useEffect(() => {
         const interval = setInterval(() => {
             setActiveStep(prev => (prev + 1) % processSteps.length);
@@ -314,7 +313,6 @@ const WorkProcess = () => {
                 <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background4})`, filter: 'grayscale(100%)'}}></div>
             </div>
             
-            {/* Анимированные элементы фона */}
             <div className="absolute inset-0">
                 {[...Array(3)].map((_, i) => (
                     <div 
@@ -339,9 +337,7 @@ const WorkProcess = () => {
                 </p>
                 
                 <div className="max-w-6xl mx-auto">
-                    {/* Основной процесс - горизонтальный для десктопа, вертикальный для мобильных */}
                     <div className="hidden lg:flex items-center justify-between mb-20 relative">
-                        {/* Линия процесса */}
                         <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 -translate-y-1/2 z-0"></div>
                         
                         {processSteps.map((step, index) => (
@@ -352,7 +348,6 @@ const WorkProcess = () => {
                                         activeStep === index ? 'scale-110' : 'opacity-70 hover:opacity-100'
                                     }`}
                                 >
-                                    {/* Шаг */}
                                     <div className={`w-16 h-16 rounded-full border-2 flex items-center justify-center mb-4 transition-all duration-300 ${
                                         activeStep === index 
                                             ? 'border-white bg-white text-black' 
@@ -361,21 +356,18 @@ const WorkProcess = () => {
                                         <span className="text-2xl">{step.icon}</span>
                                     </div>
                                     
-                                    {/* Номер шага */}
                                     <div className={`text-xs tracking-widest uppercase mb-2 transition-colors ${
                                         activeStep === index ? 'text-white' : 'text-neutral-500'
                                     }`}>
                                         {step.number}
                                     </div>
                                     
-                                    {/* Название шага */}
                                     <h3 className={`text-sm tracking-widest uppercase text-center transition-colors ${
                                         activeStep === index ? 'text-white' : 'text-neutral-400'
                                     }`}>
                                         {step.title}
                                     </h3>
                                     
-                                    {/* Соединительная линия */}
                                     {index < processSteps.length - 1 && (
                                         <div className="absolute top-8 left-full w-24 h-0.5 bg-neutral-800 -translate-x-1/2"></div>
                                     )}
@@ -384,11 +376,9 @@ const WorkProcess = () => {
                         ))}
                     </div>
                     
-                    {/* Мобильная версия - вертикальный список */}
                     <div className="lg:hidden space-y-8 mb-12">
                         {processSteps.map((step, index) => (
                             <div key={step.number} className="relative">
-                                {/* Вертикальная линия */}
                                 {index < processSteps.length - 1 && (
                                     <div className="absolute left-8 top-16 bottom-0 w-0.5 bg-neutral-800 -translate-x-1/2"></div>
                                 )}
@@ -401,7 +391,6 @@ const WorkProcess = () => {
                                             : 'border border-neutral-800 hover:border-neutral-600'
                                     }`}
                                 >
-                                    {/* Иконка */}
                                     <div className={`w-16 h-16 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
                                         activeStep === index 
                                             ? 'border-white bg-white text-black' 
@@ -410,7 +399,6 @@ const WorkProcess = () => {
                                         <span className="text-2xl">{step.icon}</span>
                                     </div>
                                     
-                                    {/* Контент */}
                                     <div className="flex-1 text-left">
                                         <div className="flex items-center gap-4 mb-2">
                                             <span className={`text-sm tracking-widest uppercase ${
@@ -440,7 +428,6 @@ const WorkProcess = () => {
                         ))}
                     </div>
                     
-                    {/* Детали активного шага (для десктопа) */}
                     <div className="hidden lg:block">
                         <motion.div
                             key={activeStep}
@@ -485,7 +472,6 @@ const WorkProcess = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        {/* Анимированные кольца */}
                                         <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-white/5 animate-spin-slow"></div>
                                         <div className="absolute inset-0 rounded-full border-4 border-transparent border-r-white/5 animate-spin-slow" style={{animationDirection: 'reverse'}}></div>
                                     </div>
@@ -493,7 +479,6 @@ const WorkProcess = () => {
                             </div>
                         </motion.div>
                         
-                        {/* Навигация */}
                         <div className="flex justify-center gap-8 mt-12">
                             <button
                                 onClick={() => setActiveStep(prev => prev === 0 ? processSteps.length - 1 : prev - 1)}
@@ -528,7 +513,6 @@ const WorkProcess = () => {
                         </div>
                     </div>
                     
-                    {/* Статистика процесса */}
                     <div className="mt-20 pt-20 border-t border-neutral-900">
                         <div className="grid md:grid-cols-3 gap-8">
                             <div className="text-center p-8 border border-neutral-800 rounded-3xl">
@@ -564,22 +548,395 @@ const WorkProcess = () => {
     );
 };
 
+// Секция "Прайс-лист"
+const PricingSection = () => {
+    const [activeService, setActiveService] = useState(0);
+    
+    const services = [
+        {
+            id: 1,
+            title: 'РАЗРАБОТКА САЙТОВ ПОД КЛЮЧ',
+            description: 'Полный цикл разработки от дизайна до запуска. Современные технологии, адаптивная верстка, SEO-оптимизация.',
+            price: 'от 45 000 ₽',
+            priceRange: '45 000 - 120 000 ₽',
+            features: [
+                'Адаптивный дизайн (мобильные + десктоп)',
+                'CMS для самостоятельного управления',
+                'Интеграция с соц. сетями и аналитикой',
+                'SEO-оптимизация под поисковые системы',
+                'Техническая поддержка 3 месяца',
+                'Хостинг на 1 год в подарок'
+            ],
+            timeline: '2-4 недели',
+            icon: '🌐',
+            popular: true
+        },
+        {
+            id: 2,
+            title: 'ВЕРСТКА С МАКЕТА',
+            description: 'Точная верстка Figma/PSD макетов. Чистый код, Pixel Perfect, кроссбраузерная совместимость.',
+            price: 'от 25 000 ₽',
+            priceRange: '25 000 - 60 000 ₽',
+            features: [
+                'Pixel Perfect верстка',
+                'Анимации и интерактивные элементы',
+                'Кроссбраузерная совместимость',
+                'Оптимизация скорости загрузки',
+                'Валидный HTML5/CSS3 код',
+                'Адаптив под все устройства'
+            ],
+            timeline: '1-2 недели',
+            icon: '✂️',
+            popular: false
+        },
+        {
+            id: 3,
+            title: 'РАЗРАБОТКА СКРИПТОВ LUA',
+            description: 'Скрипты для игр (Garry\'s Mod, World of Warcraft, FiveM), автоматизация процессов, игровые модификации.',
+            price: 'от 15 000 ₽',
+            priceRange: '15 000 - 40 000 ₽',
+            features: [
+                'Скрипты для игровых серверов',
+                'Автоматизация рутинных задач',
+                'Создание игровых модификаций',
+                'Интеграция с игровыми API',
+                'Оптимизация производительности',
+                'Тестирование и отладка'
+            ],
+            timeline: '1-3 недели',
+            icon: '🎮',
+            popular: false
+        },
+        {
+            id: 4,
+            title: 'НАПИСАНИЕ БОТОВ TELEGRAM',
+            description: 'Умные боты для автоматизации бизнеса, рассылок, опросов, интеграции с CRM и платежными системами.',
+            price: 'от 30 000 ₽',
+            priceRange: '30 000 - 80 000 ₽',
+            features: [
+                'Боты для бизнеса и личного использования',
+                'Интеграция с платежными системами',
+                'Рассылки и автоматические ответы',
+                'Поддержка Inline режима',
+                'Панель администратора',
+                'Ведение базы данных пользователей'
+            ],
+            timeline: '2-3 недели',
+            icon: '🤖',
+            popular: false
+        },
+        {
+            id: 5,
+            title: 'MINIAPPS В TELEGRAM',
+            description: 'Мини-приложения внутри Telegram для бизнеса, игр, образовательных платформ с интеграцией TON.',
+            price: 'от 50 000 ₽',
+            priceRange: '50 000 - 150 000 ₽',
+            features: [
+                'Полная интеграция с Telegram API',
+                'Поддержка TON криптовалюты',
+                'Web App внутри мессенджера',
+                'Push-уведомления и алерты',
+                'Мультиязычность',
+                'Масштабируемая архитектура'
+            ],
+            timeline: '3-5 недель',
+            icon: '📱',
+            popular: false
+        },
+        {
+            id: 6,
+            title: 'КОНСУЛЬТАЦИЯ И АУДИТ',
+            description: 'Технический аудит существующих проектов, консультации по разработке, помощь с выбором технологий.',
+            price: 'от 5 000 ₽',
+            priceRange: '5 000 - 20 000 ₽',
+            features: [
+                'Анализ текущего кода и архитектуры',
+                'Рекомендации по оптимизации',
+                'Обзор подходящих технологий',
+                'Помощь с выбором стека',
+                'Code review существующего проекта',
+                'Рекомендации по безопасности'
+            ],
+            timeline: '1-3 дня',
+            icon: '🎯',
+            popular: false
+        }
+    ];
+
+    // Автопереключение услуг
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setActiveService(prev => (prev + 1) % services.length);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, [services.length]);
+
+    return (
+        <section id="pricing" className="py-32 border-t border-neutral-900 relative overflow-hidden">
+            <div className="absolute inset-0 z-0 opacity-5">
+                <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background5})`, filter: 'grayscale(100%) blur(1px)'}}></div>
+            </div>
+            
+            {/* Анимированный фон */}
+            <div className="absolute inset-0">
+                {[...Array(8)].map((_, i) => (
+                    <motion.div
+                        key={i}
+                        className="absolute w-px h-32 bg-gradient-to-b from-transparent via-white/5 to-transparent"
+                        initial={{ y: -100, opacity: 0 }}
+                        animate={{ 
+                            y: ['-100%', '200%'],
+                            opacity: [0, 0.3, 0]
+                        }}
+                        transition={{
+                            duration: 3,
+                            delay: i * 0.5,
+                            repeat: Infinity,
+                            repeatType: 'loop'
+                        }}
+                        style={{
+                            left: `${10 + i * 12}%`
+                        }}
+                    />
+                ))}
+            </div>
+            
+            <div className="container mx-auto px-6 relative z-10">
+                <h2 className="text-xs tracking-widest text-neutral-500 uppercase mb-4 text-center">СТОИМОСТЬ</h2>
+                <p className="text-5xl md:text-7xl font-light tracking-tight text-center mb-12">
+                    УСЛУГИ<span className="text-neutral-600">.</span>
+                </p>
+                <p className="text-neutral-400 text-sm tracking-widest uppercase text-center mb-20 max-w-2xl mx-auto">
+                    ПРОЗРАЧНЫЕ ЦЕНЫ • ФИКСИРОВАННЫЙ БЮДЖЕТ • ГАРАНТИЯ КАЧЕСТВА
+                </p>
+                
+                <div className="max-w-6xl mx-auto">
+                    {/* Список услуг - горизонтальный скролл на мобильных */}
+                    <div className="flex overflow-x-auto pb-8 mb-12 hide-scrollbar lg:overflow-visible lg:grid lg:grid-cols-3 lg:gap-8">
+                        {services.map((service, index) => (
+                            <button
+                                key={service.id}
+                                onClick={() => setActiveService(index)}
+                                className={`flex-shrink-0 w-80 lg:w-auto mx-2 lg:mx-0 rounded-2xl p-8 transition-all duration-500 ${
+                                    activeService === index
+                                        ? 'bg-gradient-to-br from-black to-neutral-900 border-2 border-white transform scale-105'
+                                        : 'bg-gradient-to-br from-black/50 to-neutral-900/50 border border-neutral-800 hover:border-neutral-600'
+                                }`}
+                            >
+                                <div className="flex items-start justify-between mb-6">
+                                    <div className={`text-4xl ${activeService === index ? 'animate-pulse' : ''}`}>
+                                        {service.icon}
+                                    </div>
+                                    {service.popular && (
+                                        <span className="px-3 py-1 bg-white text-black text-xs tracking-widest rounded-full">
+                                            ПОПУЛЯРНО
+                                        </span>
+                                    )}
+                                </div>
+                                
+                                <h3 className="text-xl font-light mb-4 text-left tracking-tight">
+                                    {service.title}
+                                </h3>
+                                
+                                <div className="text-left mb-6">
+                                    <div className="text-3xl font-light mb-2">{service.price}</div>
+                                    <div className="text-sm text-neutral-400">Диапазон: {service.priceRange}</div>
+                                </div>
+                                
+                                <div className="text-left">
+                                    <div className="flex items-center gap-2 text-sm text-neutral-500 mb-4">
+                                        <span>⏱️</span>
+                                        <span>Срок: {service.timeline}</span>
+                                    </div>
+                                    {activeService === index && (
+                                        <motion.div
+                                            initial={{ opacity: 0, height: 0 }}
+                                            animate={{ opacity: 1, height: 'auto' }}
+                                            transition={{ duration: 0.3 }}
+                                            className="mt-4 pt-4 border-t border-neutral-800"
+                                        >
+                                            <p className="text-sm text-neutral-300 mb-3">{service.description}</p>
+                                            <div className="text-xs text-neutral-500">
+                                                {service.features.slice(0, 2).map((feature, i) => (
+                                                    <div key={i} className="flex items-center gap-2 mb-1">
+                                                        <span>✓</span>
+                                                        <span>{feature}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </div>
+                            </button>
+                        ))}
+                    </div>
+                    
+                    {/* Детали выбранной услуги */}
+                    <motion.div
+                        key={activeService}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="bg-gradient-to-br from-black to-neutral-900 border-2 border-neutral-800 rounded-3xl p-8 lg:p-12 mb-12"
+                    >
+                        <div className="grid lg:grid-cols-2 gap-12 items-start">
+                            <div>
+                                <div className="flex items-center gap-6 mb-8">
+                                    <div className="text-5xl">{services[activeService].icon}</div>
+                                    <div>
+                                        <h3 className="text-3xl font-light mb-2">{services[activeService].title}</h3>
+                                        <div className="flex items-center gap-4">
+                                            <div className="text-2xl font-light">{services[activeService].price}</div>
+                                            <div className="px-3 py-1 border border-neutral-800 rounded-full text-sm">
+                                                Срок: {services[activeService].timeline}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <p className="text-xl text-neutral-300 mb-8 leading-relaxed">
+                                    {services[activeService].description}
+                                </p>
+                                
+                                <div className="grid grid-cols-2 gap-4 mb-8">
+                                    <div className="p-4 border border-neutral-800 rounded-2xl">
+                                        <div className="text-sm text-neutral-500 mb-1">Диапазон цен</div>
+                                        <div className="text-lg font-light">{services[activeService].priceRange}</div>
+                                    </div>
+                                    <div className="p-4 border border-neutral-800 rounded-2xl">
+                                        <div className="text-sm text-neutral-500 mb-1">Срок выполнения</div>
+                                        <div className="text-lg font-light">{services[activeService].timeline}</div>
+                                    </div>
+                                </div>
+                                
+                                <button
+                                    onClick={() => document.getElementById('contact')?.scrollIntoView({behavior: 'smooth'})}
+                                    className="w-full py-4 border-2 border-white text-white text-sm tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-300"
+                                >
+                                    ЗАКАЗАТЬ ЭТУ УСЛУГУ
+                                </button>
+                            </div>
+                            
+                            <div>
+                                <h4 className="text-xl font-light mb-6 tracking-widest uppercase">Что входит в услугу:</h4>
+                                <div className="space-y-4">
+                                    {services[activeService].features.map((feature, index) => (
+                                        <div key={index} className="flex items-start gap-3 p-4 border border-neutral-800 rounded-2xl hover:border-white transition-colors">
+                                            <div className="w-6 h-6 rounded-full border border-white flex items-center justify-center flex-shrink-0 mt-0.5">
+                                                <span className="text-xs">✓</span>
+                                            </div>
+                                            <span className="text-neutral-300">{feature}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                                
+                                <div className="mt-8 p-6 border border-neutral-800 rounded-2xl bg-black/30">
+                                    <h5 className="text-sm tracking-widest uppercase mb-3 text-neutral-400">ДОПОЛНИТЕЛЬНО</h5>
+                                    <ul className="space-y-2 text-sm text-neutral-300">
+                                        <li className="flex items-center gap-2">• Бесплатная консультация перед началом</li>
+                                        <li className="flex items-center gap-2">• Фиксированная цена без скрытых платежей</li>
+                                        <li className="flex items-center gap-2">• Техническая поддержка после сдачи проекта</li>
+                                        <li className="flex items-center gap-2">• Гарантия на код 6 месяцев</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
+                    
+                    {/* Навигация по услугам */}
+                    <div className="flex justify-between items-center mb-12">
+                        <button
+                            onClick={() => setActiveService(prev => prev === 0 ? services.length - 1 : prev - 1)}
+                            className="w-12 h-12 border-2 border-neutral-800 rounded-full flex items-center justify-center hover:border-white hover:scale-110 transition-all duration-300"
+                        >
+                            ←
+                        </button>
+                        
+                        <div className="flex items-center gap-6">
+                            <div className="text-center">
+                                <div className="text-3xl font-light">{String(activeService + 1).padStart(2, '0')}</div>
+                                <div className="text-xs tracking-widest text-neutral-500 uppercase">Услуга</div>
+                            </div>
+                            
+                            <div className="w-48 h-0.5 bg-neutral-800">
+                                <motion.div
+                                    className="h-full bg-white"
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${((activeService + 1) / services.length) * 100}%` }}
+                                    transition={{ duration: 0.5 }}
+                                />
+                            </div>
+                            
+                            <div className="text-center">
+                                <div className="text-3xl font-light text-neutral-600">{String(services.length).padStart(2, '0')}</div>
+                                <div className="text-xs tracking-widest text-neutral-500 uppercase">Всего</div>
+                            </div>
+                        </div>
+                        
+                        <button
+                            onClick={() => setActiveService(prev => (prev + 1) % services.length)}
+                            className="w-12 h-12 border-2 border-neutral-800 rounded-full flex items-center justify-center hover:border-white hover:scale-110 transition-all duration-300"
+                        >
+                            →
+                        </button>
+                    </div>
+                    
+                    {/* Преимущества работы с нами */}
+                    <div className="mt-20 pt-20 border-t border-neutral-900">
+                        <h3 className="text-2xl font-light text-center mb-12 tracking-widest uppercase">ПОЧЕМУ ВЫБИРАЮТ НАС</h3>
+                        <div className="grid md:grid-cols-4 gap-6">
+                            <div className="text-center p-6 border border-neutral-800 rounded-2xl">
+                                <div className="text-3xl mb-4">💎</div>
+                                <h4 className="text-sm tracking-widest uppercase mb-2">ФИКСИРОВАННАЯ ЦЕНА</h4>
+                                <p className="text-neutral-400 text-xs">Цена не меняется в процессе работы</p>
+                            </div>
+                            <div className="text-center p-6 border border-neutral-800 rounded-2xl">
+                                <div className="text-3xl mb-4">⚡</div>
+                                <h4 className="text-sm tracking-widest uppercase mb-2">СКОРОСТЬ РАБОТЫ</h4>
+                                <p className="text-neutral-400 text-xs">Средний срок разработки 2-3 недели</p>
+                            </div>
+                            <div className="text-center p-6 border border-neutral-800 rounded-2xl">
+                                <div className="text-3xl mb-4">🛡️</div>
+                                <h4 className="text-sm tracking-widest uppercase mb-2">ГАРАНТИЯ 6 МЕСЯЦЕВ</h4>
+                                <p className="text-neutral-400 text-xs">Исправляем баги бесплатно полгода</p>
+                            </div>
+                            <div className="text-center p-6 border border-neutral-800 rounded-2xl">
+                                <div className="text-3xl mb-4">📞</div>
+                                <h4 className="text-sm tracking-widest uppercase mb-2">ПОДДЕРЖКА 24/7</h4>
+                                <p className="text-neutral-400 text-xs">Отвечаем в Telegram в любое время</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <style jsx global>{`
+                .hide-scrollbar {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+                .hide-scrollbar::-webkit-scrollbar {
+                    display: none;
+                }
+            `}</style>
+        </section>
+    );
+};
+
 const Portfolio = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [loading, setLoading] = useState(true);
     const [apiStatus, setApiStatus] = useState('Загрузка...');
     const [projects, setProjects] = useState([]);
-    const [skills, setSkills] = useState([]);
-    const [experience, setExperience] = useState([]);
     const [profile, setProfile] = useState(null);
 
-    // Обновляем меню: меняем "НАВЫКИ" на "ПРОЦЕСС"
+    // Обновляем меню: меняем "ОПЫТ" на "ПРАЙС"
     const menuItems = [
         {id: 'home', label: 'ГЛАВНАЯ'}, 
         {id: 'about', label: 'ОБО МНЕ'}, 
         {id: 'projects', label: 'ПРОЕКТЫ'},
-        {id: 'process', label: 'ПРОЦЕСС'}, // Изменено здесь
-        {id: 'experience', label: 'ОПЫТ'}, 
+        {id: 'process', label: 'ПРОЦЕСС'},
+        {id: 'pricing', label: 'ПРАЙС'}, // Изменено здесь
         {id: 'contact', label: 'КОНТАКТЫ'}
     ];
 
@@ -593,23 +950,28 @@ const Portfolio = () => {
             try {
                 setLoading(true); setApiStatus('Подключение к сайту...');
                 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
-                const [projectsRes, skillsRes, experienceRes, profileRes] = await Promise.allSettled([
+                
+                // Загружаем только проекты и профиль
+                const [projectsRes, profileRes] = await Promise.allSettled([
                     fetch(`${API_URL}/projects/`).then(r => r.ok ? r.json() : []),
-                    fetch(`${API_URL}/skills/`).then(r => r.ok ? r.json() : []),
-                    fetch(`${API_URL}/experience/`).then(r => r.ok ? r.json() : []),
                     fetch(`${API_URL}/profile/`).then(r => r.ok ? r.json() : getMockProfile())
                 ]);
+
                 const projectsData = projectsRes.status === 'fulfilled' && Array.isArray(projectsRes.value) ? projectsRes.value : [];
-                const skillsData = skillsRes.status === 'fulfilled' && Array.isArray(skillsRes.value) ? skillsRes.value : [];
-                const experienceData = experienceRes.status === 'fulfilled' && Array.isArray(experienceRes.value) ? experienceRes.value : [];
                 const profileData = profileRes.status === 'fulfilled' && profileRes.value ? profileRes.value : getMockProfile();
-                setProjects(projectsData); setSkills(skillsData); setExperience(experienceData); setProfile(profileData);
+
+                setProjects(projectsData);
+                setProfile(profileData);
                 setApiStatus('Данные загружены');
+
             } catch (error) {
                 console.error('Ошибка при загрузке данных:', error);
-                setProfile(getMockProfile()); setProjects([]); setSkills([]); setExperience([]);
+                setProfile(getMockProfile()); 
+                setProjects([]);
                 setApiStatus('Ошибка подключения к API');
-            } finally { setLoading(false); }
+            } finally { 
+                setLoading(false); 
+            }
         };
         fetchData();
     }, []);
@@ -620,17 +982,9 @@ const Portfolio = () => {
         setIsMenuOpen(false);
     };
 
-    const formatDate = (dateString) => {
-        if (!dateString) return 'НАСТОЯЩЕЕ ВРЕМЯ';
-        try { return new Date(dateString).toLocaleDateString('ru-RU', {month: 'long', year: 'numeric'}).toUpperCase(); }
-        catch { return dateString; }
-    };
-
     if (loading) return <LoadingScreen apiStatus={apiStatus} />;
 
     const safeProjects = Array.isArray(projects) ? projects : [];
-    const safeSkills = Array.isArray(skills) ? skills : [];
-    const safeExperience = Array.isArray(experience) ? experience : [];
 
     return (
         <div className="min-h-screen bg-black text-white font-sans">
@@ -657,7 +1011,7 @@ const Portfolio = () => {
                 </div>
             </nav>
 
-            <HeroSection profile={profile} safeProjects={safeProjects} safeSkills={safeSkills} safeExperience={safeExperience} handleScroll={handleScroll}/>
+            <HeroSection profile={profile} safeProjects={safeProjects} handleScroll={handleScroll}/>
 
             {/* Обо мне с background2 */}
             <section id="about" className="py-32 border-t border-neutral-900 relative">
@@ -698,42 +1052,11 @@ const Portfolio = () => {
                 </div>
             </section>
 
-            {/* Процесс работы вместо навыков */}
+            {/* Процесс работы */}
             <WorkProcess />
 
-            {/* Опыт с background5 */}
-            <section id="experience" className="py-32 border-t border-neutral-900 relative">
-                <div className="absolute inset-0 z-0 opacity-5">
-                    <div className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background5})`, filter: 'grayscale(100%)'}}></div>
-                </div>
-                <div className="container mx-auto px-6 relative z-10">
-                    <h2 className="text-xs tracking-widest text-neutral-500 uppercase mb-20 text-center">ОПЫТ РАБОТЫ</h2>
-                    <div className="max-w-4xl mx-auto">
-                        {safeExperience.length === 0 ? (
-                            <div className="text-center py-12">
-                                <p className="text-neutral-500 text-sm tracking-wide uppercase">Опыт работы не добавлен</p>
-                            </div>
-                        ) : (
-                            <div className="space-y-16">
-                                {safeExperience.map((exp, index) => (
-                                    <div key={exp.id || index} className="border-b border-neutral-900 pb-16 last:border-0">
-                                        <div className="flex flex-col md:flex-row md:justify-between mb-6">
-                                            <div>
-                                                <h3 className="text-2xl font-light mb-2">{exp.position}</h3>
-                                                <p className="text-neutral-400 tracking-wide">{exp.company}</p>
-                                            </div>
-                                            <span className="text-xs tracking-widest text-neutral-500 uppercase mt-4 md:mt-0">
-                                                {formatDate(exp.start_date)} - {exp.is_current ? 'НАСТОЯЩЕЕ ВРЕМЯ' : formatDate(exp.end_date)}
-                                            </span>
-                                        </div>
-                                        <p className="text-neutral-400 leading-relaxed">{exp.description}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </section>
+            {/* Прайс-лист вместо опыта */}
+            <PricingSection />
 
             {/* Контакты с background3 */}
             <section id="contact" className="py-32 border-t border-neutral-900 relative">

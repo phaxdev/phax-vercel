@@ -2,9 +2,9 @@ from rest_framework import generics, permissions
 from django.http import JsonResponse, HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Project, Experience, Profile
+from .models import Project, Profile
 from .serializers import (
-    ProjectSerializer, ExperienceSerializer, ProfileSerializer
+    ProjectSerializer, ProfileSerializer
 )
 from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAdminUser
@@ -52,11 +52,6 @@ def test_view(request):
 class ProjectListAPIView(generics.ListAPIView):
     queryset = Project.objects.filter(is_published=True).order_by('-created_at')
     serializer_class = ProjectSerializer
-    permission_classes = [permissions.AllowAny]
-
-class ExperienceListAPIView(generics.ListAPIView):
-    queryset = Experience.objects.all().order_by('-start_date')
-    serializer_class = ExperienceSerializer
     permission_classes = [permissions.AllowAny]
 
 class ProfileDetailAPIView(generics.RetrieveAPIView):

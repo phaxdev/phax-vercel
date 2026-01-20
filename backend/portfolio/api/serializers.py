@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Project, Experience, Profile, ContactMessage
+from .models import Project, Profile, ContactMessage
 
 class ContactMessageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,14 +33,6 @@ class ProjectSerializer(serializers.ModelSerializer):
                 return url.replace('http://', 'https://')
             return obj.image.url.replace('http://', 'https://')
         return None
-
-class ExperienceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Experience
-        fields = [
-            'id', 'company', 'position', 'description',
-            'start_date', 'end_date', 'is_current', 'order'
-        ]
 
 class ProfileSerializer(serializers.ModelSerializer):
     photo_url = serializers.SerializerMethodField()
