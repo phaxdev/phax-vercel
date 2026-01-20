@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, EffectCoverflow, Autoplay, Mousewheel, Keyboard } from 'swiper/modules';
+import { Navigation, Pagination, Autoplay, Mousewheel, Keyboard } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import 'swiper/css/effect-coverflow';
 import { FaGithub, FaExternalLinkAlt, FaChevronLeft, FaChevronRight, FaCode, FaServer, FaDatabase, FaMobile, FaRocket } from 'react-icons/fa';
 
 const ContactForm = () => {
@@ -633,15 +632,7 @@ const Portfolio = () => {
                 {/* Сам свайпер */}
                 <Swiper
                     ref={swiperRef}
-                    modules={[Navigation, Pagination, EffectCoverflow, Autoplay, Mousewheel, Keyboard]}
-                    effect="coverflow"
-                    coverflowEffect={{
-                        rotate: 0,
-                        stretch: 0,
-                        depth: 100,
-                        modifier: 1,
-                        slideShadows: false,
-                    }}
+                    modules={[Navigation, Pagination, Autoplay, Mousewheel, Keyboard]}
                     grabCursor={true}
                     centeredSlides={true}
                     centeredSlidesBounds={true} // Важно! Удерживает слайды по центру
