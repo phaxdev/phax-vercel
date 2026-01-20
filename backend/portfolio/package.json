@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "framer-motion": "^12.27.5"
+    "framer-motion": "^10.16.16"
   }
 }
