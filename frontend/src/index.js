@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
-import Portfolio from './Portfolio';
+import Portfolio from './components/Portfolio';
 import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
