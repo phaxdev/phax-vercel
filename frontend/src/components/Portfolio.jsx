@@ -7,7 +7,6 @@ import background3 from './background3.png';
 import background4 from './background4.png';
 import background5 from './background5.png';
 
-
 // SEO компонент
 const SEO = ({ 
   title = "Разработка сайтов и ботов под ключ | Full Stack Developer",
