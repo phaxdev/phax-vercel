@@ -971,7 +971,7 @@ const WorkProcess = () => {
     return (
         <motion.section 
             id="process" 
-            className="py-32 border-t border-white/10 relative overflow-hidden"
+            className="relative z-40 -mt-16 md:-mt-24 lg:-mt-28 py-28 md:py-32 border-t border-white/10 overflow-hidden"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, amount: 0.2 }}
@@ -1441,7 +1441,7 @@ const PricingSection = () => {
     return (
         <motion.section 
             id="pricing" 
-            className="py-32 border-t border-white/10 relative overflow-hidden"
+            className="relative z-50 -mt-16 md:-mt-24 lg:-mt-28 py-28 md:py-32 border-t border-white/10 overflow-hidden"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, amount: 0.2 }}
@@ -1882,81 +1882,96 @@ const Portfolio = () => {
                 />
                 
                 <motion.nav 
-                    className="fixed w-full bg-black/80 backdrop-blur-md z-50 border-b border-white/10"
+                    className="fixed top-0 left-0 w-full bg-black/80 backdrop-blur-md z-50 border-b border-white/10"
                     initial={{ y: -100 }}
                     animate={{ y: 0 }}
                     transition={{ duration: 0.6, ease: "easeOut" }}
                 >
-                    <div className="container mx-auto px-6 py-5">
-                        <div className="flex justify-between items-center">
-                            <motion.div 
-                                className="text-sm tracking-[0.2em] uppercase font-light cursor-pointer"
+                    <div className="container mx-auto px-4 md:px-6 py-4 md:py-5">
+                        <div className="flex items-center justify-between">
+                            <motion.button
+                                type="button"
+                                onClick={() => handleScroll('home')}
+                                className="text-xs md:text-sm tracking-[0.2em] uppercase font-light cursor-pointer text-white/80 hover:text-white"
                                 whileHover={{ scale: 1.05 }}
                             >
                                 {profile?.name?.split(' ')[0] || 'Portfolio'}
-                            </motion.div>
-                            <div className="hidden md:flex space-x-8">
-                                {menuItems.map((item, index) => (
-                                    <motion.button 
-                                        key={item.id} 
-                                        onClick={() => handleScroll(item.id)} 
-                                        className="text-xs tracking-[0.15em] text-neutral-400 hover:text-white uppercase font-light relative group"
-                                        initial={{ opacity: 0, y: -20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: index * 0.1 }}
-                                        whileHover={{ scale: 1.1 }}
-                                    >
-                                        {item.label}
-                                        <motion.div
-                                            className="absolute bottom-0 left-0 h-px bg-white"
-                                            initial={{ width: 0 }}
-                                            whileHover={{ width: "100%" }}
-                                            transition={{ duration: 0.3 }}
-                                        />
-                                    </motion.button>
-                                ))}
-                            </div>
-                            <motion.button 
-                                className="md:hidden text-neutral-400 hover:text-white transition-colors text-sm tracking-[0.2em] uppercase font-light"
+                            </motion.button>
+
+                            {/* Бургер справа на всех экранах */}
+                            <motion.button
+                                type="button"
                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                                whileTap={{ scale: 0.95 }}
+                                className="relative flex items-center justify-center w-10 h-10 md:w-11 md:h-11 rounded-full border border-white/20 hover:border-white/60 transition-colors"
+                                whileTap={{ scale: 0.92 }}
+                                aria-label={isMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
                             >
-                                {isMenuOpen ? 'ЗАКРЫТЬ' : 'МЕНЮ'}
+                                <div className="flex flex-col justify-center gap-1.5 w-5 md:w-6">
+                                    <span
+                                        className={`h-0.5 rounded-full bg-white transition-transform duration-300 ${isMenuOpen ? 'translate-y-2 rotate-45' : ''}`}
+                                    />
+                                    <span
+                                        className={`h-0.5 rounded-full bg-white transition-opacity duration-300 ${isMenuOpen ? 'opacity-0' : 'opacity-80'}`}
+                                    />
+                                    <span
+                                        className={`h-0.5 rounded-full bg-white transition-transform duration-300 ${isMenuOpen ? '-translate-y-2 -rotate-45' : ''}`}
+                                    />
+                                </div>
                             </motion.button>
                         </div>
-                        <AnimatePresence>
-                            {isMenuOpen && (
-                                <motion.div 
-                                    className="md:hidden mt-8 pb-8 space-y-6"
-                                    initial={{ opacity: 0, height: 0 }}
-                                    animate={{ opacity: 1, height: "auto" }}
-                                    exit={{ opacity: 0, height: 0 }}
-                                    transition={{ duration: 0.3 }}
-                                >
-                                    {menuItems.map((item, index) => (
-                                        <motion.button 
-                                            key={item.id} 
-                                            onClick={() => handleScroll(item.id)} 
-                                            className="block w-full text-left text-sm tracking-[0.15em] text-neutral-400 hover:text-white transition-colors uppercase font-light"
-                                            initial={{ opacity: 0, x: -20 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            transition={{ delay: index * 0.1 }}
-                                            whileHover={{ x: 10 }}
-                                        >
-                                            {item.label}
-                                        </motion.button>
-                                    ))}
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
                     </div>
                 </motion.nav>
+
+                {/* Сайдбар-меню справа */}
+                <AnimatePresence>
+                    {isMenuOpen && (
+                        <motion.aside
+                            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:bg-black/40"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                        >
+                            <motion.div
+                                className="ml-auto h-full w-64 sm:w-80 bg-black/95 border-l border-white/10 flex flex-col justify-between px-6 py-8"
+                                initial={{ x: '100%' }}
+                                animate={{ x: 0 }}
+                                exit={{ x: '100%' }}
+                                transition={{ duration: 0.3, ease: 'easeOut' }}
+                            >
+                                <div className="space-y-8">
+                                    <div className="text-xs tracking-[0.25em] text-neutral-500 uppercase">
+                                        Навигация
+                                    </div>
+                                    <nav className="space-y-4">
+                                        {menuItems.map((item, index) => (
+                                            <motion.button
+                                                key={item.id}
+                                                type="button"
+                                                onClick={() => handleScroll(item.id)}
+                                                className="w-full text-left text-sm tracking-[0.2em] uppercase font-light text-neutral-300 hover:text-white"
+                                                initial={{ opacity: 0, x: 20 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                transition={{ delay: 0.05 * index }}
+                                                whileHover={{ x: 6 }}
+                                            >
+                                                {item.label}
+                                            </motion.button>
+                                        ))}
+                                    </nav>
+                                </div>
+                                <div className="pt-6 border-t border-white/10 text-xs text-neutral-500 tracking-[0.18em] uppercase">
+                                    © {new Date().getFullYear()} {profile?.name || 'phax'}
+                                </div>
+                            </motion.div>
+                        </motion.aside>
+                    )}
+                </AnimatePresence>
 
                 <HeroSection profile={profile} safeProjects={safeProjects} handleScroll={handleScroll}/>
 
                 <motion.section 
                     id="about" 
-                    className="py-32 border-t border-white/10 relative overflow-hidden"
+                    className="relative z-20 -mt-12 md:-mt-20 lg:-mt-24 py-28 md:py-32 border-t border-white/10 overflow-hidden"
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true, amount: 0.3 }}
@@ -2027,7 +2042,7 @@ const Portfolio = () => {
 
                 <motion.section 
                     id="projects" 
-                    className="py-32 border-t border-white/10 relative overflow-hidden"
+                    className="relative z-30 -mt-16 md:-mt-24 lg:-mt-28 py-28 md:py-32 border-t border-white/10 overflow-hidden"
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true, amount: 0.2 }}
