@@ -1418,8 +1418,6 @@ const WorkProcess = () => {
 // ПРОДОЛЖЕНИЕ Portfolio_Redesigned.jsx (ЧАСТЬ 2)
 // Вставьте этот код после Work
 
-Process Section
-
 // Pricing Section
 const PricingSection = () => {
     const { isDark } = useTheme();
