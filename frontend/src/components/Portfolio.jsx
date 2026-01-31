@@ -436,7 +436,7 @@ const ProjectsSwiper = ({ projects }) => {
     );
 };
 
-// Секция "Процесс работы" с черно-белыми иконками
+// Секция "Процесс работы" БЕЗ линий между кругами
 const WorkProcess = () => {
     const [activeStep, setActiveStep] = useState(0);
     
@@ -528,9 +528,8 @@ const WorkProcess = () => {
                 </p>
                 
                 <div className="max-w-6xl mx-auto">
+                    {/* Desktop version - БЕЗ линий между кругами */}
                     <div className="hidden lg:flex items-center justify-between mb-20 relative">
-                        <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 -translate-y-1/2 z-0"></div>
-                        
                         {processSteps.map((step, index) => {
                             const IconComponent = ProcessIcons[step.icon];
                             return (
@@ -560,25 +559,18 @@ const WorkProcess = () => {
                                         }`}>
                                             {step.title}
                                         </h3>
-                                        
-                                        {index < processSteps.length - 1 && (
-                                            <div className="absolute top-8 left-full w-24 h-0.5 bg-neutral-800 -translate-x-1/2"></div>
-                                        )}
                                     </button>
                                 </div>
                             );
                         })}
                     </div>
                     
+                    {/* Mobile version */}
                     <div className="lg:hidden space-y-8 mb-12">
                         {processSteps.map((step, index) => {
                             const IconComponent = ProcessIcons[step.icon];
                             return (
                                 <div key={step.number} className="relative">
-                                    {index < processSteps.length - 1 && (
-                                        <div className="absolute left-8 top-16 bottom-0 w-0.5 bg-neutral-800 -translate-x-1/2"></div>
-                                    )}
-                                    
                                     <button
                                         onClick={() => setActiveStep(index)}
                                         className={`flex items-start gap-6 w-full p-6 rounded-2xl transition-all duration-300 ${
@@ -625,6 +617,7 @@ const WorkProcess = () => {
                         })}
                     </div>
                     
+                    {/* Details card - показывается только на desktop */}
                     <div className="hidden lg:block">
                         <motion.div
                             key={activeStep}
@@ -1210,7 +1203,7 @@ const Portfolio = () => {
     const safeProjects = Array.isArray(projects) ? projects : [];
 
     return (
-        <HelmetProvider> {/* ВАЖНО: оборачиваем всё в HelmetProvider */}
+        <HelmetProvider>
             <div className="min-h-screen bg-black text-white font-sans">
                 <SEO 
                     title="Разработчик сайтов | Создание Telegram ботов | Lua скрипты под ключ"
