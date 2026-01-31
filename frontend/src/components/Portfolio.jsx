@@ -8,37 +8,37 @@ import background4 from './background4.png';
 import background5 from './background5.png';
 
 const SEO = ({ title = "Разработка сайтов и ботов под ключ | Full Stack Developer", description = "Профессиональная разработка сайтов, Telegram ботов, скриптов Lua. Создание сайтов под ключ, верстка макетов, мини-приложения в Telegram. Фиксированные цены, гарантия качества.", keywords = "разработка сайтов, создание сайтов, telegram боты, Lua скрипты, верстка макетов, мини-приложения, fullstack разработчик, заказать сайт", ogImage = "/og-image.jpg", ogUrl = "https://phax.online", type = "website", author = "phax" }) => {
-  return (
-    <Helmet>
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      <meta name="keywords" content={keywords} />
-      <meta name="author" content={author} />
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={ogImage} />
-      <meta property="og:url" content={ogUrl} />
-      <meta property="og:type" content={type} />
-      <meta property="og:locale" content="ru_RU" />
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={ogImage} />
-      <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-      <link rel="canonical" href={ogUrl} />
-      <script type="application/ld+json">{JSON.stringify({"@context": "https://schema.org","@type": "ProfessionalService","name": "Разработка сайтов и ботов под ключ","description": description,"url": ogUrl,"logo": `${ogUrl}/logo.png`,"address": {"@type": "PostalAddress","addressCountry": "RU"},"service": [{"@type": "Service","name": "Разработка сайтов","description": "Создание сайтов под ключ с современным дизайном и адаптивной версткой"},{"@type": "Service","name": "Telegram боты","description": "Разработка интеллектуальных ботов для автоматизации бизнеса"},{"@type": "Service","name": "Lua скрипты","description": "Создание скриптов для игровых серверов и автоматизации"}],"offers": {"@type": "AggregateOffer","priceCurrency": "RUB","lowPrice": "15000","highPrice": "150000","offerCount": "6"}})}</script>
-    </Helmet>
-  );
+    return (
+        <Helmet>
+            <title>{title}</title>
+            <meta name="description" content={description} />
+            <meta name="keywords" content={keywords} />
+            <meta name="author" content={author} />
+            <meta property="og:title" content={title} />
+            <meta property="og:description" content={description} />
+            <meta property="og:image" content={ogImage} />
+            <meta property="og:url" content={ogUrl} />
+            <meta property="og:type" content={type} />
+            <meta property="og:locale" content="ru_RU" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:title" content={title} />
+            <meta name="twitter:description" content={description} />
+            <meta name="twitter:image" content={ogImage} />
+            <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+            <link rel="canonical" href={ogUrl} />
+            <script type="application/ld+json">{JSON.stringify({ "@context": "https://schema.org", "@type": "ProfessionalService", "name": "Разработка сайтов и ботов под ключ", "description": description, "url": ogUrl, "logo": `${ogUrl}/logo.png`, "address": { "@type": "PostalAddress", "addressCountry": "RU" }, "service": [{ "@type": "Service", "name": "Разработка сайтов", "description": "Создание сайтов под ключ с современным дизайном и адаптивной версткой" }, { "@type": "Service", "name": "Telegram боты", "description": "Разработка интеллектуальных ботов для автоматизации бизнеса" }, { "@type": "Service", "name": "Lua скрипты", "description": "Создание скриптов для игровых серверов и автоматизации" }], "offers": { "@type": "AggregateOffer", "priceCurrency": "RUB", "lowPrice": "15000", "highPrice": "150000", "offerCount": "6" } })}</script>
+        </Helmet>
+    );
 };
 
 const ThemeToggle = ({ isDark, toggleTheme }) => {
-  return (
-    <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} onClick={toggleTheme} className={`relative w-16 h-8 rounded-full transition-all duration-500 ${isDark ? 'bg-neutral-800' : 'bg-blue-200'} border-2 ${isDark ? 'border-neutral-600' : 'border-blue-300'}`} aria-label="Переключить тему">
-      <motion.div className={`absolute top-1 w-5 h-5 rounded-full flex items-center justify-center ${isDark ? 'bg-white' : 'bg-yellow-400'}`} animate={{ left: isDark ? '4px' : '32px', rotate: isDark ? 0 : 360 }} transition={{ type: 'spring', stiffness: 300, damping: 30 }}>
-        {isDark ? (<svg className="w-3 h-3 text-neutral-800" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" /></svg>) : (<svg className="w-3 h-3 text-yellow-600" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" /></svg>)}
-      </motion.div>
-    </motion.button>
-  );
+    return (
+        <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} onClick={toggleTheme} className={`relative w-16 h-8 rounded-full transition-all duration-500 ${isDark ? 'bg-neutral-800' : 'bg-blue-200'} border-2 ${isDark ? 'border-neutral-600' : 'border-blue-300'}`} aria-label="Переключить тему">
+            <motion.div className={`absolute top-1 w-5 h-5 rounded-full flex items-center justify-center ${isDark ? 'bg-white' : 'bg-yellow-400'}`} animate={{ left: isDark ? '4px' : '32px', rotate: isDark ? 0 : 360 }} transition={{ type: 'spring', stiffness: 300, damping: 30 }}>
+                {isDark ? (<svg className="w-3 h-3 text-neutral-800" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" /></svg>) : (<svg className="w-3 h-3 text-yellow-600" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" /></svg>)}
+            </motion.div>
+        </motion.button>
+    );
 };
 
 const ProcessIcons = {
@@ -75,8 +75,8 @@ const ContactForm = ({ isDark }) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({...formData, [name]: value});
-        if (errors[name]) setErrors({...errors, [name]: ''});
+        setFormData({ ...formData, [name]: value });
+        if (errors[name]) setErrors({ ...errors, [name]: '' });
     };
 
     const validateForm = () => {
@@ -98,17 +98,17 @@ const ContactForm = ({ isDark }) => {
             const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
             const response = await fetch(`${API_URL}/contact-messages/`, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
             });
             if (response.status === 201) {
-                setSubmitStatus({type: 'success', message: 'Сообщение отправлено'});
-                setFormData({name: '', email: '', message: ''});
+                setSubmitStatus({ type: 'success', message: 'Сообщение отправлено' });
+                setFormData({ name: '', email: '', message: '' });
                 setTimeout(() => setSubmitStatus(null), 5000);
             } else throw new Error('Ошибка отправки');
         } catch (error) {
             console.error('Ошибка при отправке сообщения:', error);
-            setSubmitStatus({type: 'error', message: 'Произошла ошибка при отправке'});
+            setSubmitStatus({ type: 'error', message: 'Произошла ошибка при отправке' });
         } finally {
             setIsSubmitting(false);
         }
@@ -158,7 +158,12 @@ const ContactForm = ({ isDark }) => {
 const LoadingSpinner = ({ isDark }) => (
     <div className="relative w-32 h-32 mx-auto mb-8">
         <div className={`absolute inset-0 border-4 ${isDark ? 'border-white/30' : 'border-gray-300'} rounded-full`}></div>
-        <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-1 ${isDark ? 'bg-white' : 'bg-gray-900'} origin-center`}></motion.div>
+        <motion.div
+            animate={{ rotate: 360 }}
+            className="absolute inset-0 flex items-center justify-center"
+        >
+            <div className="w-12 h-1 bg-white"></div>
+        </motion.div>
         <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 ${isDark ? 'bg-white' : 'bg-gray-900'} rounded-full`}></div>
     </div>
 );
@@ -198,7 +203,7 @@ const HeroSection = ({ profile, safeProjects, handleScroll, isDark }) => {
     return (
         <section id="home" className="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden">
             <div className="absolute inset-0 z-0 opacity-10">
-                <motion.div initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.5 }} className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background1})`, filter: 'grayscale(100%) blur(1px)'}}></motion.div>
+                <motion.div initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.5 }} className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${background1})`, filter: 'grayscale(100%) blur(1px)' }}></motion.div>
             </div>
             <div className="container mx-auto px-6 relative z-10">
                 <motion.div initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="max-w-4xl mx-auto text-center space-y-12">
@@ -285,10 +290,10 @@ const ProjectCard = ({ project, isActive, isDark }) => {
 const ProjectsSwiper = ({ projects, isDark }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const displayProjects = Array.isArray(projects) && projects.length > 0 ? projects.map((p, i) => ({
-        id: p.id || i, title: p.title || `Проект ${i+1}`, description: p.short_description || p.description || '',
+        id: p.id || i, title: p.title || `Проект ${i + 1}`, description: p.short_description || p.description || '',
         technologies_list: p.technologies_list || p.technologies || [], year: p.year || new Date().getFullYear(),
         github_url: p.github_url, live_url: p.live_url
-    })) : [{ id: 1, title: 'ДОБАВЬТЕ ПРОЕКТЫ', description: 'Используйте админ-панель Django для добавления проектов', technologies_list: ['React', 'Django', 'API'], year: '2024'}];
+    })) : [{ id: 1, title: 'ДОБАВЬТЕ ПРОЕКТЫ', description: 'Используйте админ-панель Django для добавления проектов', technologies_list: ['React', 'Django', 'API'], year: '2024' }];
 
     useEffect(() => { const interval = setInterval(() => setCurrentIndex(prev => (prev + 1) % displayProjects.length), 5000); return () => clearInterval(interval); }, [displayProjects.length]);
     const handlePrev = () => setCurrentIndex(prev => prev === 0 ? displayProjects.length - 1 : prev - 1);
@@ -310,7 +315,7 @@ const ProjectsSwiper = ({ projects, isDark }) => {
                 <div className="flex items-center gap-4">
                     <motion.span animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 2, repeat: Infinity }} className={`text-3xl font-light ${textColor}`}>{String(currentIndex + 1).padStart(2, '0')}</motion.span>
                     <div className={`w-32 h-0.5 ${progressBg}`}>
-                        <motion.div className={`h-full ${progressFill}`} initial={{width: 0}} animate={{width: `${((currentIndex + 1) / displayProjects.length) * 100}%`}} transition={{duration: 0.5}}/>
+                        <motion.div className={`h-full ${progressFill}`} initial={{ width: 0 }} animate={{ width: `${((currentIndex + 1) / displayProjects.length) * 100}%` }} transition={{ duration: 0.5 }} />
                     </div>
                     <span className={`text-3xl font-light ${mutedColor}`}>{String(displayProjects.length).padStart(2, '0')}</span>
                 </div>
@@ -318,10 +323,10 @@ const ProjectsSwiper = ({ projects, isDark }) => {
             <div className="relative overflow-hidden py-8">
                 <div className="flex justify-center">
                     <div className="relative w-full max-w-4xl">
-                        <div className="relative z-10 mx-auto" style={{width: '100%'}}>
+                        <div className="relative z-10 mx-auto" style={{ width: '100%' }}>
                             <AnimatePresence mode="wait">
-                                <motion.div key={currentIndex} initial={{x: 100, opacity: 0}} animate={{x: 0, opacity: 1}} exit={{x: -100, opacity: 0}} transition={{duration: 0.5}}>
-                                    <ProjectCard project={displayProjects[currentIndex]} isActive={true} isDark={isDark}/>
+                                <motion.div key={currentIndex} initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -100, opacity: 0 }} transition={{ duration: 0.5 }}>
+                                    <ProjectCard project={displayProjects[currentIndex]} isActive={true} isDark={isDark} />
                                 </motion.div>
                             </AnimatePresence>
                         </div>
@@ -332,7 +337,7 @@ const ProjectsSwiper = ({ projects, isDark }) => {
                 <motion.button whileHover={{ scale: 1.1, rotate: -5 }} whileTap={{ scale: 0.9 }} onClick={handlePrev} className={`w-12 h-12 border-2 ${borderColor} rounded-full flex items-center justify-center transition-all duration-300 ${textColor}`}>←</motion.button>
                 <div className="flex gap-2">
                     {displayProjects.map((_, index) => (
-                        <motion.button key={index} whileHover={{ scale: 1.2 }} onClick={() => setCurrentIndex(index)} className={`h-2 rounded-full transition-all duration-300 ${index === currentIndex ? `${progressFill} w-8` : `${isDark ? 'bg-neutral-600 hover:bg-neutral-400' : 'bg-gray-300 hover:bg-gray-500'} w-2`}`}/>
+                        <motion.button key={index} whileHover={{ scale: 1.2 }} onClick={() => setCurrentIndex(index)} className={`h-2 rounded-full transition-all duration-300 ${index === currentIndex ? `${progressFill} w-8` : `${isDark ? 'bg-neutral-600 hover:bg-neutral-400' : 'bg-gray-300 hover:bg-gray-500'} w-2`}`} />
                     ))}
                 </div>
                 <motion.button whileHover={{ scale: 1.1, rotate: 5 }} whileTap={{ scale: 0.9 }} onClick={handleNext} className={`w-12 h-12 border-2 ${borderColor} rounded-full flex items-center justify-center transition-all duration-300 ${textColor}`}>→</motion.button>
@@ -379,7 +384,7 @@ const WorkProcess = ({ isDark }) => {
     return (
         <section id="process" className={`py-32 border-t ${borderColor} relative overflow-hidden`}>
             <div className="absolute inset-0 z-0 opacity-5">
-                <motion.div initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.5 }} className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background4})`, filter: 'grayscale(100%)'}}></motion.div>
+                <motion.div initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.5 }} className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${background4})`, filter: 'grayscale(100%)' }}></motion.div>
             </div>
             <div className="absolute inset-0">
                 {[...Array(3)].map((_, i) => (
@@ -472,7 +477,7 @@ const WorkProcess = ({ isDark }) => {
                             <div className="flex items-center gap-4">
                                 <span className={`text-2xl font-light ${textColor}`}>{String(activeStep + 1).padStart(2, '0')}</span>
                                 <div className={`w-48 h-0.5 ${isDark ? 'bg-neutral-800' : 'bg-gray-200'}`}>
-                                    <motion.div className={`h-full ${isDark ? 'bg-white' : 'bg-gray-900'}`} initial={{ width: 0 }} animate={{ width: `${((activeStep + 1) / processSteps.length) * 100}%` }} transition={{ duration: 0.5 }}/>
+                                    <motion.div className={`h-full ${isDark ? 'bg-white' : 'bg-gray-900'}`} initial={{ width: 0 }} animate={{ width: `${((activeStep + 1) / processSteps.length) * 100}%` }} transition={{ duration: 0.5 }} />
                                 </div>
                                 <span className={`text-2xl font-light ${mutedColor}`}>{String(processSteps.length).padStart(2, '0')}</span>
                             </div>
@@ -535,11 +540,11 @@ const PricingSection = ({ isDark }) => {
     return (
         <section id="pricing" className={`py-32 border-t ${borderColor} relative overflow-hidden`}>
             <div className="absolute inset-0 z-0 opacity-5">
-                <motion.div initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.5 }} className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background5})`, filter: 'grayscale(100%) blur(1px)'}}></motion.div>
+                <motion.div initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.5 }} className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${background5})`, filter: 'grayscale(100%) blur(1px)' }}></motion.div>
             </div>
             <div className="absolute inset-0">
                 {[...Array(8)].map((_, i) => (
-                    <motion.div key={i} className={`absolute w-px h-32 bg-gradient-to-b from-transparent ${isDark ? 'via-white/5' : 'via-gray-900/5'} to-transparent`} initial={{ y: -100, opacity: 0 }} animate={{ y: ['-100%', '200%'], opacity: [0, 0.3, 0] }} transition={{ duration: 3, delay: i * 0.5, repeat: Infinity, repeatType: 'loop' }} style={{ left: `${10 + i * 12}%` }}/>
+                    <motion.div key={i} className={`absolute w-px h-32 bg-gradient-to-b from-transparent ${isDark ? 'via-white/5' : 'via-gray-900/5'} to-transparent`} initial={{ y: -100, opacity: 0 }} animate={{ y: ['-100%', '200%'], opacity: [0, 0.3, 0] }} transition={{ duration: 3, delay: i * 0.5, repeat: Infinity, repeatType: 'loop' }} style={{ left: `${10 + i * 12}%` }} />
                 ))}
             </div>
             <div className="container mx-auto px-6 relative z-10">
@@ -615,7 +620,7 @@ const PricingSection = ({ isDark }) => {
                                         <div className={`text-lg font-light ${textColor}`}>{services[activeService].timeline}</div>
                                     </motion.div>
                                 </div>
-                                <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => document.getElementById('contact')?.scrollIntoView({behavior: 'smooth'})} className={`w-full py-4 border-2 ${isDark ? 'border-white text-white hover:bg-white hover:text-black' : 'border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white'} text-sm tracking-widest uppercase transition-all duration-300`}>ЗАКАЗАТЬ ЭТУ УСЛУГУ</motion.button>
+                                <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} className={`w-full py-4 border-2 ${isDark ? 'border-white text-white hover:bg-white hover:text-black' : 'border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white'} text-sm tracking-widest uppercase transition-all duration-300`}>ЗАКАЗАТЬ ЭТУ УСЛУГУ</motion.button>
                             </div>
                             <div>
                                 <h4 className={`text-xl font-light mb-6 tracking-widest uppercase ${textColor}`}>Что входит в услугу:</h4>
@@ -651,7 +656,7 @@ const PricingSection = ({ isDark }) => {
                                 <div className={`text-xs tracking-widest ${isDark ? 'text-neutral-500' : 'text-gray-500'} uppercase`}>Услуга</div>
                             </div>
                             <div className={`w-48 h-0.5 ${isDark ? 'bg-neutral-800' : 'bg-gray-200'}`}>
-                                <motion.div className={`h-full ${isDark ? 'bg-white' : 'bg-gray-900'}`} initial={{ width: 0 }} animate={{ width: `${((activeService + 1) / services.length) * 100}%` }} transition={{ duration: 0.5 }}/>
+                                <motion.div className={`h-full ${isDark ? 'bg-white' : 'bg-gray-900'}`} initial={{ width: 0 }} animate={{ width: `${((activeService + 1) / services.length) * 100}%` }} transition={{ duration: 0.5 }} />
                             </div>
                             <div className="text-center">
                                 <div className={`text-3xl font-light ${mutedColor}`}>{String(services.length).padStart(2, '0')}</div>
@@ -695,8 +700,8 @@ const Portfolio = () => {
     const [isDark, setIsDark] = useState(true);
 
     const menuItems = [
-        {id: 'home', label: 'ГЛАВНАЯ'}, {id: 'about', label: 'ОБО МНЕ'}, {id: 'projects', label: 'ПРОЕКТЫ'},
-        {id: 'process', label: 'ПРОЦЕСС'}, {id: 'pricing', label: 'ПРАЙС'}, {id: 'contact', label: 'КОНТАКТЫ'}
+        { id: 'home', label: 'ГЛАВНАЯ' }, { id: 'about', label: 'ОБО МНЕ' }, { id: 'projects', label: 'ПРОЕКТЫ' },
+        { id: 'process', label: 'ПРОЦЕСС' }, { id: 'pricing', label: 'ПРАЙС' }, { id: 'contact', label: 'КОНТАКТЫ' }
     ];
 
     const getMockProfile = () => ({
@@ -737,7 +742,7 @@ const Portfolio = () => {
 
     const handleScroll = (id) => {
         const element = document.getElementById(id);
-        if (element) element.scrollIntoView({behavior: 'smooth'});
+        if (element) element.scrollIntoView({ behavior: 'smooth' });
         setIsMenuOpen(false);
     };
 
@@ -753,7 +758,7 @@ const Portfolio = () => {
     return (
         <HelmetProvider>
             <div className={`min-h-screen ${bgColor} ${textColor} font-sans transition-colors duration-500`}>
-                <SEO title="Разработчик сайтов | Создание Telegram ботов | Lua скрипты под ключ" description="Профессиональный fullstack разработчик. Делаю сайты под ключ от 25.000₽, Telegram боты, мини-приложения, скрипты Lua. Гарантия 6 месяцев. Срок от 2 недель." keywords="заказать сайт недорого, разработка сайтов москва, создать телеграм бота, программист на Lua, верстка макетов Figma, разработка мини-приложений, fullstack разработчик, веб-разработка под ключ" ogUrl={window.location.href} author={profile?.name || 'phax'}/>
+                <SEO title="Разработчик сайтов | Создание Telegram ботов | Lua скрипты под ключ" description="Профессиональный fullstack разработчик. Делаю сайты под ключ от 25.000₽, Telegram боты, мини-приложения, скрипты Lua. Гарантия 6 месяцев. Срок от 2 недель." keywords="заказать сайт недорого, разработка сайтов москва, создать телеграм бота, программист на Lua, верстка макетов Figma, разработка мини-приложений, fullstack разработчик, веб-разработка под ключ" ogUrl={window.location.href} author={profile?.name || 'phax'} />
                 <motion.nav initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.6 }} className={`fixed w-full ${navBg} backdrop-blur-sm z-50 border-b ${borderColor}`}>
                     <div className="container mx-auto px-6 py-6">
                         <div className="flex justify-between items-center">
@@ -781,11 +786,11 @@ const Portfolio = () => {
                     </div>
                 </motion.nav>
 
-                <HeroSection profile={profile} safeProjects={safeProjects} handleScroll={handleScroll} isDark={isDark}/>
+                <HeroSection profile={profile} safeProjects={safeProjects} handleScroll={handleScroll} isDark={isDark} />
 
                 <section id="about" className={`py-32 border-t ${borderColor} relative overflow-hidden`}>
                     <div className="absolute inset-0 z-0 opacity-5">
-                        <motion.div initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.5 }} className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background2})`, filter: 'grayscale(100%)'}}></motion.div>
+                        <motion.div initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.5 }} className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${background2})`, filter: 'grayscale(100%)' }}></motion.div>
                     </div>
                     <div className="container mx-auto px-6 relative z-10">
                         <motion.div initial={{ opacity: 0, x: 100 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }} className="max-w-3xl mx-auto">
@@ -807,7 +812,7 @@ const Portfolio = () => {
 
                 <section id="projects" className={`py-32 border-t ${borderColor} relative overflow-hidden`}>
                     <div className="absolute inset-0 z-0 opacity-10">
-                        <motion.div initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.5 }} className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background3})`, filter: 'grayscale(100%) blur(0.5px)'}}></motion.div>
+                        <motion.div initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.5 }} className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${background3})`, filter: 'grayscale(100%) blur(0.5px)' }}></motion.div>
                     </div>
                     <div className={`absolute inset-0 bg-gradient-to-b from-transparent ${isDark ? 'via-black/50 to-black' : 'via-white/50 to-white'} pointer-events-none`}></div>
                     <div className="container mx-auto px-6 relative z-10">
@@ -825,7 +830,7 @@ const Portfolio = () => {
 
                 <section id="contact" className={`py-32 border-t ${borderColor} relative overflow-hidden`}>
                     <div className="absolute inset-0 z-0 opacity-5">
-                        <motion.div initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.5 }} className="absolute inset-0 bg-cover bg-center" style={{backgroundImage: `url(${background3})`, filter: 'grayscale(100%) blur(0.5px)'}}></motion.div>
+                        <motion.div initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.5 }} className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${background3})`, filter: 'grayscale(100%) blur(0.5px)' }}></motion.div>
                     </div>
                     <div className="container mx-auto px-6 relative z-10">
                         <motion.div initial={{ opacity: 0, x: 100 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }}>
