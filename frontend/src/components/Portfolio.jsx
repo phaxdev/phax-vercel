@@ -201,34 +201,34 @@ const HeroSection = ({ profile, safeProjects, handleScroll, isDark }) => {
     const hoverBorder = isDark ? 'hover:border-white hover:text-white' : 'hover:border-gray-900 hover:text-gray-900';
 
     return (
-        <section id="home" className="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden">
+        <section id="home" className="min-h-screen flex items-center justify-center pt-20 px-4 relative overflow-hidden">
             <div className="absolute inset-0 z-0 opacity-10">
                 <motion.div initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.5 }} className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${background1})`, filter: 'grayscale(100%) blur(1px)' }}></motion.div>
             </div>
-            <div className="container mx-auto px-6 relative z-10">
-                <motion.div initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="max-w-4xl mx-auto text-center space-y-12">
+            <div className="container mx-auto px-4 sm:px-6 relative z-10">
+                <motion.div initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="max-w-4xl mx-auto text-center space-y-8 sm:space-y-12">
                     <CodeIconAnimation isDark={isDark} />
-                    <motion.h1 initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }} className={`text-5xl md:text-7xl font-light tracking-tight ${textColor}`}>
+                    <motion.h1 initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }} className={`text-4xl sm:text-5xl md:text-7xl font-light tracking-tight ${textColor} px-4`}>
                         {profile?.name || 'Разработчик'}
                     </motion.h1>
                     <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5, duration: 0.8 }} className={`text-sm tracking-widest ${mutedColor} uppercase`}>
                         {profile?.title || 'Full Stack Developer'}
                     </motion.p>
-                    <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 0.8 }} className="flex justify-center gap-16 pt-8">
+                    <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 0.8 }} className="flex flex-wrap justify-center gap-8 sm:gap-16 pt-6 sm:pt-8 px-4">
                         {[
                             { value: safeProjects.length, label: 'Проектов' },
                             { value: '3+', label: 'Года опыта' },
                             { value: '6', label: 'Услуг' }
                         ].map((stat, idx) => (
                             <motion.div key={idx} whileHover={{ scale: 1.1 }} className="text-center">
-                                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.9 + idx * 0.1, type: 'spring' }} className={`text-4xl font-light mb-2 ${textColor}`}>{stat.value}</motion.div>
+                                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.9 + idx * 0.1, type: 'spring' }} className={`text-3xl sm:text-4xl font-light mb-2 ${textColor}`}>{stat.value}</motion.div>
                                 <div className={`text-xs tracking-widest ${isDark ? 'text-neutral-500' : 'text-gray-500'} uppercase`}>{stat.label}</div>
                             </motion.div>
                         ))}
                     </motion.div>
-                    <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9, duration: 0.8 }} className="flex justify-center gap-6 pt-12">
-                        <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => handleScroll('contact')} className={`px-10 py-4 border-2 ${borderColor} ${textColor} text-sm tracking-widest uppercase ${hoverBg} transition-all duration-300`}>СВЯЗАТЬСЯ</motion.button>
-                        <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => handleScroll('pricing')} className={`px-10 py-4 border-2 ${borderMuted} ${mutedColor} text-sm tracking-widest uppercase ${hoverBorder} transition-all duration-300`}>ПРАЙС</motion.button>
+                    <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9, duration: 0.8 }} className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 pt-8 sm:pt-12 px-4">
+                        <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => handleScroll('contact')} className={`w-full sm:w-auto px-8 sm:px-10 py-4 border-2 ${borderColor} ${textColor} text-sm tracking-widest uppercase ${hoverBg} transition-all duration-300`}>СВЯЗАТЬСЯ</motion.button>
+                        <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => handleScroll('pricing')} className={`w-full sm:w-auto px-8 sm:px-10 py-4 border-2 ${borderMuted} ${mutedColor} text-sm tracking-widest uppercase ${hoverBorder} transition-all duration-300`}>ПРАЙС</motion.button>
                     </motion.div>
                 </motion.div>
             </div>
@@ -260,30 +260,109 @@ const ProjectCard = ({ project, isActive, isDark }) => {
     const mutedColor = isDark ? 'text-neutral-400' : 'text-gray-600';
     const techBorder = isDark ? 'border-neutral-800 hover:border-white hover:bg-white/5' : 'border-gray-200 hover:border-gray-900 hover:bg-gray-100';
 
-    return (
-        <motion.div ref={cardRef} initial={{ opacity: 0, x: 100, rotateY: -15 }} whileInView={{ opacity: 1, x: 0, rotateY: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }} whileHover={{ scale: 1.02, rotateY: 2 }} className={`relative bg-gradient-to-br ${bgGradient} border-2 ${borderColor} rounded-2xl p-8 transition-all duration-500 group`}>
-            {isActive && <motion.div animate={{ x: ['-100%', '100%'] }} transition={{ duration: 2, repeat: Infinity, ease: 'linear' }} className={`absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent ${isDark ? 'via-white/5' : 'via-gray-900/5'} to-transparent`}></motion.div>}
-            <div className="relative z-10">
-                <div className="flex justify-between items-center mb-6">
-                    <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className={`text-xs tracking-widest ${isDark ? 'text-neutral-500' : 'text-gray-500'} uppercase`}>{project.year || new Date().getFullYear()}</motion.span>
-                    {isActive && <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring' }} className={`px-3 py-1 ${isDark ? 'bg-white text-black' : 'bg-gray-900 text-white'} text-xs tracking-widest rounded-full`}>ACTIVE</motion.span>}
-                </div>
-                <motion.h3 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }} className={`text-3xl md:text-4xl font-light mb-4 tracking-tight ${textColor}`}>{project.title || 'Проект без названия'}</motion.h3>
-                <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className={`${mutedColor} mb-8 leading-relaxed`}>{project.short_description || project.description || 'Описание проекта будет добавлено позже'}</motion.p>
-                {technologies.length > 0 && (
-                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="flex flex-wrap gap-3 mb-8">
-                        {technologies.map((tech, index) => (
-                            <motion.span key={index} whileHover={{ scale: 1.1, rotate: 2 }} className={`px-4 py-2 border ${techBorder} rounded-full text-sm tracking-wider transition-all duration-300 ${textColor}`}>{tech}</motion.span>
-                        ))}
-                    </motion.div>
+return (
+    <motion.div 
+        ref={cardRef} 
+        initial={{ opacity: 0, x: 100, rotateY: -15 }} 
+        whileInView={{ opacity: 1, x: 0, rotateY: 0 }} 
+        transition={{ duration: 0.6 }} 
+        viewport={{ once: true }} 
+        whileHover={{ scale: 1.02, rotateY: 2 }} 
+        className={`relative bg-gradient-to-br ${bgGradient} border-2 ${borderColor} rounded-2xl p-6 sm:p-8 transition-all duration-500 group`}
+    >
+        {isActive && (
+            <motion.div 
+                animate={{ x: ['-100%', '100%'] }} 
+                transition={{ duration: 2, repeat: Infinity, ease: 'linear' }} 
+                className={`absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent ${isDark ? 'via-white/5' : 'via-gray-900/5'} to-transparent`}
+            />
+        )}
+        <div className="relative z-10">
+            <div className="flex justify-between items-center mb-4 sm:mb-6">
+                <motion.span 
+                    initial={{ opacity: 0 }} 
+                    animate={{ opacity: 1 }} 
+                    transition={{ delay: 0.2 }} 
+                    className={`text-xs tracking-widest ${isDark ? 'text-neutral-500' : 'text-gray-500'} uppercase`}
+                >
+                    {project.year || new Date().getFullYear()}
+                </motion.span>
+                {isActive && (
+                    <motion.span 
+                        initial={{ scale: 0 }} 
+                        animate={{ scale: 1 }} 
+                        transition={{ type: 'spring' }} 
+                        className={`px-3 py-1 ${isDark ? 'bg-white text-black' : 'bg-gray-900 text-white'} text-xs tracking-widest rounded-full`}
+                    >
+                        ACTIVE
+                    </motion.span>
                 )}
-                <div className="flex gap-6">
-                    {project.github_url && <motion.a whileHover={{ x: 5 }} href={project.github_url} target="_blank" rel="noopener noreferrer" className={`text-sm tracking-widest uppercase ${mutedColor} transition-colors group/link`}><span className={`border-b border-transparent group-hover/link:${isDark ? 'border-white text-white' : 'border-gray-900 text-gray-900'}`}>GITHUB</span></motion.a>}
-                    {project.live_url && <motion.a whileHover={{ x: 5 }} href={project.live_url} target="_blank" rel="noopener noreferrer" className={`text-sm tracking-widest uppercase ${mutedColor} transition-colors group/link`}><span className={`border-b border-transparent group-hover/link:${isDark ? 'border-white text-white' : 'border-gray-900 text-gray-900'}`}>ДЕМО</span></motion.a>}
-                </div>
             </div>
-        </motion.div>
-    );
+            <motion.h3 
+                initial={{ opacity: 0, x: -20 }} 
+                animate={{ opacity: 1, x: 0 }} 
+                transition={{ delay: 0.3 }} 
+                className={`text-2xl sm:text-3xl md:text-4xl font-light mb-3 sm:mb-4 tracking-tight ${textColor}`}
+            >
+                {project.title || 'Проект без названия'}
+            </motion.h3>
+            <motion.p 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                transition={{ delay: 0.4 }} 
+                className={`${mutedColor} mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base`}
+            >
+                {project.short_description || project.description || 'Описание проекта будет добавлено позже'}
+            </motion.p>
+            {technologies.length > 0 && (
+                <motion.div 
+                    initial={{ opacity: 0, y: 20 }} 
+                    animate={{ opacity: 1, y: 0 }} 
+                    transition={{ delay: 0.5 }} 
+                    className="flex flex-wrap gap-2 sm:gap-3 mb-6 sm:mb-8"
+                >
+                    {technologies.map((tech, index) => (
+                        <motion.span 
+                            key={index} 
+                            whileHover={{ scale: 1.1, rotate: 2 }} 
+                            className={`px-3 sm:px-4 py-1.5 sm:py-2 border ${techBorder} rounded-full text-xs sm:text-sm tracking-wider transition-all duration-300 ${textColor}`}
+                        >
+                            {tech}
+                        </motion.span>
+                    ))}
+                </motion.div>
+            )}
+            <div className="flex flex-wrap gap-4 sm:gap-6">
+                {project.github_url && (
+                    <motion.a 
+                        whileHover={{ x: 5 }} 
+                        href={project.github_url} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className={`text-xs sm:text-sm tracking-widest uppercase ${mutedColor} transition-colors group/link`}
+                    >
+                        <span className={`border-b border-transparent group-hover/link:${isDark ? 'border-white text-white' : 'border-gray-900 text-gray-900'}`}>
+                            GITHUB
+                        </span>
+                    </motion.a>
+                )}
+                {project.live_url && (
+                    <motion.a 
+                        whileHover={{ x: 5 }} 
+                        href={project.live_url} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className={`text-xs sm:text-sm tracking-widest uppercase ${mutedColor} transition-colors group/link`}
+                    >
+                        <span className={`border-b border-transparent group-hover/link:${isDark ? 'border-white text-white' : 'border-gray-900 text-gray-900'}`}>
+                            ДЕМО
+                        </span>
+                    </motion.a>
+                )}
+            </div>
+        </div>
+    </motion.div>
+);
 };
 
 
@@ -554,11 +633,11 @@ const PricingSection = ({ isDark }) => {
                     <p className={`${mutedColor} text-sm tracking-widest uppercase text-center mb-20 max-w-2xl mx-auto`}>ПРОЗРАЧНЫЕ ЦЕНЫ • ФИКСИРОВАННЫЙ БЮДЖЕТ • ГАРАНТИЯ КАЧЕСТВА</p>
                 </motion.div>
                 <div className="max-w-6xl mx-auto">
-                    <div className="flex overflow-x-auto pb-8 mb-12 hide-scrollbar lg:overflow-visible lg:grid lg:grid-cols-3 lg:gap-8">
+                    <div className="flex overflow-x-auto pb-6 sm:pb-8 mb-8 sm:mb-12 hide-scrollbar lg:overflow-visible lg:grid lg:grid-cols-3 lg:gap-8">
                         {services.map((service, index) => {
                             const IconComponent = PricingIcons[service.icon];
                             return (
-                                <motion.button key={service.id} onClick={() => setActiveService(index)} initial={{ opacity: 0, x: 100 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.1, duration: 0.5 }} viewport={{ once: true }} whileHover={{ scale: 1.05, y: -5 }} className={`flex-shrink-0 w-80 lg:w-auto mx-2 lg:mx-0 rounded-2xl p-8 transition-all duration-500 ${activeService === index ? `bg-gradient-to-br ${activeBg} border-2 ${isDark ? 'border-white' : 'border-gray-900'} transform scale-105` : `bg-gradient-to-br ${cardBg} border ${iconBorder} ${isDark ? 'hover:border-neutral-600' : 'hover:border-gray-300'}`}`}>
+                                <motion.button key={service.id} onClick={() => setActiveService(index)} initial={{ opacity: 0, x: 100 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.1, duration: 0.5 }} viewport={{ once: true }} whileHover={{ scale: 1.05, y: -5 }} className={`flex-shrink-0 w-full sm:w-80 lg:w-auto mx-2 lg:mx-0 rounded-2xl p-6 sm:p-8 transition-all duration-500 ${activeService === index ? `bg-gradient-to-br ${activeBg} border-2 ${isDark ? 'border-white' : 'border-gray-900'} transform scale-105` : `bg-gradient-to-br ${cardBg} border ${iconBorder} ${isDark ? 'hover:border-neutral-600' : 'hover:border-gray-300'}`}`}>
                                     <div className="flex items-start justify-between mb-6">
                                         <motion.div animate={{ rotate: activeService === index ? [0, 5, -5, 0] : 0 }} transition={{ duration: 2, repeat: Infinity }} className={`${textColor}`}><IconComponent className="w-10 h-10" /></motion.div>
                                         {service.popular && (<span className={`px-3 py-1 ${isDark ? 'bg-white text-black' : 'bg-gray-900 text-white'} text-xs tracking-widest rounded-full`}>ПОПУЛЯРНО</span>)}
@@ -667,7 +746,7 @@ const PricingSection = ({ isDark }) => {
                     </div>
                     <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }} className={`mt-20 pt-20 border-t ${borderColor}`}>
                         <h3 className={`text-2xl font-light text-center mb-12 tracking-widest uppercase ${textColor}`}>ПОЧЕМУ ВЫБИРАЮТ НАС</h3>
-                        <div className="grid md:grid-cols-4 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                             {benefits.map((benefit, index) => {
                                 const IconComponent = PricingIcons[benefit.icon];
                                 return (
@@ -760,7 +839,7 @@ const Portfolio = () => {
             <div className={`min-h-screen ${bgColor} ${textColor} font-sans transition-colors duration-500`}>
                 <SEO title="Разработчик сайтов | Создание Telegram ботов | Lua скрипты под ключ" description="Профессиональный fullstack разработчик. Делаю сайты под ключ от 25.000₽, Telegram боты, мини-приложения, скрипты Lua. Гарантия 6 месяцев. Срок от 2 недель." keywords="заказать сайт недорого, разработка сайтов москва, создать телеграм бота, программист на Lua, верстка макетов Figma, разработка мини-приложений, fullstack разработчик, веб-разработка под ключ" ogUrl={window.location.href} author={profile?.name || 'phax'} />
                 <motion.nav initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.6 }} className={`fixed w-full ${navBg} backdrop-blur-sm z-50 border-b ${borderColor}`}>
-                    <div className="container mx-auto px-6 py-6">
+                    <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
                         <div className="flex justify-between items-center">
                             <motion.div whileHover={{ scale: 1.05 }} className={`text-sm tracking-widest uppercase font-light ${textColor}`}>{profile?.name?.split(' ')[0] || 'Portfolio'}</motion.div>
                             <div className="hidden md:flex space-x-12 items-center">
@@ -796,11 +875,11 @@ const Portfolio = () => {
                         <motion.div initial={{ opacity: 0, x: 100 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }} className="max-w-3xl mx-auto">
                             <h2 className={`text-xs tracking-widest ${isDark ? 'text-neutral-500' : 'text-gray-500'} uppercase mb-12 text-center`}>ОБО МНЕ</h2>
                             <div className="text-center space-y-8">
-                                <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.6 }} viewport={{ once: true }} className={`text-2xl md:text-3xl font-light leading-relaxed ${isDark ? 'text-neutral-300' : 'text-gray-700'}`}>
+                                <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.6 }} viewport={{ once: true }} className={`text-xl sm:text-2xl md:text-3xl font-light leading-relaxed ${isDark ? 'text-neutral-300' : 'text-gray-700'} px-4`}>
                                     {profile?.bio || 'Информация о вас появится здесь после добавления в админ-панель.'}
                                 </motion.p>
                                 {(profile?.email || profile?.location) && (
-                                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.6 }} viewport={{ once: true }} className={`flex justify-center gap-12 pt-12 text-sm tracking-wide ${isDark ? 'text-neutral-500' : 'text-gray-500'}`}>
+                                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.6 }} viewport={{ once: true }} className={`flex flex-col sm:flex-row justify-center gap-4 sm:gap-12 pt-8 sm:pt-12 text-sm tracking-wide ${isDark ? 'text-neutral-500' : 'text-gray-500'} px-4`}>
                                         {profile?.email && <div>EMAIL: {profile.email}</div>}
                                         {profile?.location && <div>ЛОКАЦИЯ: {profile.location}</div>}
                                     </motion.div>
@@ -818,7 +897,7 @@ const Portfolio = () => {
                     <div className="container mx-auto px-6 relative z-10">
                         <motion.div initial={{ opacity: 0, x: 100 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }} className="text-center mb-20">
                             <h2 className={`text-xs tracking-widest ${isDark ? 'text-neutral-500' : 'text-gray-500'} uppercase mb-4`}>ПРОЕКТЫ</h2>
-                            <p className={`text-5xl md:text-7xl font-light tracking-tight ${textColor}`}>РАБОТЫ<span className={mutedColor}>.</span></p>
+                            <p className={`text-4xl sm:text-5xl md:text-7xl font-light tracking-tight ${textColor} px-4`}>РАБОТЫ<span className={mutedColor}>.</span></p>
                             <p className={`${mutedColor} text-sm tracking-widest uppercase mt-4`}>СВАЙПАЙТЕ → ДЛЯ ПРОСМОТРА</p>
                         </motion.div>
                         <ProjectsSwiper projects={safeProjects} isDark={isDark} />
@@ -837,7 +916,7 @@ const Portfolio = () => {
                             <h2 className={`text-xs tracking-widest ${isDark ? 'text-neutral-500' : 'text-gray-500'} uppercase mb-20 text-center`}>КОНТАКТЫ</h2>
                             <ContactForm isDark={isDark} />
                             {(profile?.github_url || profile?.linkedin_url || profile?.telegram_url) && (
-                                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} viewport={{ once: true }} className={`flex justify-center gap-12 mt-20 text-xs tracking-widest uppercase`}>
+                                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} viewport={{ once: true }} className={`flex flex-wrap justify-center gap-6 sm:gap-12 mt-12 sm:mt-20 text-xs tracking-widest uppercase px-4`}>
                                     {profile?.github_url && <motion.a whileHover={{ scale: 1.1, y: -2 }} href={profile.github_url} target="_blank" rel="noopener noreferrer" className={`${mutedColor} hover:${textColor} transition-colors`}>GITHUB</motion.a>}
                                     {profile?.linkedin_url && <motion.a whileHover={{ scale: 1.1, y: -2 }} href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className={`${mutedColor} hover:${textColor} transition-colors`}>LINKEDIN</motion.a>}
                                     {profile?.telegram_url && <motion.a whileHover={{ scale: 1.1, y: -2 }} href={profile.telegram_url} target="_blank" rel="noopener noreferrer" className={`${mutedColor} hover:${textColor} transition-colors`}>TELEGRAM</motion.a>}
