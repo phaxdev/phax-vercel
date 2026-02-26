@@ -7,7 +7,7 @@ import background3 from './background3.png';
 import background4 from './background4.png';
 import background5 from './background5.png';
 
-const SEO = ({ title = "Разработка сайтов и ботов под ключ | Full Stack Developer", description = "Профессиональная разработка сайтов, Telegram ботов, скриптов Lua. Создание сайтов под ключ, верстка макетов, мини-приложения в Telegram. Фиксированные цены, гарантия качества.", keywords = "разработка сайтов, создание сайтов, telegram боты, Lua скрипты, верстка макетов, мини-приложения, fullstack разработчик, заказать сайт", ogImage = "/og-image.jpg", ogUrl = "https://phax.online", type = "website", author = "phax" }) => {
+const SEO = ({ title = "Разработка сайтов и ботов под ключ | Full Stack Developer", description = "Профессиональная разработка сайтов, Telegram ботов, скриптов Lua. Создание сайтов под ключ, верстка макетов, мини-приложения в Telegram. Фиксированные цены, гарантия качества.", keywords = "phaxdev, phax, github phax, phax разр, phax раз, разработка сайтов, создание сайтов, telegram боты, Lua скрипты, верстка макетов, мини-приложения, fullstack разработчик, заказать сайт", ogImage = "/og-image.jpg", ogUrl = "https://phax.online", type = "website", author = "phax" }) => {
     return (
         <Helmet>
             <title>{title}</title>
