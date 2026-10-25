@@ -27,6 +27,7 @@ import {
   Mail,
   MapPin,
   Flame,
+  Leaf,
   Calculator
 } from 'lucide-react';
 
@@ -1001,102 +1002,181 @@ const Portfolio = () => {
                       ? project.technologies.split(',').map(s => s.trim())
                       : ['React', 'Django', 'API'];
 
-                  return (
-                    <motion.div
-                      key={project.id || idx}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: idx * 0.1, duration: 0.5 }}
-                      className={`group rounded-3xl border overflow-hidden flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 ${
-                        isDark
-                          ? 'bg-zinc-950/80 border-zinc-800/90 hover:border-zinc-700 hover:shadow-2xl hover:shadow-blue-500/5'
-                          : 'bg-white border-zinc-200 hover:border-zinc-300 shadow-md hover:shadow-xl'
-                      }`}
-                    >
-                      {/* Project Image or Mock Gradient Header */}
-                      <div className="relative h-48 overflow-hidden bg-zinc-900 flex items-center justify-center">
-                        {project.image_url || project.image ? (
-                          <img
-                            src={project.image_url || project.image}
-                            alt={project.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-900/30 via-zinc-900 to-indigo-900/30">
-                            <Code2 className="w-10 h-10 text-zinc-600 mb-2" />
-                            <span className="text-[11px] font-mono text-zinc-500 uppercase tracking-widest">
-                              PHAX PRODUCTION
+                    const theme = (() => {
+                      const t = (project.slug || project.title || '').toLowerCase();
+                      if (t.includes('geo')) {
+                        return {
+                          gradient: isDark ? 'from-amber-950/30 via-zinc-950 to-[#0c1015]' : 'from-amber-50/50 via-white to-amber-50/20',
+                          border: isDark ? 'border-amber-500/30 group-hover:border-amber-400' : 'border-amber-200 group-hover:border-amber-500',
+                          headerBg: 'bg-gradient-to-br from-amber-900/40 via-[#0c1015] to-zinc-900',
+                          tagBg: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
+                          accentText: 'group-hover:text-amber-400',
+                          glow: 'hover:shadow-[0_0_30px_rgba(245,158,11,0.12)]',
+                          icon: Compass,
+                          subBadge: '🗺️ Гео-карты РФ'
+                        };
+                      }
+                      if (t.includes('eco')) {
+                        return {
+                          gradient: isDark ? 'from-emerald-950/30 via-zinc-950 to-[#041215]' : 'from-emerald-50/50 via-white to-emerald-50/20',
+                          border: isDark ? 'border-emerald-500/30 group-hover:border-emerald-400' : 'border-emerald-200 group-hover:border-emerald-500',
+                          headerBg: 'bg-gradient-to-br from-emerald-900/40 via-[#041215] to-zinc-900',
+                          tagBg: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
+                          accentText: 'group-hover:text-emerald-400',
+                          glow: 'hover:shadow-[0_0_30px_rgba(16,185,129,0.12)]',
+                          icon: Leaf,
+                          subBadge: '🌱 Live AQI сенсоры'
+                        };
+                      }
+                      if (t.includes('bot') || t.includes('phax')) {
+                        return {
+                          gradient: isDark ? 'from-cyan-950/30 via-zinc-950 to-[#081820]' : 'from-cyan-50/50 via-white to-cyan-50/20',
+                          border: isDark ? 'border-cyan-500/30 group-hover:border-cyan-400' : 'border-cyan-200 group-hover:border-cyan-500',
+                          headerBg: 'bg-gradient-to-br from-cyan-900/40 via-zinc-900 to-zinc-950',
+                          tagBg: 'bg-cyan-500/15 text-cyan-400 border-cyan-500/30',
+                          accentText: 'group-hover:text-cyan-400',
+                          glow: 'hover:shadow-[0_0_30px_rgba(6,182,212,0.12)]',
+                          icon: Bot,
+                          subBadge: '⚡ Telethon Engine'
+                        };
+                      }
+                      if (t.includes('dnevnik')) {
+                        return {
+                          gradient: isDark ? 'from-indigo-950/30 via-zinc-950 to-purple-950/20' : 'from-indigo-50/50 via-white to-indigo-50/20',
+                          border: isDark ? 'border-indigo-500/30 group-hover:border-indigo-400' : 'border-indigo-200 group-hover:border-indigo-500',
+                          headerBg: 'bg-gradient-to-br from-indigo-900/40 via-zinc-900 to-zinc-950',
+                          tagBg: 'bg-indigo-500/15 text-indigo-400 border-indigo-500/30',
+                          accentText: 'group-hover:text-indigo-400',
+                          glow: 'hover:shadow-[0_0_30px_rgba(99,102,241,0.12)]',
+                          icon: FileCode2,
+                          subBadge: '🎓 Next.js + Prisma'
+                        };
+                      }
+                      if (t.includes('vpn')) {
+                        return {
+                          gradient: isDark ? 'from-purple-950/30 via-zinc-950 to-pink-950/20' : 'from-purple-50/50 via-white to-purple-50/20',
+                          border: isDark ? 'border-purple-500/30 group-hover:border-purple-400' : 'border-purple-200 group-hover:border-purple-500',
+                          headerBg: 'bg-gradient-to-br from-purple-900/40 via-zinc-900 to-zinc-950',
+                          tagBg: 'bg-purple-500/15 text-purple-400 border-purple-500/30',
+                          accentText: 'group-hover:text-purple-400',
+                          glow: 'hover:shadow-[0_0_30px_rgba(168,85,247,0.12)]',
+                          icon: ShieldCheck,
+                          subBadge: '🛡️ VLESS Reality'
+                        };
+                      }
+                      return {
+                        gradient: isDark ? 'from-blue-950/30 via-zinc-950 to-zinc-950' : 'from-blue-50/50 via-white to-white',
+                        border: isDark ? 'border-blue-500/30 group-hover:border-blue-400' : 'border-blue-200 group-hover:border-blue-500',
+                        headerBg: 'bg-gradient-to-br from-blue-900/40 via-zinc-900 to-zinc-950',
+                        tagBg: 'bg-blue-500/15 text-blue-400 border-blue-500/30',
+                        accentText: 'group-hover:text-blue-400',
+                        glow: 'hover:shadow-[0_0_30px_rgba(59,130,246,0.12)]',
+                        icon: Code2,
+                        subBadge: '💻 Web Project'
+                      };
+                    })();
+
+                    const Icon = theme.icon;
+
+                    return (
+                      <motion.div
+                        key={project.id || idx}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: idx * 0.1, duration: 0.5 }}
+                        className={`group rounded-3xl border overflow-hidden flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 bg-gradient-to-b ${theme.gradient} ${theme.border} ${theme.glow}`}
+                      >
+                        {/* Project Image or Themed Header */}
+                        <div className={`relative h-48 overflow-hidden ${theme.headerBg} flex items-center justify-center border-b border-zinc-800/50`}>
+                          {project.image_url || project.image ? (
+                            <img
+                              src={project.image_url || project.image}
+                              alt={project.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                          ) : (
+                            <div className="flex flex-col items-center justify-center p-6 text-center">
+                              <Icon className="w-12 h-12 text-zinc-500 mb-2 group-hover:scale-110 transition-transform" />
+                              <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-widest">
+                                {project.title.split('—')[0]}
+                              </span>
+                            </div>
+                          )}
+
+                          <div className="absolute top-3 left-3">
+                            <span className={`px-2.5 py-1 rounded-full text-[10px] font-mono tracking-wider uppercase border backdrop-blur-md ${theme.tagBg}`}>
+                              {theme.subBadge}
                             </span>
                           </div>
-                        )}
-                        <div className="absolute top-3 right-3">
-                          <span className="px-2.5 py-1 rounded-full text-[10px] font-mono tracking-wider uppercase bg-black/70 backdrop-blur-md text-emerald-400 border border-emerald-500/30">
-                            #{project.id || idx + 1}
-                          </span>
-                        </div>
-                      </div>
 
-                      {/* Content */}
-                      <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-                        <div>
-                          <div className="flex flex-wrap gap-1.5 mb-3">
-                            {techList.map((t, i) => (
-                              <span
-                                key={i}
-                                className={`px-2.5 py-0.5 rounded-md text-[10px] font-mono ${
-                                  isDark
-                                    ? 'bg-zinc-900 text-zinc-300 border border-zinc-800'
-                                    : 'bg-zinc-100 text-zinc-700 border border-zinc-200'
-                                }`}
-                              >
-                                {t}
-                              </span>
-                            ))}
+                          <div className="absolute top-3 right-3">
+                            <span className="px-2.5 py-1 rounded-full text-[10px] font-mono tracking-wider uppercase bg-black/70 backdrop-blur-md text-zinc-300 border border-zinc-700/60">
+                              #{project.id || idx + 1}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Content */}
+                        <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                          <div>
+                            <div className="flex flex-wrap gap-1.5 mb-3">
+                              {techList.map((t, i) => (
+                                <span
+                                  key={i}
+                                  className={`px-2.5 py-0.5 rounded-md text-[10px] font-mono ${
+                                    isDark
+                                      ? 'bg-zinc-900/90 text-zinc-300 border border-zinc-800'
+                                      : 'bg-zinc-100 text-zinc-700 border border-zinc-200'
+                                  }`}
+                                >
+                                  {t}
+                                </span>
+                              ))}
+                            </div>
+
+                            <h3 className={`text-xl font-bold tracking-tight mb-2 transition-colors ${theme.accentText} ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+                              {project.title}
+                            </h3>
+
+                            <p className={`text-xs leading-relaxed line-clamp-3 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                              {project.short_description || project.description || 'Описание разрабатываемого проекта.'}
+                            </p>
                           </div>
 
-                          <h3 className={`text-xl font-bold tracking-tight mb-2 group-hover:text-blue-500 transition-colors ${isDark ? 'text-white' : 'text-zinc-900'}`}>
-                            {project.title}
-                          </h3>
+                          {/* Card Footer Links */}
+                          <div className="pt-4 border-t border-zinc-800/60 flex items-center justify-between text-xs font-mono">
+                            {project.github_url ? (
+                              <a
+                                href={project.github_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors"
+                              >
+                                <GithubIcon className="w-4 h-4" />
+                                <span>Репозиторий</span>
+                              </a>
+                            ) : (
+                              <span className="text-zinc-600 text-[11px]">Private Repo</span>
+                            )}
 
-                          <p className={`text-xs leading-relaxed line-clamp-3 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                            {project.short_description || project.description || 'Описание разрабатываемого проекта.'}
-                          </p>
+                            {project.live_url ? (
+                              <a
+                                href={project.live_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1 transition-colors px-3 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20"
+                              >
+                                <span>Демо</span>
+                                <ExternalLink className="w-3.5 h-3.5" />
+                              </a>
+                            ) : (
+                              <span className="text-zinc-500 text-[11px]">В разработке</span>
+                            )}
+                          </div>
                         </div>
-
-                        {/* Card Footer Links */}
-                        <div className="pt-4 border-t border-zinc-800/60 flex items-center justify-between text-xs font-mono">
-                          {project.github_url ? (
-                            <a
-                              href={project.github_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors"
-                            >
-                              <GithubIcon className="w-4 h-4" />
-                              <span>Репозиторий</span>
-                            </a>
-                          ) : (
-                            <span className="text-zinc-600 text-[11px]">Private Repo</span>
-                          )}
-
-                          {project.live_url ? (
-                            <a
-                              href={project.live_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors"
-                            >
-                              <span>Демо</span>
-                              <ExternalLink className="w-3.5 h-3.5" />
-                            </a>
-                          ) : (
-                            <span className="text-zinc-500 text-[11px]">В разработке</span>
-                          )}
-                        </div>
-                      </div>
-                    </motion.div>
-                  );
+                      </motion.div>
+                    );
                 })
               ) : (
                 <div className="col-span-full py-12 text-center text-zinc-500 font-mono text-sm">
