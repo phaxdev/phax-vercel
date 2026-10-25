@@ -501,6 +501,42 @@
   }
 },
 {
+  "model": "api.project",
+  "pk": 2,
+  "fields": {
+    "title": "COSMOVPN",
+    "slug": "cosmovpn",
+    "description": "Быстрый и надежный VPN-сервис для безопасного доступа в интернет.",
+    "short_description": "VPN-сервис нового поколения.",
+    "technologies": "VPN, Security",
+    "image": "",
+    "github_url": "",
+    "live_url": "",
+    "created_at": "2026-09-14T10:00:00.000Z",
+    "updated_at": "2026-09-14T10:00:00.000Z",
+    "is_published": true,
+    "order": 1
+  }
+},
+{
+  "model": "api.project",
+  "pk": 3,
+  "fields": {
+    "title": "gEcology",
+    "slug": "gecology",
+    "description": "Платформа для мониторинга экологической обстановки.",
+    "short_description": "Экологический мониторинг.",
+    "technologies": "Ecology, Analytics",
+    "image": "",
+    "github_url": "",
+    "live_url": "",
+    "created_at": "2026-09-14T10:00:00.000Z",
+    "updated_at": "2026-09-14T10:00:00.000Z",
+    "is_published": true,
+    "order": 2
+  }
+},
+{
   "model": "api.skill",
   "pk": 1,
   "fields": {

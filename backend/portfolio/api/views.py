@@ -18,6 +18,7 @@ class ContactMessageViewSet(viewsets.ModelViewSet):
     queryset = ContactMessage.objects.all()
     serializer_class = ContactMessageSerializer
     permission_classes = [AllowAny]
+    authentication_classes = []
     
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

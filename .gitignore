@@ -1,9 +1,12 @@
-# Бэкенд
-*.pyc
-__pycache__/
-db.sqlite3
-.env
-venv/
 
+# Бэкенд
 # Фронтенд
-node_modules/
+*.env
+*.pyc
+.env
+__pycache__/
+backend/portfolio/.env
+db.sqlite3
+frontend/.env
+node_modules/.env
+venv/

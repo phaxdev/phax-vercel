@@ -1,948 +1,1492 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HelmetProvider, Helmet } from 'react-helmet-async';
-import background1 from './background1.png';
-import background2 from './background2.png';
-import background3 from './background3.png';
-import background4 from './background4.png';
-import background5 from './background5.png';
+import {
+  Code2,
+  Terminal,
+  Bot,
+  Globe,
+  Sparkles,
+  ArrowRight,
+  ExternalLink,
+  Send,
+  CheckCircle2,
+  Copy,
+  Check,
+  Layers,
+  Zap,
+  ShieldCheck,
+  Clock,
+  MessageSquare,
+  Menu,
+  X,
+  Sun,
+  Moon,
+  Compass,
+  FileCode2,
+  Mail,
+  MapPin,
+  Flame,
+  Calculator
+} from 'lucide-react';
 
-const SEO = ({ title = "Разработка сайтов и ботов под ключ | Full Stack Developer", description = "Профессиональная разработка сайтов, Telegram ботов, скриптов Lua. Создание сайтов под ключ, верстка макетов, мини-приложения в Telegram. Фиксированные цены, гарантия качества.", keywords = "phaxdev, phax, github phax, phax разр, phax раз, разработка сайтов, создание сайтов, telegram боты, Lua скрипты, верстка макетов, мини-приложения, fullstack разработчик, заказать сайт", ogImage = "/og-image.jpg", ogUrl = "https://phax.online", type = "website", author = "phax" }) => {
-    return (
-        <Helmet>
-            <title>{title}</title>
-            <meta name="description" content={description} />
-            <meta name="keywords" content={keywords} />
-            <meta name="author" content={author} />
-            <meta property="og:title" content={title} />
-            <meta property="og:description" content={description} />
-            <meta property="og:image" content={ogImage} />
-            <meta property="og:url" content={ogUrl} />
-            <meta property="og:type" content={type} />
-            <meta property="og:locale" content="ru_RU" />
-            <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:title" content={title} />
-            <meta name="twitter:description" content={description} />
-            <meta name="twitter:image" content={ogImage} />
-            <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-            <link rel="canonical" href={ogUrl} />
-            <script type="application/ld+json">{JSON.stringify({ "@context": "https://schema.org", "@type": "ProfessionalService", "name": "Разработка сайтов и ботов под ключ", "description": description, "url": ogUrl, "logo": `${ogUrl}/logo.png`, "address": { "@type": "PostalAddress", "addressCountry": "RU" }, "service": [{ "@type": "Service", "name": "Разработка сайтов", "description": "Создание сайтов под ключ с современным дизайном и адаптивной версткой" }, { "@type": "Service", "name": "Telegram боты", "description": "Разработка интеллектуальных ботов для автоматизации бизнеса" }, { "@type": "Service", "name": "Lua скрипты", "description": "Создание скриптов для игровых серверов и автоматизации" }], "offers": { "@type": "AggregateOffer", "priceCurrency": "RUB", "lowPrice": "15000", "highPrice": "150000", "offerCount": "6" } })}</script>
-        </Helmet>
-    );
-};
-
-const ThemeToggle = ({ isDark, toggleTheme }) => {
-    return (
-        <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} onClick={toggleTheme} className={`relative w-16 h-8 rounded-full transition-all duration-500 ${isDark ? 'bg-neutral-800' : 'bg-blue-200'} border-2 ${isDark ? 'border-neutral-600' : 'border-blue-300'}`} aria-label="Переключить тему">
-            <motion.div className={`absolute top-1 w-5 h-5 rounded-full flex items-center justify-center ${isDark ? 'bg-white' : 'bg-yellow-400'}`} animate={{ left: isDark ? '4px' : '32px', rotate: isDark ? 0 : 360 }} transition={{ type: 'spring', stiffness: 300, damping: 30 }}>
-                {isDark ? (<svg className="w-3 h-3 text-neutral-800" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" /></svg>) : (<svg className="w-3 h-3 text-yellow-600" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" /></svg>)}
-            </motion.div>
-        </motion.button>
-    );
-};
-
-const ProcessIcons = {
-    Consultation: ({ className }) => (<svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>),
-    Prototype: ({ className }) => (<svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>),
-    Development: ({ className }) => (<svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>),
-    Testing: ({ className }) => (<svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>),
-    Launch: ({ className }) => (<svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>),
-    Support: ({ className }) => (<svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" /></svg>),
-    Transparency: ({ className }) => (<svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>),
-    Communication: ({ className }) => (<svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>),
-    Quality: ({ className }) => (<svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>)
-};
-
-const PricingIcons = {
-    Website: ({ className }) => (<svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" /></svg>),
-    Layout: ({ className }) => (<svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" /></svg>),
-    Lua: ({ className }) => (<svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" /></svg>),
-    TelegramBot: ({ className }) => (<svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>),
-    MiniApp: ({ className }) => (<svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>),
-    ConsultationPricing: ({ className }) => (<svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>),
-    FixedPrice: ({ className }) => (<svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>),
-    Speed: ({ className }) => (<svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>),
-    Warranty: ({ className }) => (<svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>),
-    Support24: ({ className }) => (<svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>)
-};
-
-
-const ContactForm = ({ isDark }) => {
-    const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submitStatus, setSubmitStatus] = useState(null);
-    const [errors, setErrors] = useState({});
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-        if (errors[name]) setErrors({ ...errors, [name]: '' });
-    };
-
-    const validateForm = () => {
-        const newErrors = {};
-        if (!formData.name.trim()) newErrors.name = 'Введите свой @username или номер';
-        if (!formData.email.trim()) newErrors.email = 'Введите email';
-        else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Введите корректный email';
-        if (!formData.message.trim()) newErrors.message = 'Введите сообщение';
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!validateForm()) return;
-        setIsSubmitting(true);
-        setSubmitStatus(null);
-        try {
-            const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
-            const response = await fetch(`${API_URL}/contact-messages/`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            });
-            if (response.status === 201) {
-                setSubmitStatus({ type: 'success', message: 'Сообщение отправлено' });
-                setFormData({ name: '', email: '', message: '' });
-                setTimeout(() => setSubmitStatus(null), 5000);
-            } else throw new Error('Ошибка отправки');
-        } catch (error) {
-            console.error('Ошибка при отправке сообщения:', error);
-            setSubmitStatus({ type: 'error', message: 'Произошла ошибка при отправке' });
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
-
-    const borderColor = isDark ? 'border-neutral-800' : 'border-gray-300';
-    const focusBorder = isDark ? 'focus:border-neutral-600' : 'focus:border-blue-500';
-    const textColor = isDark ? 'text-white' : 'text-gray-900';
-    const placeholderColor = isDark ? 'placeholder-neutral-600' : 'placeholder-gray-400';
-
-    return (
-        <div className="max-w-2xl mx-auto">
-            <motion.div initial={{ opacity: 0, x: 100 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }} className="space-y-8">
-                <motion.div whileHover={{ scale: 1.02 }} transition={{ type: "spring", stiffness: 300 }}>
-                    <input type="text" name="name" placeholder="ИМЯ / USERNAME" value={formData.name} onChange={handleChange}
-                        className={`w-full px-0 py-4 bg-transparent border-b-2 ${errors.name ? 'border-red-500' : borderColor} ${focusBorder} focus:outline-none transition-colors ${textColor} ${placeholderColor} text-sm tracking-widest uppercase`}
-                    />
-                    {errors.name && <p className="text-red-500 text-xs mt-2 tracking-wide">{errors.name}</p>}
-                </motion.div>
-                <motion.div whileHover={{ scale: 1.02 }} transition={{ type: "spring", stiffness: 300 }}>
-                    <input type="email" name="email" placeholder="EMAIL" value={formData.email} onChange={handleChange}
-                        className={`w-full px-0 py-4 bg-transparent border-b-2 ${errors.email ? 'border-red-500' : borderColor} ${focusBorder} focus:outline-none transition-colors ${textColor} ${placeholderColor} text-sm tracking-widest uppercase`}
-                    />
-                    {errors.email && <p className="text-red-500 text-xs mt-2 tracking-wide">{errors.email}</p>}
-                </motion.div>
-                <motion.div whileHover={{ scale: 1.02 }} transition={{ type: "spring", stiffness: 300 }}>
-                    <textarea name="message" placeholder="СООБЩЕНИЕ" rows="6" value={formData.message} onChange={handleChange}
-                        className={`w-full px-0 py-4 bg-transparent border-b-2 ${errors.message ? 'border-red-500' : borderColor} ${focusBorder} focus:outline-none transition-colors ${textColor} ${placeholderColor} resize-none text-sm tracking-widest uppercase`}
-                    ></textarea>
-                    {errors.message && <p className="text-red-500 text-xs mt-2 tracking-wide">{errors.message}</p>}
-                </motion.div>
-                {submitStatus && (
-                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className={`p-4 text-center text-sm tracking-wide ${submitStatus.type === 'success' ? 'text-green-400' : 'text-red-400'}`}>
-                        {submitStatus.message}
-                    </motion.div>
-                )}
-                <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={handleSubmit} disabled={isSubmitting}
-                    className={`w-full py-5 border-2 ${isDark ? 'border-white text-white hover:bg-white hover:text-black' : 'border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white'} text-sm tracking-widest uppercase transition-all duration-300 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
-                >
-                    {isSubmitting ? 'ОТПРАВКА...' : 'ОТПРАВИТЬ'}
-                </motion.button>
-            </motion.div>
-        </div>
-    );
-};
-
-const LoadingSpinner = ({ isDark }) => (
-    <div className="relative w-32 h-32 mx-auto mb-8">
-        <div className={`absolute inset-0 border-4 ${isDark ? 'border-white/30' : 'border-gray-300'} rounded-full`}></div>
-        <motion.div
-            animate={{ rotate: 360 }}
-            className="absolute inset-0 flex items-center justify-center"
-        >
-            <div className="w-12 h-1 bg-white"></div>
-        </motion.div>
-        <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 ${isDark ? 'bg-white' : 'bg-gray-900'} rounded-full`}></div>
-    </div>
+const GithubIcon = ({ className = "w-4 h-4" }) => (
+  <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+    <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+  </svg>
 );
 
-const CodeIconAnimation = ({ isDark }) => (
-    <motion.div initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} transition={{ duration: 0.8, type: 'spring' }} className="relative w-32 h-32 mx-auto mb-8">
-        <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 2, repeat: Infinity }} className={`absolute top-1/2 left-1/4 text-3xl ${isDark ? 'text-white' : 'text-gray-900'}`}>{'{'}</motion.div>
-        <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0.5 }} className={`absolute top-1/2 right-1/4 text-3xl ${isDark ? 'text-white' : 'text-gray-900'}`}>{'}'}</motion.div>
-        <div className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ${isDark ? 'text-white' : 'text-gray-900'} text-2xl font-mono`}>
-            <motion.span animate={{ opacity: [1, 0.5, 1] }} transition={{ duration: 1.5, repeat: Infinity }}>code</motion.span>
-        </div>
-        <motion.div animate={{ scale: [1, 1.5, 1], opacity: [1, 0, 1] }} transition={{ duration: 2, repeat: Infinity }} className={`absolute top-1/4 left-1/2 w-2 h-2 ${isDark ? 'bg-white' : 'bg-gray-900'} rounded-full`}></motion.div>
-        <motion.div animate={{ scale: [1, 1.5, 1], opacity: [1, 0, 1] }} transition={{ duration: 2, repeat: Infinity, delay: 0.7 }} className={`absolute bottom-1/4 right-1/3 w-2 h-2 ${isDark ? 'bg-white' : 'bg-gray-900'} rounded-full`}></motion.div>
-        <motion.div animate={{ scale: [1, 1.5, 1], opacity: [1, 0, 1] }} transition={{ duration: 2, repeat: Infinity, delay: 1.4 }} className={`absolute bottom-1/4 left-1/3 w-2 h-2 ${isDark ? 'bg-white' : 'bg-gray-900'} rounded-full`}></motion.div>
-    </motion.div>
-);
-
-const LoadingScreen = ({ apiStatus, isDark }) => (
-    <div className={`min-h-screen flex items-center justify-center ${isDark ? 'bg-black' : 'bg-white'}`}>
-        <div className="text-center">
-            <LoadingSpinner isDark={isDark} />
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className={`${isDark ? 'text-white' : 'text-gray-900'} text-sm tracking-widest uppercase mb-4`}>{apiStatus}</motion.p>
-            <p className={`${isDark ? 'text-neutral-600' : 'text-gray-400'} text-xs`}>API: Текущий адрес: {window.location.hostname}:{window.location.port}</p>
-        </div>
-    </div>
-);
-
-
-const HeroSection = ({ profile, safeProjects, handleScroll, isDark }) => {
-    const textColor = isDark ? 'text-white' : 'text-gray-900';
-    const mutedColor = isDark ? 'text-neutral-400' : 'text-gray-600';
-    const borderColor = isDark ? 'border-white' : 'border-gray-900';
-    const borderMuted = isDark ? 'border-neutral-700' : 'border-gray-300';
-    const hoverBg = isDark ? 'hover:bg-white hover:text-black' : 'hover:bg-gray-900 hover:text-white';
-    const hoverBorder = isDark ? 'hover:border-white hover:text-white' : 'hover:border-gray-900 hover:text-gray-900';
-
-    return (
-        <section id="home" className="min-h-screen flex items-center justify-center pt-20 px-4 relative overflow-hidden">
-            <div className="absolute inset-0 z-0 opacity-10">
-                <motion.div initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.5 }} className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${background1})`, filter: 'grayscale(100%) blur(1px)' }}></motion.div>
-            </div>
-            <div className="container mx-auto px-4 sm:px-6 relative z-10">
-                <motion.div initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} className="max-w-4xl mx-auto text-center space-y-8 sm:space-y-12">
-                    <CodeIconAnimation isDark={isDark} />
-                    <motion.h1 initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }} className={`text-4xl sm:text-5xl md:text-7xl font-light tracking-tight ${textColor} px-4`}>
-                        {profile?.name || 'Разработчик'}
-                    </motion.h1>
-                    <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5, duration: 0.8 }} className={`text-sm tracking-widest ${mutedColor} uppercase`}>
-                        {profile?.title || 'Full Stack Developer'}
-                    </motion.p>
-                    <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 0.8 }} className="flex flex-wrap justify-center gap-8 sm:gap-16 pt-6 sm:pt-8 px-4">
-                        {[
-                            { value: safeProjects.length, label: 'Проектов' },
-                            { value: '3+', label: 'Года опыта' },
-                            { value: '6', label: 'Услуг' }
-                        ].map((stat, idx) => (
-                            <motion.div key={idx} whileHover={{ scale: 1.1 }} className="text-center">
-                                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.9 + idx * 0.1, type: 'spring' }} className={`text-3xl sm:text-4xl font-light mb-2 ${textColor}`}>{stat.value}</motion.div>
-                                <div className={`text-xs tracking-widest ${isDark ? 'text-neutral-500' : 'text-gray-500'} uppercase`}>{stat.label}</div>
-                            </motion.div>
-                        ))}
-                    </motion.div>
-                    <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9, duration: 0.8 }} className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 pt-8 sm:pt-12 px-4">
-                        <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => handleScroll('contact')} className={`w-full sm:w-auto px-8 sm:px-10 py-4 border-2 ${borderColor} ${textColor} text-sm tracking-widest uppercase ${hoverBg} transition-all duration-300`}>СВЯЗАТЬСЯ</motion.button>
-                        <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => handleScroll('pricing')} className={`w-full sm:w-auto px-8 sm:px-10 py-4 border-2 ${borderMuted} ${mutedColor} text-sm tracking-widest uppercase ${hoverBorder} transition-all duration-300`}>ПРАЙС</motion.button>
-                    </motion.div>
-                </motion.div>
-            </div>
-        </section>
-    );
+// ==================== SEO COMPONENT ====================
+const SEO = ({
+  title = "PHAX | Fullstack Разработчик сайтов, Telegram ботов и Lua скриптов",
+  description = "Профессиональная разработка сайтов под ключ, Telegram ботов, мини-приложений и Lua скриптов. Гарантия качества, прозрачные цены и быстрые сроки.",
+  keywords = "phax, phaxdev, разработка сайтов, создание сайтов, telegram боты, telegram miniapps, lua скрипты, fullstack разработчик, веб разработка, django, react",
+  ogImage = "/og-image.jpg",
+  ogUrl = "https://phax.online",
+  author = "phax"
+}) => {
+  return (
+    <Helmet>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <meta name="keywords" content={keywords} />
+      <meta name="author" content={author} />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:image" content={ogImage} />
+      <meta property="og:url" content={ogUrl} />
+      <meta property="og:type" content="website" />
+      <meta property="og:locale" content="ru_RU" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={ogImage} />
+      <meta name="robots" content="index, follow" />
+      <link rel="canonical" href={ogUrl} />
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ProfessionalService",
+          "name": "PHAX - Fullstack Разработка",
+          "description": description,
+          "url": ogUrl,
+          "address": { "@type": "PostalAddress", "addressCountry": "RU" },
+          "service": [
+            { "@type": "Service", "name": "Разработка сайтов под ключ" },
+            { "@type": "Service", "name": "Telegram боты и Mini Apps" },
+            { "@type": "Service", "name": "Lua скрипты" }
+          ]
+        })}
+      </script>
+    </Helmet>
+  );
 };
 
-const ProjectCard = ({ project, isActive, isDark }) => {
-    const cardRef = useRef(null);
-    useEffect(() => {
-        if (cardRef.current && isActive) {
-            cardRef.current.classList.add('animate-pulse-once');
-            setTimeout(() => cardRef.current?.classList.remove('animate-pulse-once'), 1000);
-        }
-    }, [isActive]);
+// ==================== THEME TOGGLE ====================
+const ThemeToggle = ({ isDark, toggleTheme }) => (
+  <button
+    onClick={toggleTheme}
+    aria-label="Сменить тему"
+    className={`p-2.5 rounded-xl border transition-all duration-300 ${
+      isDark
+        ? 'bg-zinc-900/80 border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-700'
+        : 'bg-white border-zinc-200 text-zinc-700 hover:text-black hover:border-zinc-300 shadow-sm'
+    }`}
+  >
+    {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-blue-600" />}
+  </button>
+);
 
-    const getTechnologies = () => {
-        if (!project) return [];
-        if (Array.isArray(project.technologies)) return project.technologies;
-        if (Array.isArray(project.technologies_list)) return project.technologies_list;
-        if (project.technologies && typeof project.technologies === 'string') return project.technologies.split(',').map(t => t.trim());
-        return [];
-    };
-    const technologies = getTechnologies();
+// ==================== INTERACTIVE TERMINAL WIDGET ====================
+const InteractiveTerminal = ({ isDark, profile }) => {
+  const [activeTab, setActiveTab] = useState('skills');
 
-    const bgGradient = isDark ? 'from-black to-neutral-900' : 'from-white to-gray-50';
-    const borderColor = isActive ? (isDark ? 'border-white' : 'border-gray-900') : (isDark ? 'border-neutral-800' : 'border-gray-200');
-    const textColor = isDark ? 'text-white' : 'text-gray-900';
-    const mutedColor = isDark ? 'text-neutral-400' : 'text-gray-600';
-    const techBorder = isDark ? 'border-neutral-800 hover:border-white hover:bg-white/5' : 'border-gray-200 hover:border-gray-900 hover:bg-gray-100';
+  const tabsData = {
+    skills: [
+      { cmd: 'phax --skills --verbose', type: 'cmd' },
+      { text: '✓ Frontend:  React 18, Next.js, TailwindCSS, Framer Motion', color: 'text-blue-400' },
+      { text: '✓ Backend:   Python, Django REST Framework, PostgreSQL, Redis', color: 'text-emerald-400' },
+      { text: '✓ Telegram:  Aiogram 3, Telethon, BotFather API, Telegram MiniApps (TMA)', color: 'text-cyan-400' },
+      { text: '✓ Game & OS: Lua (GMod, FiveM, Roblox), Bash scripting, Docker, Nginx', color: 'text-purple-400' },
+    ],
+    status: [
+      { cmd: 'phax --status', type: 'cmd' },
+      { text: '🟢 Status: Available for freelance & turnkey contracts', color: 'text-emerald-400 font-semibold' },
+      { text: `📍 Location: ${profile?.location || 'Владикавказ, Россия / Remote'}`, color: 'text-zinc-400' },
+      { text: '⚡ Response time: ~15-30 mins via Telegram', color: 'text-amber-400' },
+      { text: '🛡️ Warranty: 6 months code maintenance on all projects', color: 'text-zinc-300' }
+    ],
+    contact: [
+      { cmd: 'phax --connect', type: 'cmd' },
+      { text: 'Telegram:  https://t.me/skypespeaker (@skypespeaker)', color: 'text-cyan-400' },
+      { text: `Email:     ${profile?.email || 'phaxdev.info@internet.ru'}`, color: 'text-blue-400' },
+      { text: 'GitHub:    https://github.com/phaxdev', color: 'text-purple-400' },
+    ]
+  };
 
-return (
-    <motion.div 
-        ref={cardRef} 
-        initial={{ opacity: 0, x: 100, rotateY: -15 }} 
-        whileInView={{ opacity: 1, x: 0, rotateY: 0 }} 
-        transition={{ duration: 0.6 }} 
-        viewport={{ once: true }} 
-        whileHover={{ scale: 1.02, rotateY: 2 }} 
-        className={`relative bg-gradient-to-br ${bgGradient} border-2 ${borderColor} rounded-2xl p-6 sm:p-8 transition-all duration-500 group`}
+  return (
+    <div
+      className={`rounded-2xl border font-mono text-xs overflow-hidden transition-all duration-300 ${
+        isDark
+          ? 'bg-zinc-950/90 border-zinc-800 shadow-2xl shadow-blue-500/5'
+          : 'bg-zinc-900 border-zinc-700 text-zinc-100 shadow-xl'
+      }`}
     >
-        {isActive && (
-            <motion.div 
-                animate={{ x: ['-100%', '100%'] }} 
-                transition={{ duration: 2, repeat: Infinity, ease: 'linear' }} 
-                className={`absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent ${isDark ? 'via-white/5' : 'via-gray-900/5'} to-transparent`}
-            />
-        )}
-        <div className="relative z-10">
-            <div className="flex justify-between items-center mb-4 sm:mb-6">
-                <motion.span 
-                    initial={{ opacity: 0 }} 
-                    animate={{ opacity: 1 }} 
-                    transition={{ delay: 0.2 }} 
-                    className={`text-xs tracking-widest ${isDark ? 'text-neutral-500' : 'text-gray-500'} uppercase`}
-                >
-                    {project.year || new Date().getFullYear()}
-                </motion.span>
-                {isActive && (
-                    <motion.span 
-                        initial={{ scale: 0 }} 
-                        animate={{ scale: 1 }} 
-                        transition={{ type: 'spring' }} 
-                        className={`px-3 py-1 ${isDark ? 'bg-white text-black' : 'bg-gray-900 text-white'} text-xs tracking-widest rounded-full`}
-                    >
-                        ACTIVE
-                    </motion.span>
-                )}
-            </div>
-            <motion.h3 
-                initial={{ opacity: 0, x: -20 }} 
-                animate={{ opacity: 1, x: 0 }} 
-                transition={{ delay: 0.3 }} 
-                className={`text-2xl sm:text-3xl md:text-4xl font-light mb-3 sm:mb-4 tracking-tight ${textColor}`}
+      {/* Terminal Title Bar */}
+      <div className="flex items-center justify-between px-4 py-3 bg-zinc-900/90 border-b border-zinc-800">
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded-full bg-red-500/80" />
+          <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+          <div className="w-3 h-3 rounded-full bg-green-500/80" />
+          <span className="text-[11px] text-zinc-400 ml-2 font-mono flex items-center gap-1.5">
+            <Terminal className="w-3.5 h-3.5 text-zinc-400" />
+            phax@dev-server:~
+          </span>
+        </div>
+        <div className="flex gap-1">
+          {['skills', 'status', 'contact'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-2.5 py-1 rounded-md text-[11px] transition-all ${
+                activeTab === tab
+                  ? 'bg-zinc-800 text-white font-medium'
+                  : 'text-zinc-400 hover:text-zinc-200'
+              }`}
             >
-                {project.title || 'Проект без названия'}
-            </motion.h3>
-            <motion.p 
-                initial={{ opacity: 0 }} 
-                animate={{ opacity: 1 }} 
-                transition={{ delay: 0.4 }} 
-                className={`${mutedColor} mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base`}
-            >
-                {project.short_description || project.description || 'Описание проекта будет добавлено позже'}
-            </motion.p>
-            {technologies.length > 0 && (
-                <motion.div 
-                    initial={{ opacity: 0, y: 20 }} 
-                    animate={{ opacity: 1, y: 0 }} 
-                    transition={{ delay: 0.5 }} 
-                    className="flex flex-wrap gap-2 sm:gap-3 mb-6 sm:mb-8"
-                >
-                    {technologies.map((tech, index) => (
-                        <motion.span 
-                            key={index} 
-                            whileHover={{ scale: 1.1, rotate: 2 }} 
-                            className={`px-3 sm:px-4 py-1.5 sm:py-2 border ${techBorder} rounded-full text-xs sm:text-sm tracking-wider transition-all duration-300 ${textColor}`}
-                        >
-                            {tech}
-                        </motion.span>
-                    ))}
-                </motion.div>
+              .{tab}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Terminal Body */}
+      <div className="p-4 sm:p-5 space-y-2 leading-relaxed min-h-[170px]">
+        {tabsData[activeTab].map((line, idx) => (
+          <div key={idx} className="flex items-start gap-2">
+            {line.type === 'cmd' ? (
+              <div className="flex items-center gap-2 text-zinc-400">
+                <span className="text-emerald-400">➜</span>
+                <span className="text-blue-400">~</span>
+                <span className="text-zinc-200 font-semibold">{line.cmd}</span>
+              </div>
+            ) : (
+              <div className={`pl-4 ${line.color}`}>{line.text}</div>
             )}
-            <div className="flex flex-wrap gap-4 sm:gap-6">
-                {project.github_url && (
-                    <motion.a 
-                        whileHover={{ x: 5 }} 
-                        href={project.github_url} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className={`text-xs sm:text-sm tracking-widest uppercase ${mutedColor} transition-colors group/link`}
-                    >
-                        <span className={`border-b border-transparent group-hover/link:${isDark ? 'border-white text-white' : 'border-gray-900 text-gray-900'}`}>
-                            GITHUB
-                        </span>
-                    </motion.a>
-                )}
-                {project.live_url && (
-                    <motion.a 
-                        whileHover={{ x: 5 }} 
-                        href={project.live_url} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className={`text-xs sm:text-sm tracking-widest uppercase ${mutedColor} transition-colors group/link`}
-                    >
-                        <span className={`border-b border-transparent group-hover/link:${isDark ? 'border-white text-white' : 'border-gray-900 text-gray-900'}`}>
-                            ДЕМО
-                        </span>
-                    </motion.a>
-                )}
-            </div>
+          </div>
+        ))}
+        <div className="flex items-center gap-2 pt-2 text-zinc-500">
+          <span className="text-emerald-400">➜</span>
+          <span className="text-blue-400">~</span>
+          <span className="inline-block w-2 h-4 bg-zinc-400 animate-pulse" />
         </div>
-    </motion.div>
-);
+      </div>
+    </div>
+  );
 };
 
+// ==================== INTERACTIVE CALCULATOR (KILLER FEATURE) ====================
+const ProjectCalculator = ({ isDark, onSelectService }) => {
+  const [projectType, setProjectType] = useState('site');
+  const [options, setOptions] = useState({
+    design: true,
+    urgent: false,
+    payments: false,
+    admin: true,
+  });
 
-const ProjectsSwiper = ({ projects, isDark }) => {
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const displayProjects = Array.isArray(projects) && projects.length > 0 ? projects.map((p, i) => ({
-        id: p.id || i, title: p.title || `Проект ${i + 1}`, description: p.short_description || p.description || '',
-        technologies_list: p.technologies_list || p.technologies || [], year: p.year || new Date().getFullYear(),
-        github_url: p.github_url, live_url: p.live_url
-    })) : [{ id: 1, title: 'ДОБАВЬТЕ ПРОЕКТЫ', description: 'Используйте админ-панель Django для добавления проектов', technologies_list: ['React', 'Django', 'API'], year: '2024' }];
+  const types = [
+    { id: 'site', title: 'Сайт под ключ', basePrice: 25000, baseDays: 7, icon: Globe },
+    { id: 'bot', title: 'Telegram Бот', basePrice: 12000, baseDays: 3, icon: Bot },
+    { id: 'miniapp', title: 'Telegram MiniApp', basePrice: 25000, baseDays: 7, icon: Sparkles },
+    { id: 'lua', title: 'Lua Скрипты', basePrice: 7000, baseDays: 2, icon: FileCode2 },
+    { id: 'layout', title: 'Верстка макета', basePrice: 10000, baseDays: 2, icon: Layers },
+  ];
 
-    useEffect(() => { const interval = setInterval(() => setCurrentIndex(prev => (prev + 1) % displayProjects.length), 5000); return () => clearInterval(interval); }, [displayProjects.length]);
-    const handlePrev = () => setCurrentIndex(prev => prev === 0 ? displayProjects.length - 1 : prev - 1);
-    const handleNext = () => setCurrentIndex(prev => (prev + 1) % displayProjects.length);
-    useEffect(() => {
-        const handleKeyDown = (e) => { if (e.key === 'ArrowLeft') handlePrev(); if (e.key === 'ArrowRight') handleNext(); };
-        window.addEventListener('keydown', handleKeyDown); return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [currentIndex, displayProjects.length]);
+  const extraOptions = useMemo(() => [
+    { id: 'design', label: 'Уникальный UI/UX дизайн с нуля', price: 5000, days: 1 },
+    { id: 'payments', label: 'Интеграция онлайн-оплаты / TON', price: 5000, days: 1 },
+    { id: 'admin', label: 'Удобная панель управления (CMS)', price: 4000, days: 1 },
+    { id: 'urgent', label: 'Срочный экспресс-запуск за 48 часов', price: 6000, days: -2 },
+  ], []);
 
-    const textColor = isDark ? 'text-white' : 'text-gray-900';
-    const mutedColor = isDark ? 'text-neutral-600' : 'text-gray-400';
-    const progressBg = isDark ? 'bg-neutral-800' : 'bg-gray-200';
-    const progressFill = isDark ? 'bg-white' : 'bg-gray-900';
-    const borderColor = isDark ? 'border-neutral-800 hover:border-white' : 'border-gray-200 hover:border-gray-900';
+  const currentType = types.find(t => t.id === projectType);
 
-    return (
-        <div className="relative">
-            <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex justify-center items-center mb-12">
-                <div className="flex items-center gap-4">
-                    <motion.span animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 2, repeat: Infinity }} className={`text-3xl font-light ${textColor}`}>{String(currentIndex + 1).padStart(2, '0')}</motion.span>
-                    <div className={`w-32 h-0.5 ${progressBg}`}>
-                        <motion.div className={`h-full ${progressFill}`} initial={{ width: 0 }} animate={{ width: `${((currentIndex + 1) / displayProjects.length) * 100}%` }} transition={{ duration: 0.5 }} />
-                    </div>
-                    <span className={`text-3xl font-light ${mutedColor}`}>{String(displayProjects.length).padStart(2, '0')}</span>
-                </div>
-            </motion.div>
-            <div className="relative overflow-hidden py-8">
-                <div className="flex justify-center">
-                    <div className="relative w-full max-w-4xl">
-                        <div className="relative z-10 mx-auto" style={{ width: '100%' }}>
-                            <AnimatePresence mode="wait">
-                                <motion.div key={currentIndex} initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -100, opacity: 0 }} transition={{ duration: 0.5 }}>
-                                    <ProjectCard project={displayProjects[currentIndex]} isActive={true} isDark={isDark} />
-                                </motion.div>
-                            </AnimatePresence>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="flex justify-between items-center mt-12 px-4">
-                <motion.button whileHover={{ scale: 1.1, rotate: -5 }} whileTap={{ scale: 0.9 }} onClick={handlePrev} className={`w-12 h-12 border-2 ${borderColor} rounded-full flex items-center justify-center transition-all duration-300 ${textColor}`}>←</motion.button>
-                <div className="flex gap-2">
-                    {displayProjects.map((_, index) => (
-                        <motion.button key={index} whileHover={{ scale: 1.2 }} onClick={() => setCurrentIndex(index)} className={`h-2 rounded-full transition-all duration-300 ${index === currentIndex ? `${progressFill} w-8` : `${isDark ? 'bg-neutral-600 hover:bg-neutral-400' : 'bg-gray-300 hover:bg-gray-500'} w-2`}`} />
-                    ))}
-                </div>
-                <motion.button whileHover={{ scale: 1.1, rotate: 5 }} whileTap={{ scale: 0.9 }} onClick={handleNext} className={`w-12 h-12 border-2 ${borderColor} rounded-full flex items-center justify-center transition-all duration-300 ${textColor}`}>→</motion.button>
-            </div>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="text-center mt-8">
-                <p className={`${mutedColor} text-xs tracking-widest uppercase`}>← КЛИК / КЛАВИШИ →</p>
-                <p className={`${isDark ? 'text-neutral-700' : 'text-gray-300'} text-xs mt-2`}>АВТОПРОКРУТКА КАЖДЫЕ 5С</p>
-            </motion.div>
-        </div>
-    );
-};
+  const calculated = useMemo(() => {
+    let price = currentType.basePrice;
+    let days = currentType.baseDays;
 
-
-const WorkProcess = ({ isDark }) => {
-    const [activeStep, setActiveStep] = useState(0);
-    const processSteps = [
-        { number: '01', title: 'КОНСУЛЬТАЦИЯ', description: 'Обсуждение проекта, анализ требований, определение сроков и бюджета', duration: '1-2 дня', icon: 'Consultation' },
-        { number: '02', title: 'ПРОТОТИП', description: 'Создание wireframes и прототипа для визуализации концепции', duration: '3-5 дней', icon: 'Prototype' },
-        { number: '03', title: 'РАЗРАБОТКА', description: 'Поэтапная разработка с регулярными демонстрациями прогресса', duration: 'Зависит от проекта', icon: 'Development' },
-        { number: '04', title: 'ТЕСТИРОВАНИЕ', description: 'Всестороннее тестирование и финальные корректировки', duration: '3-7 дней', icon: 'Testing' },
-        { number: '05', title: 'ЗАПУСК', description: 'Деплой проекта, документация и обучение использованию', duration: '1-2 дня', icon: 'Launch' },
-        { number: '06', title: 'ПОДДЕРЖКА', description: 'Техническая поддержка и дальнейшее развитие проекта', duration: 'Постоянно', icon: 'Support' }
-    ];
-    const processStats = [
-        { icon: 'Transparency', value: '100%', title: 'ПРОЗРАЧНОСТЬ', description: 'Регулярные отчеты и демонстрации' },
-        { icon: 'Communication', value: '24/7', title: 'КОММУНИКАЦИЯ', description: 'Поддержка в Telegram и почте' },
-        { icon: 'Quality', value: '✓', title: 'ГАРАНТИЯ КАЧЕСТВА', description: 'Тестирование и фиксы после запуска' }
-    ];
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setActiveStep(prev => (prev + 1) % processSteps.length);
-        }, 4000);
-        return () => clearInterval(interval);
-    }, [processSteps.length]);
-
-    const textColor = isDark ? 'text-white' : 'text-gray-900';
-    const mutedColor = isDark ? 'text-neutral-400' : 'text-gray-600';
-    const borderColor = isDark ? 'border-neutral-900' : 'border-gray-100';
-    const cardBg = isDark ? 'from-black to-neutral-900' : 'from-white to-gray-50';
-    const iconBorder = isDark ? 'border-neutral-700' : 'border-gray-200';
-    const iconBg = isDark ? 'bg-black' : 'bg-white';
-
-    return (
-        <section id="process" className={`py-32 border-t ${borderColor} relative overflow-hidden`}>
-            <div className="absolute inset-0 z-0 opacity-5">
-                <motion.div initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.5 }} className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${background4})`, filter: 'grayscale(100%)' }}></motion.div>
-            </div>
-            <div className="absolute inset-0">
-                {[...Array(3)].map((_, i) => (
-                    <motion.div key={i} animate={{ x: ['-100%', '100%'] }} transition={{ duration: 15, repeat: Infinity, delay: i * 1 }} className={`absolute h-px bg-gradient-to-r from-transparent ${isDark ? 'via-white/5' : 'via-gray-900/5'} to-transparent`} style={{ top: `${30 + i * 20}%`, width: '100%' }}></motion.div>
-                ))}
-            </div>
-            <div className="container mx-auto px-6 relative z-10">
-                <motion.div initial={{ opacity: 0, x: 100 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }}>
-                    <h2 className={`text-xs tracking-widest ${isDark ? 'text-neutral-500' : 'text-gray-500'} uppercase mb-4 text-center`}>ПРОЦЕСС</h2>
-                    <p className={`text-5xl md:text-7xl font-light tracking-tight text-center mb-12 ${textColor}`}>РАБОТЫ<span className={mutedColor}>.</span></p>
-                    <p className={`${mutedColor} text-sm tracking-widest uppercase text-center mb-20 max-w-2xl mx-auto`}>ОТ ИДЕИ ДО ЗАПУСКА: 6 КЛЮЧЕВЫХ ЭТАПОВ</p>
-                </motion.div>
-                <div className="max-w-6xl mx-auto">
-                    <div className="hidden lg:flex items-center justify-between mb-20 relative">
-                        {processSteps.map((step, index) => {
-                            const IconComponent = ProcessIcons[step.icon];
-                            return (
-                                <motion.div key={step.number} className="relative z-10" initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1, duration: 0.5 }} viewport={{ once: true }}>
-                                    <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} onClick={() => setActiveStep(index)} className={`flex flex-col items-center transition-all duration-500 ${activeStep === index ? 'scale-110' : 'opacity-70 hover:opacity-100'}`}>
-                                        <div className={`w-16 h-16 rounded-full border-2 flex items-center justify-center mb-4 transition-all duration-300 ${activeStep === index ? `${isDark ? 'border-white bg-white text-black' : 'border-gray-900 bg-gray-900 text-white'}` : `${iconBorder} ${iconBg} ${textColor}`}`}>
-                                            <IconComponent className="w-8 h-8" />
-                                        </div>
-                                        <div className={`text-xs tracking-widest uppercase mb-2 transition-colors ${activeStep === index ? textColor : (isDark ? 'text-neutral-500' : 'text-gray-400')}`}>{step.number}</div>
-                                        <h3 className={`text-sm tracking-widest uppercase text-center transition-colors ${activeStep === index ? textColor : mutedColor}`}>{step.title}</h3>
-                                    </motion.button>
-                                </motion.div>
-                            );
-                        })}
-                    </div>
-                    <div className="lg:hidden space-y-8 mb-12">
-                        {processSteps.map((step, index) => {
-                            const IconComponent = ProcessIcons[step.icon];
-                            return (
-                                <motion.div key={step.number} className="relative" initial={{ opacity: 0, x: 100 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.1, duration: 0.5 }} viewport={{ once: true }}>
-                                    {index < processSteps.length - 1 && (<div className={`absolute left-8 top-16 bottom-0 w-0.5 ${isDark ? 'bg-neutral-800' : 'bg-gray-200'} -translate-x-1/2`}></div>)}
-                                    <motion.button whileHover={{ scale: 1.02 }} onClick={() => setActiveStep(index)} className={`flex items-start gap-6 w-full p-6 rounded-2xl transition-all duration-300 ${activeStep === index ? `bg-gradient-to-br ${cardBg} border-2 ${isDark ? 'border-white' : 'border-gray-900'}` : `border ${iconBorder} hover:${isDark ? 'border-neutral-600' : 'border-gray-300'}`}`}>
-                                        <div className={`w-16 h-16 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all duration-300 ${activeStep === index ? `${isDark ? 'border-white bg-white text-black' : 'border-gray-900 bg-gray-900 text-white'}` : `${iconBorder} ${iconBg}`}`}>
-                                            <IconComponent className="w-8 h-8" />
-                                        </div>
-                                        <div className="flex-1 text-left">
-                                            <div className="flex items-center gap-4 mb-2">
-                                                <span className={`text-sm tracking-widest uppercase ${activeStep === index ? textColor : (isDark ? 'text-neutral-500' : 'text-gray-400')}`}>{step.number}</span>
-                                                <h3 className={`text-lg tracking-widest uppercase ${textColor}`}>{step.title}</h3>
-                                            </div>
-                                            <p className={`text-sm mb-3 ${activeStep === index ? (isDark ? 'text-neutral-300' : 'text-gray-700') : (isDark ? 'text-neutral-500' : 'text-gray-500')}`}>{step.description}</p>
-                                            <div className={`text-xs tracking-widest uppercase ${activeStep === index ? mutedColor : (isDark ? 'text-neutral-600' : 'text-gray-400')}`}>Длительность: {step.duration}</div>
-                                        </div>
-                                    </motion.button>
-                                </motion.div>
-                            );
-                        })}
-                    </div>
-                    <div className="hidden lg:block">
-                        <motion.div key={activeStep} initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} className={`bg-gradient-to-br ${cardBg} border-2 ${iconBorder} rounded-3xl p-12`}>
-                            <div className="grid md:grid-cols-3 gap-12 items-center">
-                                <div className="md:col-span-2">
-                                    <div className="flex items-center gap-6 mb-8">
-                                        <motion.div animate={{ rotate: [0, 5, -5, 0] }} transition={{ duration: 2, repeat: Infinity }} className={`text-6xl font-light ${textColor}`}>{processSteps[activeStep].number}</motion.div>
-                                        <div>
-                                            <h3 className={`text-3xl font-light mb-2 ${textColor}`}>{processSteps[activeStep].title}</h3>
-                                            <p className={`text-sm tracking-widest ${isDark ? 'text-neutral-500' : 'text-gray-500'} uppercase`}>Этап {activeStep + 1} из {processSteps.length}</p>
-                                        </div>
-                                    </div>
-                                    <p className={`text-xl ${isDark ? 'text-neutral-300' : 'text-gray-700'} mb-8 leading-relaxed`}>{processSteps[activeStep].description}</p>
-                                    <div className="flex items-center gap-8">
-                                        <div className={`px-6 py-3 border ${iconBorder} rounded-full`}><span className={`text-sm tracking-widest uppercase ${textColor}`}>Длительность: {processSteps[activeStep].duration}</span></div>
-                                        <div className={`px-6 py-3 border ${iconBorder} rounded-full`}><span className={`text-sm tracking-widest uppercase ${textColor}`}>Результат: {activeStep === 5 ? 'Поддержка' : 'Следующий этап'}</span></div>
-                                    </div>
-                                </div>
-                                <div className="flex justify-center">
-                                    <div className="relative">
-                                        <div className={`w-64 h-64 rounded-full border-4 ${isDark ? 'border-white/10' : 'border-gray-900/10'} flex items-center justify-center`}>
-                                            <div className={`w-48 h-48 rounded-full border-4 ${isDark ? 'border-white/20' : 'border-gray-900/20'} flex items-center justify-center`}>
-                                                <div className={`w-32 h-32 rounded-full border-4 ${isDark ? 'border-white/30' : 'border-gray-900/30'} flex items-center justify-center ${textColor}`}>
-                                                    {(() => {
-                                                        const IconComponent = ProcessIcons[processSteps[activeStep].icon];
-                                                        return <IconComponent className="w-16 h-16" />;
-                                                    })()}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: 'linear' }} className={`absolute inset-0 rounded-full border-4 border-transparent ${isDark ? 'border-t-white/5' : 'border-t-gray-900/5'}`}></motion.div>
-                                        <motion.div animate={{ rotate: -360 }} transition={{ duration: 15, repeat: Infinity, ease: 'linear' }} className={`absolute inset-0 rounded-full border-4 border-transparent ${isDark ? 'border-r-white/5' : 'border-r-gray-900/5'}`}></motion.div>
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.div>
-                        <div className="flex justify-center gap-8 mt-12">
-                            <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => setActiveStep(prev => prev === 0 ? processSteps.length - 1 : prev - 1)} className={`w-12 h-12 border-2 ${iconBorder} rounded-full flex items-center justify-center ${isDark ? 'hover:border-white' : 'hover:border-gray-900'} transition-all duration-300 ${textColor}`}>←</motion.button>
-                            <div className="flex items-center gap-4">
-                                <span className={`text-2xl font-light ${textColor}`}>{String(activeStep + 1).padStart(2, '0')}</span>
-                                <div className={`w-48 h-0.5 ${isDark ? 'bg-neutral-800' : 'bg-gray-200'}`}>
-                                    <motion.div className={`h-full ${isDark ? 'bg-white' : 'bg-gray-900'}`} initial={{ width: 0 }} animate={{ width: `${((activeStep + 1) / processSteps.length) * 100}%` }} transition={{ duration: 0.5 }} />
-                                </div>
-                                <span className={`text-2xl font-light ${mutedColor}`}>{String(processSteps.length).padStart(2, '0')}</span>
-                            </div>
-                            <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => setActiveStep(prev => (prev + 1) % processSteps.length)} className={`w-12 h-12 border-2 ${iconBorder} rounded-full flex items-center justify-center ${isDark ? 'hover:border-white' : 'hover:border-gray-900'} transition-all duration-300 ${textColor}`}>→</motion.button>
-                        </div>
-                    </div>
-                    <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }} className={`mt-20 pt-20 border-t ${borderColor}`}>
-                        <div className="grid md:grid-cols-3 gap-8">
-                            {processStats.map((stat, index) => {
-                                const IconComponent = ProcessIcons[stat.icon];
-                                return (
-                                    <motion.div key={index} whileHover={{ scale: 1.05, y: -5 }} className={`text-center p-8 border ${iconBorder} rounded-3xl`}>
-                                        <motion.div animate={{ rotate: [0, 10, -10, 0] }} transition={{ duration: 3, repeat: Infinity }} className={`flex justify-center mb-4 ${textColor}`}><IconComponent className="w-8 h-8" /></motion.div>
-                                        <motion.div initial={{ scale: 0 }} whileInView={{ scale: 1 }} transition={{ type: 'spring', delay: index * 0.1 }} viewport={{ once: true }} className={`text-5xl font-light mb-4 ${textColor}`}>{stat.value}</motion.div>
-                                        <h4 className={`text-sm tracking-widest uppercase mb-2 ${textColor}`}>{stat.title}</h4>
-                                        <p className={`${mutedColor} text-sm`}>{stat.description}</p>
-                                    </motion.div>
-                                );
-                            })}
-                        </div>
-                    </motion.div>
-                </div>
-            </div>
-        </section>
-    );
-};
-
-
-const PricingSection = ({ isDark }) => {
-    const [activeService, setActiveService] = useState(0);
-    const services = [
-        { id: 1, title: 'РАЗРАБОТКА САЙТОВ ПОД КЛЮЧ', description: 'Полный цикл разработки от дизайна до запуска. Современные технологии, адаптивная верстка, SEO-оптимизация.', price: 'от 45 000 ₽', priceRange: '45 000 - 120 000 ₽', features: ['Адаптивный дизайн (мобильные + десктоп)', 'CMS для самостоятельного управления', 'Интеграция с соц. сетями и аналитикой', 'SEO-оптимизация под поисковые системы', 'Техническая поддержка 3 месяца', 'Хостинг на 1 год в подарок'], timeline: '2-4 недели', icon: 'Website', popular: true },
-        { id: 2, title: 'ВЕРСТКА С МАКЕТА', description: 'Точная верстка Figma/PSD макетов. Чистый код, Pixel Perfect, кроссбраузерная совместимость.', price: 'от 25 000 ₽', priceRange: '25 000 - 60 000 ₽', features: ['Pixel Perfect верстка', 'Анимации и интерактивные элементы', 'Кроссбраузерная совместимость', 'Оптимизация скорости загрузки', 'Валидный HTML5/CSS3 код', 'Адаптив под все устройства'], timeline: '1-2 недели', icon: 'Layout', popular: false },
-        { id: 3, title: 'РАЗРАБОТКА СКРИПТОВ LUA', description: 'Скрипты для игр (Garrys Mod, World of Warcraft, FiveM), автоматизация процессов, игровые модификации.', price: 'от 15 000 ₽', priceRange: '15 000 - 40 000 ₽', features: ['Скрипты для игровых серверов', 'Автоматизация рутинных задач', 'Создание игровых модификаций', 'Интеграция с игровыми API', 'Оптимизация производительности', 'Тестирование и отладка'], timeline: '1-3 недели', icon: 'Lua', popular: false },
-        { id: 4, title: 'НАПИСАНИЕ БОТОВ TELEGRAM', description: 'Умные боты для автоматизации бизнеса, рассылок, опросов, интеграции с CRM и платежными системами.', price: 'от 30 000 ₽', priceRange: '30 000 - 80 000 ₽', features: ['Боты для бизнеса и личного использования', 'Интеграция с платежными системами', 'Рассылки и автоматические ответы', 'Поддержка Inline режима', 'Панель администратора', 'Ведение базы данных пользователей'], timeline: '2-3 недели', icon: 'TelegramBot', popular: false },
-        { id: 5, title: 'MINIAPPS В TELEGRAM', description: 'Мини-приложения внутри Telegram для бизнеса, игр, образовательных платформ с интеграцией TON.', price: 'от 50 000 ₽', priceRange: '50 000 - 150 000 ₽', features: ['Полная интеграция с Telegram API', 'Поддержка TON криптовалюты', 'Web App внутри мессенджера', 'Push-уведомления и алерты', 'Мультиязычность', 'Масштабируемая архитектура'], timeline: '3-5 недель', icon: 'MiniApp', popular: false },
-        { id: 6, title: 'КОНСУЛЬТАЦИЯ И АУДИТ', description: 'Технический аудит существующих проектов, консультации по разработке, помощь с выбором технологий.', price: 'от 5 000 ₽', priceRange: '5 000 - 20 000 ₽', features: ['Анализ текущего кода и архитектуры', 'Рекомендации по оптимизации', 'Обзор подходящих технологий', 'Помощь с выбором стека', 'Code review существующего проекта', 'Рекомендации по безопасности'], timeline: '1-3 дня', icon: 'ConsultationPricing', popular: false }
-    ];
-    const benefits = [
-        { icon: 'FixedPrice', title: 'ФИКСИРОВАННАЯ ЦЕНА', description: 'Цена не меняется в процессе работы' },
-        { icon: 'Speed', title: 'СКОРОСТЬ РАБОТЫ', description: 'Средний срок разработки 2-3 недели' },
-        { icon: 'Warranty', title: 'ГАРАНТИЯ 6 МЕСЯЦЕВ', description: 'Исправляем баги бесплатно полгода' },
-        { icon: 'Support24', title: 'ПОДДЕРЖКА 24/7', description: 'Отвечаем в Telegram в любое время' }
-    ];
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setActiveService(prev => (prev + 1) % services.length);
-        }, 5000);
-        return () => clearInterval(interval);
-    }, [services.length]);
-
-    const textColor = isDark ? 'text-white' : 'text-gray-900';
-    const mutedColor = isDark ? 'text-neutral-400' : 'text-gray-600';
-    const borderColor = isDark ? 'border-neutral-900' : 'border-gray-100';
-    const cardBg = isDark ? 'from-black/50 to-neutral-900/50' : 'from-white/50 to-gray-50/50';
-    const activeBg = isDark ? 'from-black to-neutral-900' : 'from-white to-gray-50';
-    const iconBorder = isDark ? 'border-neutral-800' : 'border-gray-200';
-
-    return (
-        <section id="pricing" className={`py-32 border-t ${borderColor} relative overflow-hidden`}>
-            <div className="absolute inset-0 z-0 opacity-5">
-                <motion.div initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.5 }} className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${background5})`, filter: 'grayscale(100%) blur(1px)' }}></motion.div>
-            </div>
-            <div className="absolute inset-0">
-                {[...Array(8)].map((_, i) => (
-                    <motion.div key={i} className={`absolute w-px h-32 bg-gradient-to-b from-transparent ${isDark ? 'via-white/5' : 'via-gray-900/5'} to-transparent`} initial={{ y: -100, opacity: 0 }} animate={{ y: ['-100%', '200%'], opacity: [0, 0.3, 0] }} transition={{ duration: 3, delay: i * 0.5, repeat: Infinity, repeatType: 'loop' }} style={{ left: `${10 + i * 12}%` }} />
-                ))}
-            </div>
-            <div className="container mx-auto px-6 relative z-10">
-                <motion.div initial={{ opacity: 0, x: 100 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }}>
-                    <h2 className={`text-xs tracking-widest ${isDark ? 'text-neutral-500' : 'text-gray-500'} uppercase mb-4 text-center`}>СТОИМОСТЬ</h2>
-                    <p className={`text-5xl md:text-7xl font-light tracking-tight text-center mb-12 ${textColor}`}>УСЛУГИ<span className={mutedColor}>.</span></p>
-                    <p className={`${mutedColor} text-sm tracking-widest uppercase text-center mb-20 max-w-2xl mx-auto`}>ПРОЗРАЧНЫЕ ЦЕНЫ • ФИКСИРОВАННЫЙ БЮДЖЕТ • ГАРАНТИЯ КАЧЕСТВА</p>
-                </motion.div>
-                <div className="max-w-6xl mx-auto">
-                    <div className="flex overflow-x-auto pb-6 sm:pb-8 mb-8 sm:mb-12 hide-scrollbar lg:overflow-visible lg:grid lg:grid-cols-3 lg:gap-8">
-                        {services.map((service, index) => {
-                            const IconComponent = PricingIcons[service.icon];
-                            return (
-                                <motion.button key={service.id} onClick={() => setActiveService(index)} initial={{ opacity: 0, x: 100 }} whileInView={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.1, duration: 0.5 }} viewport={{ once: true }} whileHover={{ scale: 1.05, y: -5 }} className={`flex-shrink-0 w-full sm:w-80 lg:w-auto mx-2 lg:mx-0 rounded-2xl p-6 sm:p-8 transition-all duration-500 ${activeService === index ? `bg-gradient-to-br ${activeBg} border-2 ${isDark ? 'border-white' : 'border-gray-900'} transform scale-105` : `bg-gradient-to-br ${cardBg} border ${iconBorder} ${isDark ? 'hover:border-neutral-600' : 'hover:border-gray-300'}`}`}>
-                                    <div className="flex items-start justify-between mb-6">
-                                        <motion.div animate={{ rotate: activeService === index ? [0, 5, -5, 0] : 0 }} transition={{ duration: 2, repeat: Infinity }} className={`${textColor}`}><IconComponent className="w-10 h-10" /></motion.div>
-                                        {service.popular && (<span className={`px-3 py-1 ${isDark ? 'bg-white text-black' : 'bg-gray-900 text-white'} text-xs tracking-widest rounded-full`}>ПОПУЛЯРНО</span>)}
-                                    </div>
-                                    <h3 className={`text-xl font-light mb-4 text-left tracking-tight ${textColor}`}>{service.title}</h3>
-                                    <div className="text-left mb-6">
-                                        <div className={`text-3xl font-light mb-2 ${textColor}`}>{service.price}</div>
-                                        <div className={`text-sm ${mutedColor}`}>Диапазон: {service.priceRange}</div>
-                                    </div>
-                                    <div className="text-left">
-                                        <div className={`flex items-center gap-2 text-sm ${isDark ? 'text-neutral-500' : 'text-gray-500'} mb-4`}>
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                            <span>Срок: {service.timeline}</span>
-                                        </div>
-                                        {activeService === index && (
-                                            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} transition={{ duration: 0.3 }} className={`mt-4 pt-4 border-t ${iconBorder}`}>
-                                                <p className={`text-sm ${isDark ? 'text-neutral-300' : 'text-gray-700'} mb-3`}>{service.description}</p>
-                                                <div className={`text-xs ${isDark ? 'text-neutral-500' : 'text-gray-500'}`}>
-                                                    {service.features.slice(0, 2).map((feature, i) => (
-                                                        <div key={i} className="flex items-center gap-2 mb-1">
-                                                            <svg className={`w-3 h-3 ${isDark ? 'text-white' : 'text-gray-900'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
-                                                            <span>{feature}</span>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </motion.div>
-                                        )}
-                                    </div>
-                                </motion.button>
-                            );
-                        })}
-                    </div>
-                    <motion.div key={activeService} initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} className={`bg-gradient-to-br ${activeBg} border-2 ${iconBorder} rounded-3xl p-8 lg:p-12 mb-12`}>
-                        <div className="grid lg:grid-cols-2 gap-12 items-start">
-                            <div>
-                                <div className="flex items-center gap-6 mb-8">
-                                    <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 2, repeat: Infinity }} className={`text-5xl ${textColor}`}>
-                                        {(() => {
-                                            const IconComponent = PricingIcons[services[activeService].icon];
-                                            return <IconComponent className="w-12 h-12" />;
-                                        })()}
-                                    </motion.div>
-                                    <div>
-                                        <h3 className={`text-3xl font-light mb-2 ${textColor}`}>{services[activeService].title}</h3>
-                                        <div className="flex items-center gap-4">
-                                            <div className={`text-2xl font-light ${textColor}`}>{services[activeService].price}</div>
-                                            <div className={`px-3 py-1 border ${iconBorder} rounded-full text-sm ${textColor}`}>Срок: {services[activeService].timeline}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p className={`text-xl ${isDark ? 'text-neutral-300' : 'text-gray-700'} mb-8 leading-relaxed`}>{services[activeService].description}</p>
-                                <div className="grid grid-cols-2 gap-4 mb-8">
-                                    <motion.div whileHover={{ scale: 1.05 }} className={`p-4 border ${iconBorder} rounded-2xl`}>
-                                        <div className={`text-sm ${isDark ? 'text-neutral-500' : 'text-gray-500'} mb-1`}>Диапазон цен</div>
-                                        <div className={`text-lg font-light ${textColor}`}>{services[activeService].priceRange}</div>
-                                    </motion.div>
-                                    <motion.div whileHover={{ scale: 1.05 }} className={`p-4 border ${iconBorder} rounded-2xl`}>
-                                        <div className={`text-sm ${isDark ? 'text-neutral-500' : 'text-gray-500'} mb-1`}>Срок выполнения</div>
-                                        <div className={`text-lg font-light ${textColor}`}>{services[activeService].timeline}</div>
-                                    </motion.div>
-                                </div>
-                                <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} className={`w-full py-4 border-2 ${isDark ? 'border-white text-white hover:bg-white hover:text-black' : 'border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white'} text-sm tracking-widest uppercase transition-all duration-300`}>ЗАКАЗАТЬ ЭТУ УСЛУГУ</motion.button>
-                            </div>
-                            <div>
-                                <h4 className={`text-xl font-light mb-6 tracking-widest uppercase ${textColor}`}>Что входит в услугу:</h4>
-                                <div className="space-y-4">
-                                    {services[activeService].features.map((feature, index) => (
-                                        <motion.div key={index} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.1 }} whileHover={{ x: 5 }} className={`flex items-start gap-3 p-4 border ${iconBorder} rounded-2xl ${isDark ? 'hover:border-white' : 'hover:border-gray-900'} transition-colors`}>
-                                            <div className={`w-6 h-6 rounded-full border ${isDark ? 'border-white' : 'border-gray-900'} flex items-center justify-center flex-shrink-0 mt-0.5`}>
-                                                <svg className={`w-3 h-3 ${isDark ? 'text-white' : 'text-gray-900'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
-                                            </div>
-                                            <span className={isDark ? 'text-neutral-300' : 'text-gray-700'}>{feature}</span>
-                                        </motion.div>
-                                    ))}
-                                </div>
-                                <div className={`mt-8 p-6 border ${iconBorder} rounded-2xl ${isDark ? 'bg-black/30' : 'bg-gray-50'}`}>
-                                    <h5 className={`text-sm tracking-widest uppercase mb-3 ${mutedColor}`}>ДОПОЛНИТЕЛЬНО</h5>
-                                    <ul className={`space-y-2 text-sm ${isDark ? 'text-neutral-300' : 'text-gray-700'}`}>
-                                        {['Бесплатная консультация перед началом', 'Фиксированная цена без скрытых платежей', 'Техническая поддержка после сдачи проекта', 'Гарантия на код 6 месяцев'].map((item, idx) => (
-                                            <motion.li key={idx} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: idx * 0.1 }} className="flex items-center gap-2">
-                                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                                                {item}
-                                            </motion.li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </motion.div>
-                    <div className="flex justify-between items-center mb-12">
-                        <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => setActiveService(prev => prev === 0 ? services.length - 1 : prev - 1)} className={`w-12 h-12 border-2 ${iconBorder} rounded-full flex items-center justify-center ${isDark ? 'hover:border-white' : 'hover:border-gray-900'} transition-all duration-300 ${textColor}`}>←</motion.button>
-                        <div className="flex items-center gap-6">
-                            <div className="text-center">
-                                <div className={`text-3xl font-light ${textColor}`}>{String(activeService + 1).padStart(2, '0')}</div>
-                                <div className={`text-xs tracking-widest ${isDark ? 'text-neutral-500' : 'text-gray-500'} uppercase`}>Услуга</div>
-                            </div>
-                            <div className={`w-48 h-0.5 ${isDark ? 'bg-neutral-800' : 'bg-gray-200'}`}>
-                                <motion.div className={`h-full ${isDark ? 'bg-white' : 'bg-gray-900'}`} initial={{ width: 0 }} animate={{ width: `${((activeService + 1) / services.length) * 100}%` }} transition={{ duration: 0.5 }} />
-                            </div>
-                            <div className="text-center">
-                                <div className={`text-3xl font-light ${mutedColor}`}>{String(services.length).padStart(2, '0')}</div>
-                                <div className={`text-xs tracking-widest ${isDark ? 'text-neutral-500' : 'text-gray-500'} uppercase`}>Всего</div>
-                            </div>
-                        </div>
-                        <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => setActiveService(prev => (prev + 1) % services.length)} className={`w-12 h-12 border-2 ${iconBorder} rounded-full flex items-center justify-center ${isDark ? 'hover:border-white' : 'hover:border-gray-900'} transition-all duration-300 ${textColor}`}>→</motion.button>
-                    </div>
-                    <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }} className={`mt-20 pt-20 border-t ${borderColor}`}>
-                        <h3 className={`text-2xl font-light text-center mb-12 tracking-widest uppercase ${textColor}`}>ПОЧЕМУ ВЫБИРАЮТ НАС</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                            {benefits.map((benefit, index) => {
-                                const IconComponent = PricingIcons[benefit.icon];
-                                return (
-                                    <motion.div key={index} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }} viewport={{ once: true }} whileHover={{ scale: 1.05, y: -5 }} className={`text-center p-6 border ${iconBorder} rounded-2xl`}>
-                                        <motion.div animate={{ rotate: [0, 10, -10, 0] }} transition={{ duration: 3, repeat: Infinity }} className={`flex justify-center mb-4 ${textColor}`}><IconComponent className="w-8 h-8" /></motion.div>
-                                        <h4 className={`text-sm tracking-widest uppercase mb-2 ${textColor}`}>{benefit.title}</h4>
-                                        <p className={`${mutedColor} text-xs`}>{benefit.description}</p>
-                                    </motion.div>
-                                );
-                            })}
-                        </div>
-                    </motion.div>
-                </div>
-            </div>
-            <style jsx global>{`
-                .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-                .hide-scrollbar::-webkit-scrollbar { display: none; }
-            `}</style>
-        </section>
-    );
-};
-
-
-const Portfolio = () => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [apiStatus, setApiStatus] = useState('Загрузка...');
-    const [projects, setProjects] = useState([]);
-    const [profile, setProfile] = useState(null);
-    const [isDark, setIsDark] = useState(true);
-
-    const menuItems = [
-        { id: 'home', label: 'ГЛАВНАЯ' }, { id: 'about', label: 'ОБО МНЕ' }, { id: 'projects', label: 'ПРОЕКТЫ' },
-        { id: 'process', label: 'ПРОЦЕСС' }, { id: 'pricing', label: 'ПРАЙС' }, { id: 'contact', label: 'КОНТАКТЫ' }
-    ];
-
-    const getMockProfile = () => ({
-        name: 'Алексей Петров', title: 'Full Stack Developer', bio: 'Добавьте информацию о себе в админ-панель Django',
-        email: 'example@email.com', phone: '', location: '', github_url: '', linkedin_url: '', telegram_url: '', photo: ''
+    extraOptions.forEach(opt => {
+      if (options[opt.id]) {
+        price += opt.price;
+        days += opt.days;
+      }
     });
 
-    useEffect(() => {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) setIsDark(savedTheme === 'dark');
-    }, []);
+    if (days < 3) days = 3;
+    return { price, days };
+  }, [options, currentType, extraOptions]);
 
-    const toggleTheme = () => {
-        const newTheme = !isDark;
-        setIsDark(newTheme);
-        localStorage.setItem('theme', newTheme ? 'dark' : 'light');
+  const toggleOption = (id) => {
+    setOptions(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const handleApplyOrder = () => {
+    const selectedOptsLabels = extraOptions
+      .filter(o => options[o.id])
+      .map(o => `• ${o.label}`)
+      .join('\n');
+
+    const message = `Здравствуйте! Рассчитал проект через калькулятор на сайте:\n\n` +
+      `Тип проекта: ${currentType.title}\n` +
+      `Выбранные опции:\n${selectedOptsLabels || '• Базовая комплектация'}\n\n` +
+      `Ориентировочная стоимость: ~${calculated.price.toLocaleString('ru-RU')} ₽\n` +
+      `Ориентировочный срок: ~${calculated.days} дн.\n\n` +
+      `Хочу обсудить детали и приступить к работе.`;
+
+    onSelectService(message);
+  };
+
+  return (
+    <div
+      className={`rounded-3xl border p-6 sm:p-10 transition-all ${
+        isDark ? 'bg-zinc-950/70 border-zinc-800' : 'bg-white border-zinc-200 shadow-xl'
+      }`}
+    >
+      <div className="flex items-center gap-3 mb-6">
+        <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
+          <Calculator className="w-5 h-5" />
+        </div>
+        <div>
+          <h3 className={`text-lg sm:text-xl font-semibold ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+            Интерактивный калькулятор проекта
+          </h3>
+          <p className={`text-xs ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+            Выберите параметры — мгновенно рассчитайте бюджет и сроки без скрытых доплат
+          </p>
+        </div>
+      </div>
+
+      {/* Step 1: Project Type */}
+      <div className="mb-6">
+        <label className={`block text-xs font-mono uppercase tracking-wider mb-3 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+          1. Выберите тип разработки:
+        </label>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+          {types.map((type) => {
+            const Icon = type.icon;
+            const isSelected = projectType === type.id;
+            return (
+              <button
+                key={type.id}
+                onClick={() => setProjectType(type.id)}
+                className={`p-3.5 rounded-2xl border text-left transition-all duration-200 ${
+                  isSelected
+                    ? isDark
+                      ? 'bg-blue-600/15 border-blue-500 text-white shadow-lg shadow-blue-500/10'
+                      : 'bg-blue-50 border-blue-500 text-blue-900 shadow-sm'
+                    : isDark
+                      ? 'bg-zinc-900/50 border-zinc-800 text-zinc-400 hover:text-zinc-200 hover:border-zinc-700'
+                      : 'bg-zinc-50 border-zinc-200 text-zinc-600 hover:text-zinc-900 hover:border-zinc-300'
+                }`}
+              >
+                <Icon className={`w-5 h-5 mb-2 ${isSelected ? 'text-blue-500' : 'text-zinc-400'}`} />
+                <div className="text-xs font-medium leading-tight mb-1">{type.title}</div>
+                <div className={`text-[11px] font-mono ${isSelected ? (isDark ? 'text-blue-300' : 'text-blue-700') : 'text-zinc-500'}`}>
+                  от {type.basePrice.toLocaleString('ru-RU')} ₽
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Step 2: Extra Options */}
+      <div className="mb-8">
+        <label className={`block text-xs font-mono uppercase tracking-wider mb-3 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+          2. Дополнительные опции:
+        </label>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {extraOptions.map((opt) => {
+            const checked = options[opt.id];
+            return (
+              <div
+                key={opt.id}
+                onClick={() => toggleOption(opt.id)}
+                className={`flex items-center justify-between p-3.5 rounded-2xl border cursor-pointer select-none transition-all ${
+                  checked
+                    ? isDark
+                      ? 'bg-zinc-900/80 border-emerald-500/40 text-zinc-100'
+                      : 'bg-emerald-50/60 border-emerald-500/50 text-zinc-900'
+                    : isDark
+                      ? 'bg-zinc-900/30 border-zinc-800/80 text-zinc-400 hover:border-zinc-700'
+                      : 'bg-zinc-50/60 border-zinc-200 text-zinc-600 hover:border-zinc-300'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`w-5 h-5 rounded-lg border flex items-center justify-center transition-all ${
+                      checked
+                        ? 'bg-emerald-500 border-emerald-500 text-white'
+                        : isDark
+                          ? 'border-zinc-700'
+                          : 'border-zinc-300 bg-white'
+                    }`}
+                  >
+                    {checked && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                  </div>
+                  <span className="text-xs font-medium">{opt.label}</span>
+                </div>
+                <span className={`text-[11px] font-mono pl-2 shrink-0 ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
+                  +{opt.price.toLocaleString('ru-RU')} ₽
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Calculation Summary Footer */}
+      <div
+        className={`p-5 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ${
+          isDark
+            ? 'bg-zinc-900/60 border-zinc-800'
+            : 'bg-zinc-100/70 border-zinc-200'
+        }`}
+      >
+        <div>
+          <div className="text-[11px] font-mono uppercase tracking-wider text-zinc-400">Итоговая оценка</div>
+          <div className="flex items-baseline gap-3 mt-0.5">
+            <span className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+              ~{calculated.price.toLocaleString('ru-RU')} ₽
+            </span>
+            <span className="text-xs text-emerald-500 font-mono font-medium flex items-center gap-1">
+              <Clock className="w-3.5 h-3.5" /> ~{calculated.days} дней
+            </span>
+          </div>
+        </div>
+
+        <button
+          onClick={handleApplyOrder}
+          className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs tracking-wider uppercase flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-600/20 hover:shadow-blue-600/30 active:scale-95"
+        >
+          <span>Заказать расчет</span>
+          <ArrowRight className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// ==================== MAIN PORTFOLIO COMPONENT ====================
+const Portfolio = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [apiStatus, setApiStatus] = useState('Загрузка данных...');
+  const [projects, setProjects] = useState([]);
+  const [profile, setProfile] = useState(null);
+  const [isDark, setIsDark] = useState(true);
+  const [activeTab, setActiveTab] = useState('all');
+  const [copiedText, setCopiedText] = useState(null);
+
+  // Contact Form State
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
+  const [errors, setErrors] = useState({});
+
+  const menuItems = [
+    { id: 'home', label: 'Главная' },
+    { id: 'about', label: 'Обо мне' },
+    { id: 'projects', label: 'Проекты' },
+    { id: 'services', label: 'Услуги & Прайс' },
+    { id: 'process', label: 'Процесс' },
+    { id: 'contact', label: 'Контакты' },
+  ];
+
+  const getMockProfile = () => ({
+    name: 'phax',
+    title: 'Fullstack Разработчик',
+    bio: 'Специализируюсь на создании сайтов под ключ, Telegram-ботов любой сложности, WebApp мини-приложений и Lua скриптов. Чистый код, гарантия и поддержка.',
+    email: 'phaxdev.info@internet.ru',
+    location: 'Владикавказ, Россия',
+    github_url: 'https://github.com/phaxdev',
+    telegram_url: 'https://t.me/skypespeaker',
+    photo_url: 'https://res.cloudinary.com/ddear0jsu/image/upload/v1/media/profile/photo_2026-01-10_18-06-35_mzpitz',
+  });
+
+  // Theme Sync
+  useEffect(() => {
+    const saved = localStorage.getItem('theme');
+    if (saved) setIsDark(saved === 'dark');
+  }, []);
+
+  const toggleTheme = () => {
+    const next = !isDark;
+    setIsDark(next);
+    localStorage.setItem('theme', next ? 'dark' : 'light');
+  };
+
+  // Data Fetching
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setApiStatus('Подключение к серверу...');
+        const API_URL = process.env.REACT_APP_API_URL || '/api';
+        
+        const [projectsRes, profileRes] = await Promise.allSettled([
+          fetch(`${API_URL}/projects/`).then((r) => (r.ok ? r.json() : [])),
+          fetch(`${API_URL}/profile/`).then((r) => (r.ok ? r.json() : getMockProfile())),
+        ]);
+
+        const projectsData = projectsRes.status === 'fulfilled' && Array.isArray(projectsRes.value) ? projectsRes.value : [];
+        const profileData = profileRes.status === 'fulfilled' && profileRes.value ? profileRes.value : getMockProfile();
+
+        setProjects(projectsData);
+        setProfile(profileData);
+        setApiStatus('Онлайн');
+      } catch (err) {
+        console.error('Data fetch error:', err);
+        setProfile(getMockProfile());
+        setProjects([]);
+        setApiStatus('Автономный режим');
+      }
     };
+    fetchData();
+  }, []);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true); setApiStatus('Подключение к сайту...');
-                const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
-                const [projectsRes, profileRes] = await Promise.allSettled([
-                    fetch(`${API_URL}/projects/`).then(r => r.ok ? r.json() : []),
-                    fetch(`${API_URL}/profile/`).then(r => r.ok ? r.json() : getMockProfile())
-                ]);
-                const projectsData = projectsRes.status === 'fulfilled' && Array.isArray(projectsRes.value) ? projectsRes.value : [];
-                const profileData = profileRes.status === 'fulfilled' && profileRes.value ? profileRes.value : getMockProfile();
-                setProjects(projectsData); setProfile(profileData); setApiStatus('Данные загружены');
-            } catch (error) {
-                console.error('Ошибка при загрузке данных:', error);
-                setProfile(getMockProfile()); setProjects([]); setApiStatus('Ошибка подключения к API');
-            } finally { setLoading(false); }
-        };
-        fetchData();
-    }, []);
+  const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    setIsMenuOpen(false);
+  };
 
-    const handleScroll = (id) => {
-        const element = document.getElementById(id);
-        if (element) element.scrollIntoView({ behavior: 'smooth' });
-        setIsMenuOpen(false);
-    };
+  const copyToClipboard = (text, key) => {
+    navigator.clipboard.writeText(text);
+    setCopiedText(key);
+    setTimeout(() => setCopiedText(null), 2000);
+  };
 
-    if (loading) return <LoadingScreen apiStatus={apiStatus} isDark={isDark} />;
+  const handleCalculatorSelect = (prefilledMessage) => {
+    setFormData(prev => ({ ...prev, message: prefilledMessage }));
+    scrollTo('contact');
+  };
 
-    const safeProjects = Array.isArray(projects) ? projects : [];
-    const bgColor = isDark ? 'bg-black' : 'bg-white';
-    const textColor = isDark ? 'text-white' : 'text-gray-900';
-    const mutedColor = isDark ? 'text-neutral-400' : 'text-gray-600';
-    const borderColor = isDark ? 'border-neutral-900' : 'border-gray-100';
-    const navBg = isDark ? 'bg-black/95' : 'bg-white/95';
+  // Form Handling
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
+  };
 
-    return (
-        <HelmetProvider>
-            <div className={`min-h-screen ${bgColor} ${textColor} font-sans transition-colors duration-500`}>
-                <SEO title="Разработчик сайтов | Создание Telegram ботов | Lua скрипты под ключ" description="Профессиональный fullstack разработчик. Делаю сайты под ключ от 25.000₽, Telegram боты, мини-приложения, скрипты Lua. Гарантия 6 месяцев. Срок от 2 недель." keywords="заказать сайт недорого, разработка сайтов москва, создать телеграм бота, программист на Lua, верстка макетов Figma, разработка мини-приложений, fullstack разработчик, веб-разработка под ключ" ogUrl={window.location.href} author={profile?.name || 'phax'} />
-                <motion.nav initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.6 }} className={`fixed w-full ${navBg} backdrop-blur-sm z-50 border-b ${borderColor}`}>
-                    <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
-                        <div className="flex justify-between items-center">
-                            <motion.div whileHover={{ scale: 1.05 }} className={`text-sm tracking-widest uppercase font-light ${textColor}`}>{profile?.name?.split(' ')[0] || 'Portfolio'}</motion.div>
-                            <div className="hidden md:flex space-x-12 items-center">
-                                {menuItems.map(item => (
-                                    <motion.button key={item.id} whileHover={{ scale: 1.1, y: -2 }} onClick={() => handleScroll(item.id)} className={`text-xs tracking-widest ${mutedColor} hover:${textColor} transition-colors uppercase`}>{item.label}</motion.button>
-                                ))}
-                                <ThemeToggle isDark={isDark} toggleTheme={toggleTheme} />
-                            </div>
-                            <div className="md:hidden flex items-center gap-4">
-                                <ThemeToggle isDark={isDark} toggleTheme={toggleTheme} />
-                                <motion.button whileHover={{ scale: 1.05 }} className={`${mutedColor} hover:${textColor} transition-colors text-sm tracking-widest`} onClick={() => setIsMenuOpen(!isMenuOpen)}>{isMenuOpen ? 'ЗАКРЫТЬ' : 'МЕНЮ'}</motion.button>
-                            </div>
-                        </div>
-                        <AnimatePresence>
-                            {isMenuOpen && (
-                                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="md:hidden mt-8 pb-8 space-y-6">
-                                    {menuItems.map(item => (
-                                        <motion.button key={item.id} whileHover={{ x: 10 }} onClick={() => handleScroll(item.id)} className={`block w-full text-left text-sm tracking-widest ${mutedColor} hover:${textColor} transition-colors uppercase`}>{item.label}</motion.button>
-                                    ))}
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                    </div>
-                </motion.nav>
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    const newErrors = {};
+    if (!formData.name.trim()) newErrors.name = 'Укажите имя или ник в Telegram';
+    if (!formData.email.trim()) newErrors.email = 'Укажите email для ответа';
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Некорректный email';
+    if (!formData.message.trim()) newErrors.message = 'Напишите кратко суть задачи';
 
-                <HeroSection profile={profile} safeProjects={safeProjects} handleScroll={handleScroll} isDark={isDark} />
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
 
-                <section id="about" className={`py-32 border-t ${borderColor} relative overflow-hidden`}>
-                    <div className="absolute inset-0 z-0 opacity-5">
-                        <motion.div initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.5 }} className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${background2})`, filter: 'grayscale(100%)' }}></motion.div>
-                    </div>
-                    <div className="container mx-auto px-6 relative z-10">
-                        <motion.div initial={{ opacity: 0, x: 100 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }} className="max-w-3xl mx-auto">
-                            <h2 className={`text-xs tracking-widest ${isDark ? 'text-neutral-500' : 'text-gray-500'} uppercase mb-12 text-center`}>ОБО МНЕ</h2>
-                            <div className="text-center space-y-8">
-                                <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.6 }} viewport={{ once: true }} className={`text-xl sm:text-2xl md:text-3xl font-light leading-relaxed ${isDark ? 'text-neutral-300' : 'text-gray-700'} px-4`}>
-                                    {profile?.bio || 'Информация о вас появится здесь после добавления в админ-панель.'}
-                                </motion.p>
-                                {(profile?.email || profile?.location) && (
-                                    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.6 }} viewport={{ once: true }} className={`flex flex-col sm:flex-row justify-center gap-4 sm:gap-12 pt-8 sm:pt-12 text-sm tracking-wide ${isDark ? 'text-neutral-500' : 'text-gray-500'} px-4`}>
-                                        {profile?.email && <div>EMAIL: {profile.email}</div>}
-                                        {profile?.location && <div>ЛОКАЦИЯ: {profile.location}</div>}
-                                    </motion.div>
-                                )}
-                            </div>
-                        </motion.div>
-                    </div>
-                </section>
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+    try {
+      const API_URL = process.env.REACT_APP_API_URL || '/api';
+      const res = await fetch(`${API_URL}/contact-messages/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
 
-                <section id="projects" className={`py-32 border-t ${borderColor} relative overflow-hidden`}>
-                    <div className="absolute inset-0 z-0 opacity-10">
-                        <motion.div initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.5 }} className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${background3})`, filter: 'grayscale(100%) blur(0.5px)' }}></motion.div>
-                    </div>
-                    <div className={`absolute inset-0 bg-gradient-to-b from-transparent ${isDark ? 'via-black/50 to-black' : 'via-white/50 to-white'} pointer-events-none`}></div>
-                    <div className="container mx-auto px-6 relative z-10">
-                        <motion.div initial={{ opacity: 0, x: 100 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }} className="text-center mb-20">
-                            <h2 className={`text-xs tracking-widest ${isDark ? 'text-neutral-500' : 'text-gray-500'} uppercase mb-4`}>ПРОЕКТЫ</h2>
-                            <p className={`text-4xl sm:text-5xl md:text-7xl font-light tracking-tight ${textColor} px-4`}>РАБОТЫ<span className={mutedColor}>.</span></p>
-                            <p className={`${mutedColor} text-sm tracking-widest uppercase mt-4`}>СВАЙПАЙТЕ → ДЛЯ ПРОСМОТРА</p>
-                        </motion.div>
-                        <ProjectsSwiper projects={safeProjects} isDark={isDark} />
-                    </div>
-                </section>
+      if (res.ok || res.status === 201) {
+        setSubmitStatus({
+          type: 'success',
+          message: 'Сообщение успешно отправлено! Я свяжусь с вами в ближайшее время.',
+        });
+        setFormData({ name: '', email: '', phone: '', message: '' });
+      } else {
+        throw new Error('Server error');
+      }
+    } catch (err) {
+      console.error(err);
+      setSubmitStatus({
+        type: 'error',
+        message: 'Не удалось отправить форму через сервер. Напишите напрямую в Telegram @skypespeaker!',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
-                <WorkProcess isDark={isDark} />
-                <PricingSection isDark={isDark} />
+  // Filtered Projects
+  const filteredProjects = useMemo(() => {
+    if (!Array.isArray(projects) || projects.length === 0) return [];
+    if (activeTab === 'all') return projects;
+    return projects.filter(p => {
+      const tech = (p.technologies || p.technologies_list || []).toString().toLowerCase();
+      const title = (p.title || '').toLowerCase();
+      if (activeTab === 'web') return tech.includes('react') || tech.includes('django') || tech.includes('api') || title.includes('geo');
+      if (activeTab === 'tg') return tech.includes('telegram') || tech.includes('bot') || title.includes('bot') || title.includes('userbot');
+      if (activeTab === 'lua') return tech.includes('lua') || title.includes('lua');
+      return true;
+    });
+  }, [projects, activeTab]);
 
-                <section id="contact" className={`py-32 border-t ${borderColor} relative overflow-hidden`}>
-                    <div className="absolute inset-0 z-0 opacity-5">
-                        <motion.div initial={{ scale: 1.2 }} animate={{ scale: 1 }} transition={{ duration: 1.5 }} className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${background3})`, filter: 'grayscale(100%) blur(0.5px)' }}></motion.div>
-                    </div>
-                    <div className="container mx-auto px-6 relative z-10">
-                        <motion.div initial={{ opacity: 0, x: 100 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }}>
-                            <h2 className={`text-xs tracking-widest ${isDark ? 'text-neutral-500' : 'text-gray-500'} uppercase mb-20 text-center`}>КОНТАКТЫ</h2>
-                            <ContactForm isDark={isDark} />
-                            {(profile?.github_url || profile?.linkedin_url || profile?.telegram_url) && (
-                                <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} viewport={{ once: true }} className={`flex flex-wrap justify-center gap-6 sm:gap-12 mt-12 sm:mt-20 text-xs tracking-widest uppercase px-4`}>
-                                    {profile?.github_url && <motion.a whileHover={{ scale: 1.1, y: -2 }} href={profile.github_url} target="_blank" rel="noopener noreferrer" className={`${mutedColor} hover:${textColor} transition-colors`}>GITHUB</motion.a>}
-                                    {profile?.linkedin_url && <motion.a whileHover={{ scale: 1.1, y: -2 }} href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" className={`${mutedColor} hover:${textColor} transition-colors`}>LINKEDIN</motion.a>}
-                                    {profile?.telegram_url && <motion.a whileHover={{ scale: 1.1, y: -2 }} href={profile.telegram_url} target="_blank" rel="noopener noreferrer" className={`${mutedColor} hover:${textColor} transition-colors`}>TELEGRAM</motion.a>}
-                                </motion.div>
-                            )}
-                        </motion.div>
-                    </div>
-                </section>
+  return (
+    <HelmetProvider>
+      <div className={`min-h-screen transition-colors duration-500 font-sans ${isDark ? 'bg-[#09090b] text-zinc-100' : 'bg-[#fafafa] text-zinc-900'}`}>
+        <SEO author={profile?.name || 'phax'} />
 
-                <footer className={`py-12 border-t ${borderColor}`}>
-                    <div className="container mx-auto px-6">
-                        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 0.6 }} viewport={{ once: true }} className="text-center space-y-4">
-                            <p className={`text-xs tracking-widest ${isDark ? 'text-neutral-500' : 'text-gray-500'} uppercase`}>© {new Date().getFullYear()} {profile?.name || 'phax'}</p>
-                            <p className={`text-xs ${isDark ? 'text-neutral-700' : 'text-gray-300'}`}>MADE BY DEV</p>
-                            <p className={`text-xs ${isDark ? 'text-neutral-800' : 'text-gray-200'} tracking-widest`}>Статус API: {apiStatus}</p>
-                        </motion.div>
-                    </div>
-                </footer>
+        {/* Global Mesh Background Glow */}
+        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+          <div
+            className={`absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full blur-[120px] transition-opacity duration-1000 ${
+              isDark ? 'bg-blue-600/10 opacity-70' : 'bg-blue-400/15 opacity-60'
+            }`}
+          />
+          <div
+            className={`absolute top-[40%] -left-32 w-[500px] h-[500px] rounded-full blur-[140px] transition-opacity duration-1000 ${
+              isDark ? 'bg-indigo-600/10 opacity-60' : 'bg-indigo-400/10 opacity-40'
+            }`}
+          />
+          <div
+            className={`absolute top-[70%] -right-32 w-[600px] h-[600px] rounded-full blur-[140px] transition-opacity duration-1000 ${
+              isDark ? 'bg-emerald-600/10 opacity-60' : 'bg-emerald-400/10 opacity-40'
+            }`}
+          />
+          <div className={`absolute inset-0 ${isDark ? 'bg-grid-pattern opacity-40' : 'bg-grid-pattern-light opacity-50'}`} />
+        </div>
 
-                <style jsx global>{`
-                    .animate-pulse-once { animation: pulse-once 1s ease-in-out; }
-                    @keyframes pulse-once { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
-                `}</style>
+        {/* ==================== HEADER ==================== */}
+        <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isDark ? 'glass-nav' : 'glass-nav-light'}`}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            {/* Logo */}
+            <a href="#home" className="flex items-center gap-2.5 group">
+              <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white font-mono font-bold shadow-lg shadow-blue-600/30 group-hover:scale-105 transition-transform">
+                <Code2 className="w-5 h-5" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-extrabold tracking-wider text-base uppercase font-mono">
+                  {profile?.name || 'PHAX'}
+                  <span className="text-blue-500">.</span>
+                </span>
+                <span className="text-[10px] text-zinc-400 tracking-widest uppercase -mt-1 font-mono">DEV STUDIO</span>
+              </div>
+            </a>
+
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center gap-1.5 p-1 rounded-2xl border bg-zinc-900/40 border-zinc-800/80 backdrop-blur-md">
+              {menuItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => scrollTo(item.id)}
+                  className={`px-4 py-2 rounded-xl text-xs font-medium tracking-wide uppercase transition-all duration-200 ${
+                    isDark
+                      ? 'text-zinc-400 hover:text-white hover:bg-zinc-800/70'
+                      : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </nav>
+
+            {/* Right Actions */}
+            <div className="hidden sm:flex items-center gap-3">
+              <ThemeToggle isDark={isDark} toggleTheme={toggleTheme} />
+              <a
+                href={profile?.telegram_url || 'https://t.me/skypespeaker'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold tracking-wider uppercase flex items-center gap-2 transition-all shadow-md shadow-blue-600/20 active:scale-95"
+              >
+                <Send className="w-3.5 h-3.5" />
+                <span>Telegram</span>
+              </a>
             </div>
-        </HelmetProvider>
-    );
+
+            {/* Mobile Hamburger */}
+            <div className="flex items-center gap-2 md:hidden">
+              <ThemeToggle isDark={isDark} toggleTheme={toggleTheme} />
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className={`p-2 rounded-xl border ${isDark ? 'border-zinc-800 text-zinc-200' : 'border-zinc-300 text-zinc-800'}`}
+              >
+                {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile Drawer */}
+          <AnimatePresence>
+            {isMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className={`md:hidden border-b px-4 py-6 space-y-2 ${isDark ? 'bg-zinc-950/95 border-zinc-800' : 'bg-white/95 border-zinc-200'}`}
+              >
+                {menuItems.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => scrollTo(item.id)}
+                    className="block w-full text-left px-4 py-3 rounded-xl text-sm font-medium tracking-wide uppercase hover:bg-blue-600/10 hover:text-blue-500 transition-colors"
+                  >
+                    {item.label}
+                  </button>
+                ))}
+                <div className="pt-4 border-t border-zinc-800/50">
+                  <a
+                    href={profile?.telegram_url || 'https://t.me/skypespeaker'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-3 rounded-xl bg-blue-600 text-white text-xs font-semibold uppercase flex items-center justify-center gap-2"
+                  >
+                    <Send className="w-4 h-4" />
+                    <span>Написать в Telegram</span>
+                  </a>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </header>
+
+        <main className="relative z-10 pt-24 sm:pt-32">
+          {/* ==================== HERO SECTION ==================== */}
+          <section id="home" className="min-h-[85vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 relative">
+            <div className="max-w-5xl mx-auto w-full text-center space-y-8">
+              {/* Status Badge */}
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border text-xs font-mono font-medium backdrop-blur-md bg-zinc-900/60 border-zinc-800 text-zinc-300 shadow-sm"
+              >
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                </span>
+                <span>Доступен для новых проектов • Открыт к заказам</span>
+              </motion.div>
+
+              {/* Main Headline */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="space-y-4"
+              >
+                <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.1] max-w-4xl mx-auto">
+                  Создаю{' '}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-cyan-400 to-indigo-500">
+                    веб-сайты
+                  </span>
+                  ,{' '}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400">
+                    ботов
+                  </span>{' '}
+                  и{' '}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">
+                    скрипты
+                  </span>
+                </h1>
+                <p className={`text-base sm:text-xl max-w-2xl mx-auto font-light leading-relaxed ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                  Fullstack разработка под ключ: от идеи и дизайн-макета до деплоя на сервер с гарантией 6 месяцев.
+                </p>
+              </motion.div>
+
+              {/* CTA Buttons */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2"
+              >
+                <button
+                  onClick={() => scrollTo('contact')}
+                  className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm tracking-wider uppercase flex items-center justify-center gap-2.5 shadow-xl shadow-blue-600/25 hover:shadow-blue-600/35 active:scale-95 transition-all"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span>Обсудить задачу</span>
+                </button>
+                <button
+                  onClick={() => scrollTo('projects')}
+                  className={`w-full sm:w-auto px-8 py-4 rounded-2xl border font-medium text-sm tracking-wider uppercase flex items-center justify-center gap-2.5 transition-all active:scale-95 ${
+                    isDark
+                      ? 'bg-zinc-900/60 border-zinc-800 text-zinc-300 hover:text-white hover:border-zinc-700 hover:bg-zinc-800/80'
+                      : 'bg-white border-zinc-300 text-zinc-700 hover:text-black hover:border-zinc-400'
+                  }`}
+                >
+                  <Compass className="w-4 h-4" />
+                  <span>Смотреть работы ({projects.length})</span>
+                </button>
+                {profile?.cv_file && (
+                  <a
+                    href={profile.cv_file}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`w-full sm:w-auto px-6 py-4 rounded-2xl border font-medium text-sm tracking-wider uppercase flex items-center justify-center gap-2 transition-all ${
+                      isDark
+                        ? 'border-zinc-800/80 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900/40'
+                        : 'border-zinc-200 text-zinc-500 hover:text-zinc-800'
+                    }`}
+                  >
+                    <span>Резюме</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                )}
+              </motion.div>
+
+              {/* Stats Chips */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto pt-6"
+              >
+                {[
+                  { value: '3+ года', label: 'Коммерческий опыт', icon: Clock },
+                  { value: `${projects.length || '3+'} проекта`, label: 'Сдано в продакшн', icon: CheckCircle2 },
+                  { value: '100%', label: 'Соблюдение дедлайнов', icon: Zap },
+                  { value: '6 мес.', label: 'Гарантия и поддержка', icon: ShieldCheck },
+                ].map((stat, i) => {
+                  const Icon = stat.icon;
+                  return (
+                    <div
+                      key={i}
+                      className={`p-4 rounded-2xl border text-center transition-all ${
+                        isDark ? 'bg-zinc-950/50 border-zinc-800/70' : 'bg-white/80 border-zinc-200 shadow-sm'
+                      }`}
+                    >
+                      <Icon className="w-4 h-4 mx-auto mb-2 text-blue-500 opacity-80" />
+                      <div className={`text-xl sm:text-2xl font-bold tracking-tight ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+                        {stat.value}
+                      </div>
+                      <div className={`text-[11px] uppercase tracking-wider mt-0.5 ${isDark ? 'text-zinc-500' : 'text-zinc-500'}`}>
+                        {stat.label}
+                      </div>
+                    </div>
+                  );
+                })}
+              </motion.div>
+
+              {/* Interactive Terminal Showcase */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.4 }}
+                className="max-w-2xl mx-auto pt-4"
+              >
+                <InteractiveTerminal isDark={isDark} profile={profile} />
+              </motion.div>
+            </div>
+          </section>
+
+          {/* ==================== BENTO ABOUT & SKILLS ==================== */}
+          <section id="about" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <span className="text-xs font-mono uppercase tracking-widest text-blue-500 font-semibold">
+                {"// Экспертиза & Обо мне"}
+              </span>
+              <h2 className={`text-3xl sm:text-5xl font-extrabold tracking-tight mt-2 ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+                Технологии и подход к работе
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {/* Bento 1: Profile Main */}
+              <div
+                className={`md:col-span-2 lg:col-span-2 p-6 sm:p-8 rounded-3xl border flex flex-col justify-between transition-all ${
+                  isDark ? 'bg-zinc-950/70 border-zinc-800' : 'bg-white border-zinc-200 shadow-md'
+                }`}
+              >
+                <div className="flex items-start gap-5 mb-6">
+                  {profile?.photo_url && (
+                    <img
+                      src={profile.photo_url}
+                      alt={profile?.name || 'phax'}
+                      className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover border-2 border-blue-500/30 shadow-lg shrink-0"
+                    />
+                  )}
+                  <div>
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[11px] font-mono mb-2">
+                      <Sparkles className="w-3 h-3" />
+                      <span>{profile?.title || 'Fullstack Developer'}</span>
+                    </div>
+                    <h3 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+                      {profile?.name || 'phax'}
+                    </h3>
+                    <p className="text-xs text-zinc-400 flex items-center gap-1 mt-1 font-mono">
+                      <MapPin className="w-3.5 h-3.5 text-zinc-500" />
+                      {profile?.location || 'Владикавказ, Россия / Remote'}
+                    </p>
+                  </div>
+                </div>
+
+                <p className={`text-sm sm:text-base leading-relaxed mb-6 font-light ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                  {profile?.bio ||
+                    'Разрабатываю надежные веб-сервисы, быстрых Telegram-ботов и Lua скрипты. Ценю чистую архитектуру, высокую скорость отклика и прозрачное общение с заказчиком.'}
+                </p>
+
+                <div className="flex flex-wrap gap-2 pt-4 border-t border-zinc-800/60">
+                  <span className="px-3 py-1 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-mono">
+                    #FullStack
+                  </span>
+                  <span className="px-3 py-1 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-mono">
+                    #TelegramBots
+                  </span>
+                  <span className="px-3 py-1 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-mono">
+                    #LuaScripts
+                  </span>
+                  <span className="px-3 py-1 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-mono">
+                    #ReactDjango
+                  </span>
+                </div>
+              </div>
+
+              {/* Bento 2: Telegram Bots & TMA */}
+              <div
+                className={`p-6 sm:p-8 rounded-3xl border flex flex-col justify-between transition-all ${
+                  isDark ? 'bg-zinc-950/70 border-zinc-800' : 'bg-white border-zinc-200 shadow-md'
+                }`}
+              >
+                <div>
+                  <div className="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 flex items-center justify-center mb-5">
+                    <Bot className="w-6 h-6" />
+                  </div>
+                  <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+                    Telegram Боты & TMA
+                  </h3>
+                  <p className={`text-xs leading-relaxed ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                    Умные боты для бизнеса, WebApp мини-аппы, интеграция CryptoPay / ЮKassa, рассылки и автоворонки.
+                  </p>
+                </div>
+                <div className="mt-6 pt-4 border-t border-zinc-800/60 flex items-center justify-between text-xs font-mono text-cyan-400">
+                  <span>Aiogram 3 / TMA</span>
+                  <CheckCircle2 className="w-4 h-4 text-cyan-400" />
+                </div>
+              </div>
+
+              {/* Bento 3: Lua Scripting */}
+              <div
+                className={`p-6 sm:p-8 rounded-3xl border flex flex-col justify-between transition-all ${
+                  isDark ? 'bg-zinc-950/70 border-zinc-800' : 'bg-white border-zinc-200 shadow-md'
+                }`}
+              >
+                <div>
+                  <div className="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center mb-5">
+                    <FileCode2 className="w-6 h-6" />
+                  </div>
+                  <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+                    Lua Скрипты
+                  </h3>
+                  <p className={`text-xs leading-relaxed ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                    Игровые серверы Garry's Mod, FiveM, скрипты автоматизации и интеграции с внешними API серверов.
+                  </p>
+                </div>
+                <div className="mt-6 pt-4 border-t border-zinc-800/60 flex items-center justify-between text-xs font-mono text-purple-400">
+                  <span>GMod / FiveM</span>
+                  <CheckCircle2 className="w-4 h-4 text-purple-400" />
+                </div>
+              </div>
+
+              {/* Bento 4: Fast Copy Contacts */}
+              <div
+                className={`md:col-span-3 lg:col-span-4 p-6 sm:p-8 rounded-3xl border flex flex-col sm:flex-row items-center justify-between gap-6 transition-all ${
+                  isDark
+                    ? 'bg-gradient-to-r from-blue-950/30 via-zinc-950 to-indigo-950/30 border-zinc-800'
+                    : 'bg-gradient-to-r from-blue-50/50 via-white to-indigo-50/50 border-zinc-200 shadow-md'
+                }`}
+              >
+                <div className="flex items-center gap-4">
+                  <div className="p-3.5 rounded-2xl bg-blue-600/10 text-blue-500 border border-blue-500/20">
+                    <Flame className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 className={`text-base font-bold ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+                      Нужен быстрый ответ?
+                    </h4>
+                    <p className={`text-xs ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                      Пишите прямо сейчас в Telegram или на почту — скопируйте контакт в один клик
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                  <button
+                    onClick={() => copyToClipboard('https://t.me/skypespeaker', 'tg')}
+                    className={`px-4 py-2.5 rounded-xl border text-xs font-mono flex items-center gap-2 transition-all ${
+                      isDark
+                        ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700 text-zinc-200'
+                        : 'bg-white border-zinc-300 hover:border-zinc-400 text-zinc-800'
+                    }`}
+                  >
+                    {copiedText === 'tg' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>@skypespeaker</span>
+                  </button>
+
+                  <button
+                    onClick={() => copyToClipboard(profile?.email || 'phaxdev.info@internet.ru', 'email')}
+                    className={`px-4 py-2.5 rounded-xl border text-xs font-mono flex items-center gap-2 transition-all ${
+                      isDark
+                        ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700 text-zinc-200'
+                        : 'bg-white border-zinc-300 hover:border-zinc-400 text-zinc-800'
+                    }`}
+                  >
+                    {copiedText === 'email' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{profile?.email || 'phaxdev.info@internet.ru'}</span>
+                  </button>
+
+                  <a
+                    href="https://t.me/skypespeaker"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium uppercase tracking-wider flex items-center gap-2 transition-all shadow-md shadow-blue-600/20"
+                  >
+                    <span>Открыть диалог</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ==================== PROJECTS SHOWCASE ==================== */}
+          <section id="projects" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-zinc-800/60">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+              <div>
+                <span className="text-xs font-mono uppercase tracking-widest text-blue-500 font-semibold">
+                  {"// Портфолио"}
+                </span>
+                <h2 className={`text-3xl sm:text-5xl font-extrabold tracking-tight mt-2 ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+                  Реализованные проекты
+                </h2>
+              </div>
+
+              {/* Filter Tabs */}
+              <div className="flex items-center gap-1.5 p-1 rounded-2xl border bg-zinc-900/40 border-zinc-800/80 self-start md:self-auto">
+                {[
+                  { id: 'all', label: 'Все' },
+                  { id: 'web', label: 'Веб & API' },
+                  { id: 'tg', label: 'Telegram' },
+                  { id: 'lua', label: 'Lua' },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`px-4 py-2 rounded-xl text-xs font-medium uppercase tracking-wider transition-all ${
+                      activeTab === tab.id
+                        ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
+                        : isDark
+                          ? 'text-zinc-400 hover:text-white'
+                          : 'text-zinc-600 hover:text-zinc-900'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Projects Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredProjects.length > 0 ? (
+                filteredProjects.map((project, idx) => {
+                  const techList = Array.isArray(project.technologies_list)
+                    ? project.technologies_list
+                    : typeof project.technologies === 'string'
+                      ? project.technologies.split(',').map(s => s.trim())
+                      : ['React', 'Django', 'API'];
+
+                  return (
+                    <motion.div
+                      key={project.id || idx}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: idx * 0.1, duration: 0.5 }}
+                      className={`group rounded-3xl border overflow-hidden flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 ${
+                        isDark
+                          ? 'bg-zinc-950/80 border-zinc-800/90 hover:border-zinc-700 hover:shadow-2xl hover:shadow-blue-500/5'
+                          : 'bg-white border-zinc-200 hover:border-zinc-300 shadow-md hover:shadow-xl'
+                      }`}
+                    >
+                      {/* Project Image or Mock Gradient Header */}
+                      <div className="relative h-48 overflow-hidden bg-zinc-900 flex items-center justify-center">
+                        {project.image_url || project.image ? (
+                          <img
+                            src={project.image_url || project.image}
+                            alt={project.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-blue-900/30 via-zinc-900 to-indigo-900/30">
+                            <Code2 className="w-10 h-10 text-zinc-600 mb-2" />
+                            <span className="text-[11px] font-mono text-zinc-500 uppercase tracking-widest">
+                              PHAX PRODUCTION
+                            </span>
+                          </div>
+                        )}
+                        <div className="absolute top-3 right-3">
+                          <span className="px-2.5 py-1 rounded-full text-[10px] font-mono tracking-wider uppercase bg-black/70 backdrop-blur-md text-emerald-400 border border-emerald-500/30">
+                            #{project.id || idx + 1}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Content */}
+                      <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                          <div className="flex flex-wrap gap-1.5 mb-3">
+                            {techList.map((t, i) => (
+                              <span
+                                key={i}
+                                className={`px-2.5 py-0.5 rounded-md text-[10px] font-mono ${
+                                  isDark
+                                    ? 'bg-zinc-900 text-zinc-300 border border-zinc-800'
+                                    : 'bg-zinc-100 text-zinc-700 border border-zinc-200'
+                                }`}
+                              >
+                                {t}
+                              </span>
+                            ))}
+                          </div>
+
+                          <h3 className={`text-xl font-bold tracking-tight mb-2 group-hover:text-blue-500 transition-colors ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+                            {project.title}
+                          </h3>
+
+                          <p className={`text-xs leading-relaxed line-clamp-3 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                            {project.short_description || project.description || 'Описание разрабатываемого проекта.'}
+                          </p>
+                        </div>
+
+                        {/* Card Footer Links */}
+                        <div className="pt-4 border-t border-zinc-800/60 flex items-center justify-between text-xs font-mono">
+                          {project.github_url ? (
+                            <a
+                              href={project.github_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-zinc-400 hover:text-white flex items-center gap-1.5 transition-colors"
+                            >
+                              <GithubIcon className="w-4 h-4" />
+                              <span>Репозиторий</span>
+                            </a>
+                          ) : (
+                            <span className="text-zinc-600 text-[11px]">Private Repo</span>
+                          )}
+
+                          {project.live_url ? (
+                            <a
+                              href={project.live_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors"
+                            >
+                              <span>Демо</span>
+                              <ExternalLink className="w-3.5 h-3.5" />
+                            </a>
+                          ) : (
+                            <span className="text-zinc-500 text-[11px]">В разработке</span>
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })
+              ) : (
+                <div className="col-span-full py-12 text-center text-zinc-500 font-mono text-sm">
+                  Проекты в этой категории скоро появятся.
+                </div>
+              )}
+            </div>
+          </section>
+
+          {/* ==================== SERVICES & CALCULATOR ==================== */}
+          <section id="services" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-zinc-800/60">
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <span className="text-xs font-mono uppercase tracking-widest text-blue-500 font-semibold">
+                {"// Услуги и стоимость"}
+              </span>
+              <h2 className={`text-3xl sm:text-5xl font-extrabold tracking-tight mt-2 ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+                Прозрачные фиксированные цены
+              </h2>
+              <p className={`text-sm mt-3 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                Каждый этап фиксируется договором или четким ТЗ. Без скрытых платежей.
+              </p>
+            </div>
+
+            {/* Calculator Component */}
+            <div className="mb-14">
+              <ProjectCalculator isDark={isDark} onSelectService={handleCalculatorSelect} />
+            </div>
+
+            {/* Standard Service Packages Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[
+                {
+                  title: 'Сайты под ключ',
+                  price: 'от 25 000 ₽',
+                  time: '5-10 дней',
+                  desc: 'Корпоративные сайты, сервисы, лендинги и веб-платформы на React/Django.',
+                  features: ['Адаптивный дизайн (Mobile/Desktop)', 'SEO-оптимизация и мета-теги', 'Админ-панель для контента', 'Хостинг и SSL в подарок']
+                },
+                {
+                  title: 'Telegram Боты',
+                  price: 'от 12 000 ₽',
+                  time: '2-5 дней',
+                  desc: 'Автоматизация приема заявок, платные подписки, CRM-интеграция, рассылки.',
+                  features: ['Интеграция с платежами (ЮKassa, Crypto)', 'База данных пользователей (PostgreSQL)', 'Админ-команды и статистика', 'Развертывание на сервере 24/7']
+                },
+                {
+                  title: 'Telegram MiniApps (TMA)',
+                  price: 'от 25 000 ₽',
+                  time: '5-9 дней',
+                  desc: 'Полноценные веб-приложения внутри Telegram с подключением кошельков TON.',
+                  features: ['Web App интерфейс в мессенджере', 'Авторизация через Telegram InitData', 'Интеграция с TON кошельками', 'Плавная мобильная верстка']
+                },
+                {
+                  title: 'Скрипты на Lua',
+                  price: 'от 7 000 ₽',
+                  time: '1-3 дня',
+                  desc: 'Скрипты для Garry’s Mod, FiveM, игровые механики и автоматизация.',
+                  features: ['Высокая оптимизация (без просадок FPS)', 'Интеграция с базой данных сервера', 'Настройка под ваши конфигурации', 'Тестирование и фикс багов']
+                },
+                {
+                  title: 'Верстка макетов Figma',
+                  price: 'от 10 000 ₽',
+                  time: '2-4 дня',
+                  desc: 'Точный перенос дизайна из Figma в чистый, валидный код на Tailwind/React.',
+                  features: ['Pixel Perfect точность', 'Интерактивные микро-анимации', '100% адаптив под любые экраны', 'Чистый семантичный код']
+                },
+                {
+                  title: 'Технический аудит & Fix',
+                  price: 'от 5 000 ₽',
+                  time: '1-2 дня',
+                  desc: 'Поиск багов, ускорение загрузки, настройка серверов Nginx/Docker, доработка чужого кода.',
+                  features: ['Code review архитектуры', 'Оптимизация скорости до 95+ PageSpeed', 'Исправление уязвимостей', 'Отчет с рекомендациями']
+                }
+              ].map((srv, i) => (
+                <div
+                  key={i}
+                  className={`p-6 sm:p-8 rounded-3xl border flex flex-col justify-between transition-all ${
+                    isDark
+                      ? 'bg-zinc-950/60 border-zinc-800 hover:border-zinc-700'
+                      : 'bg-white border-zinc-200 shadow-sm hover:shadow-md'
+                  }`}
+                >
+                  <div>
+                    <div className="flex items-start justify-between gap-4 mb-4">
+                      <h3 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-zinc-900'}`}>{srv.title}</h3>
+                      <span className="text-[11px] font-mono px-2.5 py-1 rounded-md bg-blue-500/10 text-blue-400 border border-blue-500/20 shrink-0">
+                        {srv.time}
+                      </span>
+                    </div>
+
+                    <div className="text-2xl font-extrabold text-blue-500 font-mono mb-3">
+                      {srv.price}
+                    </div>
+
+                    <p className={`text-xs leading-relaxed mb-6 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                      {srv.desc}
+                    </p>
+
+                    <div className="space-y-2 mb-6">
+                      {srv.features.map((f, fi) => (
+                        <div key={fi} className="flex items-center gap-2 text-xs text-zinc-400">
+                          <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                          <span>{f}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      const msg = `Здравствуйте! Хочу заказать услугу "${srv.title}" (${srv.price}). Давайте обсудим детали проекта.`;
+                      handleCalculatorSelect(msg);
+                    }}
+                    className={`w-full py-3 rounded-xl border text-xs font-mono uppercase tracking-wider font-semibold transition-all ${
+                      isDark
+                        ? 'border-zinc-700 text-zinc-200 hover:bg-white hover:text-black hover:border-white'
+                        : 'border-zinc-300 text-zinc-800 hover:bg-zinc-900 hover:text-white hover:border-zinc-900'
+                    }`}
+                  >
+                    Заказать услугу
+                  </button>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* ==================== WORK PROCESS ==================== */}
+          <section id="process" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-zinc-800/60">
+            <div className="text-center max-w-2xl mx-auto mb-16">
+              <span className="text-xs font-mono uppercase tracking-widest text-blue-500 font-semibold">
+                {"// Этапы взаимодействия"}
+              </span>
+              <h2 className={`text-3xl sm:text-5xl font-extrabold tracking-tight mt-2 ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+                Как строится работа
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[
+                { num: '01', title: 'Консультация & ТЗ', days: '1-2 дня', desc: 'Обсуждаем идею, составляем техническое задание и фиксируем точную смету и срок.' },
+                { num: '02', title: 'Прототип & Дизайн', days: '3-5 дней', desc: 'Создаем интерактивный макет интерфейса, согласовываем стиль и логику экранов.' },
+                { num: '03', title: 'Разработка', days: 'Зависит от ТЗ', desc: 'Пишем чистый код, подключаем API и базы данных, настраиваем серверную логику.' },
+                { num: '04', title: 'Тестирование', days: '2-4 дня', desc: 'Проверяем проект на всех типах устройств, исключаем баги и тестируем нагрузки.' },
+                { num: '05', title: 'Деплой и запуск', days: '1 день', desc: 'Разворачиваем проект на рабочем сервере, привязываем домен, настраиваем SSL.' },
+                { num: '06', title: 'Поддержка & Гарантия', days: '6 месяцев', desc: 'Бесплатно устраняем любые недочеты и консультируем по развитию сервиса.' },
+              ].map((step, i) => (
+                <div
+                  key={i}
+                  className={`p-6 sm:p-8 rounded-3xl border transition-all ${
+                    isDark ? 'bg-zinc-950/60 border-zinc-800 hover:border-zinc-700' : 'bg-white border-zinc-200 shadow-sm'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-3xl font-extrabold font-mono text-blue-500">{step.num}</span>
+                    <span className="text-[11px] font-mono px-2.5 py-1 rounded-md bg-zinc-800/60 text-zinc-400 border border-zinc-700/60">
+                      {step.days}
+                    </span>
+                  </div>
+                  <h3 className={`text-lg font-bold mb-2 ${isDark ? 'text-white' : 'text-zinc-900'}`}>{step.title}</h3>
+                  <p className={`text-xs leading-relaxed ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>{step.desc}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* ==================== CONTACT SECTION ==================== */}
+          <section id="contact" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-zinc-800/60">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+              {/* Left Column: Direct Telegram & Contacts */}
+              <div className="lg:col-span-5 space-y-6">
+                <div>
+                  <span className="text-xs font-mono uppercase tracking-widest text-blue-500 font-semibold">
+                    {"// Начать проект"}
+                  </span>
+                  <h2 className={`text-3xl sm:text-5xl font-extrabold tracking-tight mt-2 ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+                    Давайте создадим что-то крутое
+                  </h2>
+                  <p className={`text-sm mt-3 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                    Расскажите о вашей идее или задаче. Я отвечу в течение 15 минут с предварительной оценкой стоимости и сроков.
+                  </p>
+                </div>
+
+                {/* Direct Telegram Card */}
+                <div
+                  className={`p-6 rounded-3xl border transition-all ${
+                    isDark
+                      ? 'bg-gradient-to-br from-blue-950/40 via-zinc-950 to-zinc-950 border-blue-500/30 shadow-xl shadow-blue-500/5'
+                      : 'bg-blue-50/60 border-blue-200 shadow-md'
+                  }`}
+                >
+                  <div className="flex items-center gap-3.5 mb-4">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-600/30">
+                      <Send className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-bold">Быстрая связь в Telegram</div>
+                      <div className="text-xs text-blue-400 font-mono">@skypespeaker</div>
+                    </div>
+                  </div>
+                  <p className={`text-xs mb-5 ${isDark ? 'text-zinc-300' : 'text-zinc-600'}`}>
+                    Самый быстрый способ связаться. Отвечаю оперативно, скидываю примеры работ и сразу считаю бюджет.
+                  </p>
+                  <a
+                    href="https://t.me/skypespeaker"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-lg shadow-blue-600/25 transition-all"
+                  >
+                    <span>Написать в Telegram</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </a>
+                </div>
+
+                {/* Contact List */}
+                <div className="space-y-3 pt-2">
+                  <div className="flex items-center gap-3 text-xs text-zinc-400 font-mono">
+                    <Mail className="w-4 h-4 text-zinc-500" />
+                    <span>{profile?.email || 'phaxdev.info@internet.ru'}</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-xs text-zinc-400 font-mono">
+                    <MapPin className="w-4 h-4 text-zinc-500" />
+                    <span>{profile?.location || 'Владикавказ, Россия / Удаленно'}</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-xs text-zinc-400 font-mono">
+                    <Clock className="w-4 h-4 text-zinc-500" />
+                    <span>Часовой пояс: МСК (UTC+3)</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Contact Form */}
+              <div
+                className={`lg:col-span-7 p-6 sm:p-10 rounded-3xl border transition-all ${
+                  isDark ? 'bg-zinc-950/70 border-zinc-800' : 'bg-white border-zinc-200 shadow-xl'
+                }`}
+              >
+                <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+                  Отправить заявку
+                </h3>
+                <p className={`text-xs mb-6 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                  Заполните форму, и я свяжусь с вами в Telegram или по почте
+                </p>
+
+                {submitStatus && (
+                  <div
+                    className={`p-4 rounded-2xl mb-6 text-xs flex items-center gap-3 ${
+                      submitStatus.type === 'success'
+                        ? 'bg-emerald-500/15 border border-emerald-500/30 text-emerald-300'
+                        : 'bg-red-500/15 border border-red-500/30 text-red-300'
+                    }`}
+                  >
+                    {submitStatus.type === 'success' ? (
+                      <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                    ) : (
+                      <X className="w-5 h-5 text-red-400 shrink-0" />
+                    )}
+                    <span>{submitStatus.message}</span>
+                  </div>
+                )}
+
+                <form onSubmit={handleFormSubmit} className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-[11px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5">
+                        Ваше имя или @username *
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleFormChange}
+                        placeholder="@username или Имя"
+                        className={`w-full px-4 py-3 rounded-xl border text-xs transition-all outline-none ${
+                          errors.name
+                            ? 'border-red-500/80 bg-red-500/5'
+                            : isDark
+                              ? 'bg-zinc-900/60 border-zinc-800 text-white focus:border-blue-500 focus:bg-zinc-900'
+                              : 'bg-zinc-50 border-zinc-200 text-zinc-900 focus:border-blue-500 focus:bg-white'
+                        }`}
+                      />
+                      {errors.name && <p className="text-[10px] text-red-400 mt-1">{errors.name}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5">
+                        Email для связи *
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleFormChange}
+                        placeholder="example@mail.ru"
+                        className={`w-full px-4 py-3 rounded-xl border text-xs transition-all outline-none ${
+                          errors.email
+                            ? 'border-red-500/80 bg-red-500/5'
+                            : isDark
+                              ? 'bg-zinc-900/60 border-zinc-800 text-white focus:border-blue-500 focus:bg-zinc-900'
+                              : 'bg-zinc-50 border-zinc-200 text-zinc-900 focus:border-blue-500 focus:bg-white'
+                        }`}
+                      />
+                      {errors.email && <p className="text-[10px] text-red-400 mt-1">{errors.email}</p>}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5">
+                      Телефон или Telegram (опционально)
+                    </label>
+                    <input
+                      type="text"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleFormChange}
+                      placeholder="+7 (999) 000-00-00"
+                      className={`w-full px-4 py-3 rounded-xl border text-xs transition-all outline-none ${
+                        isDark
+                          ? 'bg-zinc-900/60 border-zinc-800 text-white focus:border-blue-500 focus:bg-zinc-900'
+                          : 'bg-zinc-50 border-zinc-200 text-zinc-900 focus:border-blue-500 focus:bg-white'
+                      }`}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5">
+                      Описание задачи / проекта *
+                    </label>
+                    <textarea
+                      name="message"
+                      rows={5}
+                      value={formData.message}
+                      onChange={handleFormChange}
+                      placeholder="Расскажите о проекте: функции, сроки, ссылки на референсы..."
+                      className={`w-full px-4 py-3 rounded-xl border text-xs transition-all outline-none resize-none ${
+                        errors.message
+                          ? 'border-red-500/80 bg-red-500/5'
+                          : isDark
+                            ? 'bg-zinc-900/60 border-zinc-800 text-white focus:border-blue-500 focus:bg-zinc-900'
+                            : 'bg-zinc-50 border-zinc-200 text-zinc-900 focus:border-blue-500 focus:bg-white'
+                      }`}
+                    />
+                    {errors.message && <p className="text-[10px] text-red-400 mt-1">{errors.message}</p>}
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-medium text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-lg shadow-blue-600/25 transition-all"
+                  >
+                    {isSubmitting ? (
+                      <span>Отправка данных...</span>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" />
+                        <span>Отправить заявку</span>
+                      </>
+                    )}
+                  </button>
+                </form>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        {/* ==================== FOOTER ==================== */}
+        <footer className={`py-12 px-4 sm:px-6 lg:px-8 border-t transition-colors ${isDark ? 'border-zinc-800/80 bg-zinc-950/80' : 'border-zinc-200 bg-white'}`}>
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-2.5">
+              <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center text-white font-mono font-bold text-xs">
+                <Code2 className="w-4 h-4" />
+              </div>
+              <span className="font-bold text-sm tracking-wider uppercase font-mono">
+                {profile?.name || 'PHAX'} • {new Date().getFullYear()}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-6 text-xs text-zinc-500 font-mono">
+              <span className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                API: {apiStatus}
+              </span>
+              <a href="#home" className="hover:text-zinc-300 transition-colors">
+                Наверх ↑
+              </a>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </HelmetProvider>
+  );
 };
 
 export default Portfolio;
