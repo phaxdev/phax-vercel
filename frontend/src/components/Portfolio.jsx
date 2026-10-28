@@ -30,6 +30,7 @@ import {
   Leaf,
   Calculator
 } from 'lucide-react';
+import ChessBot from './ChessBot';
 
 const GithubIcon = ({ className = "w-4 h-4" }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 24 24">
@@ -399,6 +400,7 @@ const Portfolio = () => {
     { id: 'home', label: 'Главная' },
     { id: 'about', label: 'Обо мне' },
     { id: 'projects', label: 'Проекты' },
+    { id: 'chess', label: 'Шахматный ИИ' },
     { id: 'services', label: 'Услуги & Прайс' },
     { id: 'process', label: 'Процесс' },
     { id: 'contact', label: 'Контакты' },
@@ -1184,6 +1186,23 @@ const Portfolio = () => {
                 </div>
               )}
             </div>
+          </section>
+
+          {/* ==================== CHESS BOT SECTION ==================== */}
+          <section id="chess" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-zinc-800/60">
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <span className="text-xs font-mono uppercase tracking-widest text-amber-500 font-semibold">
+                {"// Интерактивный челлендж"}
+              </span>
+              <h2 className={`text-3xl sm:text-5xl font-extrabold tracking-tight mt-2 ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+                Попробуй обыграть моего ИИ в шахматы
+              </h2>
+              <p className={`text-sm mt-3 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                Гроссмейстерский движок Stockfish NNUE (3500+ ELO) прямо в браузере. Анализирует до 15 полуходов вперед.
+              </p>
+            </div>
+
+            <ChessBot isDark={isDark} />
           </section>
 
           {/* ==================== SERVICES & CALCULATOR ==================== */}
