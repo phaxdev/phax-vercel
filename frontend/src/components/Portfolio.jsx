@@ -28,9 +28,9 @@ import {
   MapPin,
   Flame,
   Leaf,
-  Calculator
+  Calculator,
+  Crown
 } from 'lucide-react';
-import ChessBot from './ChessBot';
 
 const GithubIcon = ({ className = "w-4 h-4" }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 24 24">
@@ -400,7 +400,6 @@ const Portfolio = () => {
     { id: 'home', label: 'Главная' },
     { id: 'about', label: 'Обо мне' },
     { id: 'projects', label: 'Проекты' },
-    { id: 'chess', label: 'Шахматный ИИ' },
     { id: 'services', label: 'Услуги & Прайс' },
     { id: 'process', label: 'Процесс' },
     { id: 'contact', label: 'Контакты' },
@@ -1006,6 +1005,18 @@ const Portfolio = () => {
 
                     const theme = (() => {
                       const t = (project.slug || project.title || '').toLowerCase();
+                      if (t.includes('chess') || t.includes('stockfish')) {
+                        return {
+                          gradient: isDark ? 'from-amber-950/30 via-zinc-950 to-zinc-950' : 'from-amber-50/50 via-white to-amber-50/20',
+                          border: isDark ? 'border-amber-500/40 group-hover:border-amber-400' : 'border-amber-300 group-hover:border-amber-500',
+                          headerBg: 'bg-gradient-to-br from-amber-900/40 via-zinc-900 to-zinc-950',
+                          tagBg: 'bg-amber-500/20 text-amber-400 border-amber-500/40',
+                          accentText: 'group-hover:text-amber-400',
+                          glow: 'hover:shadow-[0_0_30px_rgba(245,158,11,0.18)]',
+                          icon: Crown,
+                          subBadge: '♟️ Stockfish 3500+ ELO'
+                        };
+                      }
                       if (t.includes('geo')) {
                         return {
                           gradient: isDark ? 'from-amber-950/30 via-zinc-950 to-[#0c1015]' : 'from-amber-50/50 via-white to-amber-50/20',
@@ -1186,23 +1197,6 @@ const Portfolio = () => {
                 </div>
               )}
             </div>
-          </section>
-
-          {/* ==================== CHESS BOT SECTION ==================== */}
-          <section id="chess" className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-zinc-800/60">
-            <div className="text-center max-w-2xl mx-auto mb-14">
-              <span className="text-xs font-mono uppercase tracking-widest text-amber-500 font-semibold">
-                {"// Интерактивный челлендж"}
-              </span>
-              <h2 className={`text-3xl sm:text-5xl font-extrabold tracking-tight mt-2 ${isDark ? 'text-white' : 'text-zinc-900'}`}>
-                Попробуй обыграть моего ИИ в шахматы
-              </h2>
-              <p className={`text-sm mt-3 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                Гроссмейстерский движок Stockfish NNUE (3500+ ELO) прямо в браузере. Анализирует до 15 полуходов вперед.
-              </p>
-            </div>
-
-            <ChessBot isDark={isDark} />
           </section>
 
           {/* ==================== SERVICES & CALCULATOR ==================== */}
